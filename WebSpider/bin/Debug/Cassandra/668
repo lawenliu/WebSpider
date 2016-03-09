@@ -1,0 +1,30 @@
+Firewall idle connection timeout causing nodes to lose communication during low traffic times
+Steps to configure the default idle connection timeout.
+
+
+During low traffic intervals, a firewall configured with an idle connection timeout can close connections to local nodes and nodes in other data centers. The default idle connection timeout is usually 60 minutes and configurable by the network administrator. 
+
+
+Procedure
+
+To prevent connections between nodes from timing out, set the TCP keep alive variables:
+Get a list of available kernel variables: 
+$ sysctl -A | grep net.ipv4
+
+
+The following variables should exist:net.ipv4.tcp_keepalive_time
+Time of connection inactivity after which the first keep alive request is sent.
+
+net.ipv4.tcp_keepalive_probes
+Number of keep alive requests retransmitted before the connection is considered broken.
+
+net.ipv4.tcp_keepalive_intvl
+Time interval between keep alive probes.
+
+
+To change these settings: 
+$ sudo sysctl -w net.ipv4.tcp_keepalive_time=60 net.ipv4.tcp_keepalive_probes=3 net.ipv4.tcp_keepalive_intvl=10
+
+
+This sample command changes TCP keepalive timeout to 60 seconds with 3 probes, 10 seconds gap between each. This setting detects dead TCP connections after 90 seconds (60 + 10 + 10 + 10). There is no need to be concerned about the additional traffic as it's negligible and permanently leaving these settings shouldn't be an issue. 
+

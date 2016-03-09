@@ -1,0 +1,27 @@
+invalidatekeycache
+Resets the global key cache parameter to the default, which saves all keys.
+
+
+Resets the global key cache parameter to the default, which saves all keys.
+
+
+Synopsis 
+nodetool <options> invalidatekeycache
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+By default the key_cache_keys_to_save is disabled in the cassandra.yaml. This command resets the parameter to the default. 
+

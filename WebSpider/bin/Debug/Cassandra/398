@@ -1,0 +1,42 @@
+Cassandra tools
+Topics for Cassandra tools.
+Topics in this section: 
+
+The nodetool utility
+
+A command line interface for Cassandra for managing a cluster.
+
+
+Cassandra bulk loader (sstableloader)
+
+Provides the ability to bulk load external data into a cluster, load existing SSTables into another cluster with a different number of nodes or replication strategy, and restore snapshots.
+
+
+The cassandra utility
+
+Cassandra start-up parameters can be run from the command line (in Tarball installations) or specified in the cassandra-env.sh file (Package or Tarball installations).
+
+
+The cassandra-stress tool
+
+A Java-based stress testing utility for benchmarking and load testing a Cassandra cluster. 
+
+
+The sstablescrub utility
+
+An offline version of nodetool scrub. This tool attempts to remove the corrupted parts while preserving non-corrupted data.
+
+
+The sstablesplit utility
+
+Use this tool to split SSTables files into multiple SSTables of a maximum designated size.
+
+
+sstablekeys
+
+The sstablekeys utility dumps table keys.
+
+
+The sstableupgrade tool
+
+Upgrade the SSTables in the specified table or snapshot to match the currently installed version of Cassandra.

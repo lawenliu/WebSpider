@@ -1,0 +1,18 @@
+Starting Cassandra as a stand-alone process
+Start the Cassandra Java server process for tarball installations.
+
+
+Start the Cassandra Java server process for tarball installations.
+
+
+Procedure
+
+On initial start-up, each node must be started one at a time, starting with your seed nodes. 
+To start Cassandra in the background: 
+$ cd install_location 
+$ bin/cassandra
+
+To start Cassandra in the foreground: 
+$ cd install_location
+$ bin/cassandra -f
+

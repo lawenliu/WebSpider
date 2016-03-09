@@ -1,0 +1,22 @@
+Logging in using cqlsh
+How to create a cqlshrc file to avoid having enter credentials every time you launch cqlsh.
+
+
+Typically, after configuring authentication, you log into cqlsh using the -u and -p options to the cqlsh command. To avoid having enter credentials every time you launch cqlsh, you can create a cqlshrc file in the .cassandra directory, which is in your home directory. When present, this file passes default login information to cqlsh. 
+
+
+Procedure
+Open a text editor and create a file that specifies a user name and password.
+[authentication]
+username = fred
+password = !!bang!!$
+
+Save the file in your home/.cassandra directory and name it cqlshrc. 
+Set permissions on the file. 
+To protect database login information, ensure that the file is secure from unauthorized access. 
+Note: Sample cqlshrc files are available in: Packaged installations
+/usr/share/doc/dse-libcassandra
+
+Binary installations
+install_location/conf
+

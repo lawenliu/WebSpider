@@ -1,0 +1,22 @@
+SSL encryption
+Topics for using SSL in Cassandra.
+Topics in this section: 
+
+Client-to-node encryption
+
+Client-to-node encryption protects data in flight from client machines to a database cluster using SSL (Secure Sockets Layer). 
+
+
+Node-to-node encryption
+
+Node-to-node encryption protects data transferred between nodes, including gossip communications, in a cluster using SSL (Secure Sockets Layer).
+
+
+Using cqlsh with SSL encryption
+
+Using a cqlshrc file with SSL encryption.
+
+
+Preparing server certificates
+
+Steps to generate SSL certificates for client-to-node encryption or node-to-node encryption.

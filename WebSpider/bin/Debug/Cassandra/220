@@ -1,0 +1,21 @@
+How off-heap components affect reads
+Factors for increasing the data handling capacity per node.
+
+To increase the data handling capacity per node, Cassandra keeps these components off-heap:Bloom filter
+Compression offsets map
+Partition summary
+
+Of the components in memory, only the partition key cache is a fixed size. Other components grow as the data set grows.
+
+Bloom filter
+
+The Bloom filter grows to approximately 1-2 GB per billion partitions. In the extreme case, you can have one partition per row, so you can easily have billions of these entries on a single machine. The Bloom filter is tunable if you want to trade memory for performance.
+
+Partition summary
+
+By default, the partition summary is a sample of the partition index. You configure sample frequency by changing the index_interval property in the table definition, also if you want to trade memory for performance. 
+
+Compression offsets
+
+The compression offset map grows to 1-3 GB per terabyte compressed. The more you compress data, the greater number of compressed blocks you have and the larger the compression offset table. Compression is enabled by default even though going through the compression offset map consumes CPU resources. Having compression enabled makes the page cache more effective, and typically, almost always pays off.
+

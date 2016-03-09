@@ -1,0 +1,27 @@
+decommission
+Deactivates a node by streaming its data to another node.
+
+
+Deactivates a node by streaming its data to another node.
+
+
+Synopsis 
+nodetool <options> decommission
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+Causes a live node to decommission itself, streaming its data to the next node on the ring. Use netstats to monitor the progress, as described on http://wiki.apache.org/cassandra/NodeProbe#Decommission and http://wiki.apache.org/cassandra/Operations#Removing_nodes_entirely. 
+

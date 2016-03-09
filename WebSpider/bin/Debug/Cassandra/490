@@ -1,0 +1,28 @@
+drain
+Drains the node.
+
+
+Drains the node.
+
+
+Synopsis 
+nodetool <options> drain
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+Flushes all memtables from the node to SSTables on disk. Cassandra stops listening for connections from the client and other nodes. You need to restart Cassandra after running nodetool drain. You typically use this command before upgrading a node to a new version of Cassandra. To simply flush memtables to disk, use nodetool flush.
+

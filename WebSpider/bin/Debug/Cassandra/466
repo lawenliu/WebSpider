@@ -1,0 +1,36 @@
+The cassandra-stress tool
+A Java-based stress testing utility for benchmarking and load testing a Cassandra cluster. 
+
+
+The cassandra-stress tool is a Java-based stress testing utility for benchmarking and load testing a Cassandra cluster.
+
+The binary installation of the tool also includes a daemon, which in larger-scale testing can prevent potential skews in the test results by keeping the JVM warm.
+
+Modes of operation:
+Inserting: Loads test data.
+Reading: Reads test data.
+Indexed range slicing: Works with RandomPartitioner on indexed tables.
+
+The cassandra-stress tool creates a keyspace called Keyspace1 and within that, tables named Standard1, Super1, Counter1, and SuperCounter1, depending on what type of table is being tested. These are automatically created the first time you run the stress test and will be reused on subsequent runs unless you drop the keyspace using CQL. It is not possible to change the names; they are hard-coded.
+
+
+Commands:
+Packaged installs:  cassandra-stress [options]
+Tarball installs:  install_location/tools/bin/cassandra-stress [options]
+
+You can use these modes with or without the cassandra-stress daemon running (binary installs only).
+Topics in this section: 
+
+Options for cassandra-stress 
+
+The available settings for cassandra-stress.
+
+
+Using the Daemon Mode
+
+The daemon in larger-scale testing can prevent potential skews in the test results by keeping the JVM warm.
+
+
+Interpreting the output of cassandra-stress
+
+About the output from the running tests.

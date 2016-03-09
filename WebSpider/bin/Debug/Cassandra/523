@@ -1,0 +1,34 @@
+setcompactionthreshold
+Sets minimum and maximum compaction thresholds for a table.
+
+
+Sets minimum and maximum compaction thresholds for a table.
+
+
+Synopsis 
+nodetool <options> setcompactionthreshold -- <keyspace> <table> <minthreshold> <maxthreshold>
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option and argument that could be mistaken for a option.
+keyspace is the name of a keyspace.
+table is a table name.
+minthreshold sets the minimum number of SSTables to trigger a minor compaction when using SizeTieredCompactionStrategy or DateTieredCompactionStrategy.
+maxthreshold sets the maximum number of SSTables to allow in a minor compaction when using SizeTieredCompactionStrategy or DateTieredCompactionStrategy.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+This parameter controls how many SSTables of a similar size must be present before a minor compaction is scheduled. The max_threshold sets an upper bound on the number of SSTables that may be compacted in a single minor compaction, as described in http://wiki.apache.org/cassandra/MemtableSSTable . 
+When using LeveledCompactionStrategy, maxthreshold sets the MAX_COMPACTING_L0, which limits the number of L0 SSTables that are compacted concurrently to avoid wasting memory or running out of memory when compacting highly overlapping SSTables.
+

@@ -1,0 +1,8 @@
+View of ring differs between some nodes
+Indicates that the ring is in a bad state.
+
+
+Indicates that the ring is in a bad state.
+
+This situation can happen when not using virtual nodes (vnodes) and there are token conflicts (for instance, when bootstrapping two nodes simultaneously with automatic token selection.) Unfortunately, the only way to resolve this is to do a full cluster restart. A rolling restart is insufficient since gossip from nodes with the bad state will repopulate it on newly booted nodes.
+

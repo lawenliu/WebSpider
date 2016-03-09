@@ -1,0 +1,31 @@
+stop
+Stops the compaction process.
+
+
+Stops the compaction process.
+
+
+Synopsis 
+nodetool <options> stop  -- <compaction_type>
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option and argument that could be mistaken for a option.
+A compaction type: COMPACTION, VALIDATION, CLEANUP, SCRUB, INDEX_BUILD
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+Stops an operation from continuing to run. This command is typically used to stop a compaction that has a negative impact on the performance of a node. After the compaction stops, Cassandra continues with the remaining operations in the queue. Eventually, Cassandra restarts the compaction.
+

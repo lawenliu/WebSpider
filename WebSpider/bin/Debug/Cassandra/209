@@ -1,0 +1,21 @@
+Cassandra storage basics
+Understanding how Casssandra stores data.
+
+To manage and access data in Cassandra, it is important to understand how Casssandra stores data. The hinted handoff feature and Cassandra conformance and non-conformance to the ACID (atomic, consistent, isolated, durable) database properties are key concepts in this discussion. In Cassandra, consistency refers to how up-to-date and synchronized a row of data is on all of its replicas. 
+
+Client utilities and application programming interfaces (APIs) for developing applications for data storage and retrieval are available.
+Topics in this section: 
+
+The write path to compaction
+
+Cassandra processes data at several stages on the write path.
+
+
+How Cassandra stores indexes
+
+A brief description of how Cassandra stores and distributes indexes. 
+
+
+About index updates
+
+A brief description about index updates.

@@ -1,0 +1,16 @@
+How Cassandra stores indexes
+A brief description of how Cassandra stores and distributes indexes. 
+
+Internally, a Cassandra index is a data partition.In the example of a music service, the playlists table includes an artist column and uses a compound primary key: id is the partition key and song_order is the clustering column. 
+CREATE TABLE playlists (
+  id uuid,
+  song_order int,
+  . . .
+  artist text,
+PRIMARY KEY  (id, song_order ) );
+
+As shown in the music service example, to filter the data based on the artist, create an index on artist. Cassandra uses the index to pull out the records in question. An attempt to filter the data before creating the index will fail because the operation would be very inefficient. A sequential scan across the entire playlists dataset would be required. After creating the artist index, Cassandra can filter the data in the playlists table by artist, such as Fu Manchu.
+
+The partition is the unit of replication in Cassandra. In the music service example, partitions are distributed by hashing the playlist id and using the ring to locate the nodes that store the distributed data. Cassandra would generally store playlist information on different nodes, and to find all the songs by Fu Manchu, Cassandra would have to visit different nodes. To avoid these problems, each node indexes its own data.
+This technique, however, does not guarantee trouble-free indexing, so know when and when not to use an index.
+

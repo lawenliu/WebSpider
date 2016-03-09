@@ -1,0 +1,23 @@
+pausehandoff
+Pauses the hints delivery process.
+
+
+Pauses the hints delivery process.
+
+
+Synopsis 
+nodetool <options> pausehandoff
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+

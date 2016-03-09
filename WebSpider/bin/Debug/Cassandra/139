@@ -1,0 +1,32 @@
+Security
+Topics for securing Cassandra.
+Topics in this section: 
+
+Securing Cassandra
+
+Cassandra provides these security features to the open source community.
+
+
+SSL encryption
+
+Topics for using SSL in Cassandra.
+
+
+Internal authentication
+
+Topics for internal authentication.
+
+
+Internal authorization
+
+Topics about internal authorization.
+
+
+Configuring firewall port access
+
+Which ports to open when nodes are protected by a firewall.
+
+
+Enabling JMX authentication
+
+The default settings for Cassandra make JMX accessible only from localhost. To enable remote JMX connections, change the LOCAL_JMX setting in cassandra-env.sh.

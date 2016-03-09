@@ -1,0 +1,32 @@
+Tarball installation directories
+Configuration files directory locations.
+
+
+The configuration files are located in the following directories:
+
+
+Configuration Files
+
+Locations
+
+cassandra.yamlinstall_location/conf
+cassandra-topology.propertiesinstall_location/conf
+cassandra-rackdc.propertiesinstall_location/conf
+cassandra-env.sh install_location/conf
+cassandra.in.shinstall_location/bin
+
+The binary tarball releases install into the installation directory.
+
+
+Directories
+
+Description
+
+binUtilities and start scripts
+conf Configuration files and environment settings
+interfaceThrift and Avro client APIs
+javadocCassandra Java API documentation
+libJAR and license files
+
+For DataStax Enterprise installs, see Configuration File Locations.
+

@@ -1,0 +1,57 @@
+Adding or removing nodes, data centers, or clusters
+Topics for adding or removing nodes, data centers, or clusters. 
+Topics in this section: 
+
+Adding nodes to an existing cluster
+
+Steps to add nodes when using virtual nodes.
+
+
+Adding a data center to a cluster
+
+Steps to add a data center to an existing cluster.
+
+
+Replacing a dead node
+
+Steps to replace a node that has died for some reason, such as hardware failure.
+
+
+Replacing a dead seed node
+
+Steps to replace a seed node.
+
+
+Replacing a running node
+
+Steps to replace a node with a new node, such as when updating to newer hardware or performing proactive maintenance.
+
+
+Moving a node from one rack to another
+
+
+
+
+Decommissioning a data center
+
+Steps to properly remove a data center so no information is lost.
+
+
+Removing a node
+
+Reduce the size of a data center. 
+
+
+Switching snitches
+
+Steps for switching snitches.
+
+
+Edge cases for transitioning or migrating a cluster
+
+Unusual migration scenarios without interruption of service.
+
+
+Adding or replacing single-token nodes
+
+Steps for adding or replacing nodes in single-token architecture clusters.

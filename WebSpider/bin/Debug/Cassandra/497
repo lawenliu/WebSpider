@@ -1,0 +1,32 @@
+flush
+Flushes one or more tables from the memtable.
+
+
+Flushes one or more tables from the memtable.
+
+
+Synopsis 
+ nodetool <options> flush -- <keyspace> ( <table> ... )
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option and argument that could be mistaken for a option.
+keyspace is the name of a keyspace.
+table is the name of one or more tables, separated by a space.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+You can specify a keyspace followed by one or more tables that you want to flush from the memtable to SSTables on disk.
+

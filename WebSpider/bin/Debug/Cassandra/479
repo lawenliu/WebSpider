@@ -1,0 +1,32 @@
+compact
+Forces a major compaction on one or more tables.
+
+
+Forces a major compaction on one or more tables.
+
+
+Synopsis 
+nodetool <options> compact <keyspace> ( <table> ... )
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option and argument that could be mistaken for a option.
+keyspace is the name of a keyspace.
+table is one or more table names, separated by a space.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+This command starts the compaction process on tables that use the SizeTieredCompactionStrategy or DateTieredCompactionStrategy. You can specify a keyspace for compaction. If you do not specify a keyspace, the nodetool command uses the current keyspace. You can specify one or more tables for compaction. If you do not specify a table(s), compaction of all tables in the keyspace occurs. This is called a major compaction. If you do specify a table(s), compaction of the specified table(s) occurs. This is called a minor compaction. A major compaction consolidates all existing SSTables into a single SSTable. During compaction, there is a temporary spike in disk space usage and disk I/O because the old and new SSTables co-exist. A major compaction can cause considerable disk I/O. 
+

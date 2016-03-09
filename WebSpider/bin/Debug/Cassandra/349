@@ -1,0 +1,9 @@
+Tips for efficient cache use
+Various tips for efficient cache use.
+
+Some tips for efficient cache use are:Store lower-demand data or data with extremely long rows in a table with minimal or no caching.
+Deploy a large number of Cassandra nodes under a relatively light load per node.
+Logically separate heavily-read data into discrete tables.
+
+Cassandra memtables have overhead for index structures on top of the actual data they store. If the size of the values stored in the heavily-read columns is small compared to the number of columns and rows themselves, this overhead can be substantial. Rows having this type of data do not lend themselves to efficient row caching and caching rows can cause serious problems.
+

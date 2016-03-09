@@ -1,0 +1,16 @@
+Securing Cassandra
+Cassandra provides these security features to the open source community.
+
+Cassandra provides these security features to the open source community. 
+Client-to-node encryption
+Cassandra includes an optional, secure form of communication from a client machine to a database cluster. Client to server SSL ensures data in flight is not compromised and is securely transferred back/forth from client machines.
+
+Authentication based on internally controlled login accounts/passwords
+Administrators can create users who can be authenticated to Cassandra database clusters using the CREATE USER command. Internally, Cassandra manages user accounts and access to the database cluster using passwords. User accounts may be altered and dropped using the Cassandra Query Language (CQL).
+
+Object permission management 
+Once authenticated into a database cluster using either internal authentication, the next security issue to be tackled is permission management. What can the user do inside the database? Authorization capabilities for Cassandra use the familiar GRANT/REVOKE security paradigm to manage object permissions.
+
+Enabling JMX authentication
+The default settings for Cassandra make JMX accessible only from localhost. If you want to enable remote JMX connections, change the LOCAL_JMX setting in cassandra-env.sh and enable authentication and/or ssl. After you enable JMX authentication, ensure that tools that use JMX, such as nodetool and DataStax OpsCenter, are configured to use authentication. 
+

@@ -1,0 +1,47 @@
+Options for cassandra-stress 
+The available settings for cassandra-stress.
+
+
+
+Short option
+
+Long option
+
+Description
+
+-V--average-size-valuesGenerate column values of average rather than specific size.
+-C <CARDINALITY>--cardinality <CARDINALITY>Number of unique values stored in columns. Default is 50.
+-c <COLUMNS>--columns <COLUMNS>Number of columns per key. Default is 5.
+-S <COLUMN-SIZE>--column-size <COLUMN-SIZE>Size of column values in bytes. Default is 34.
+-Z <COMPACTION-STRATEGY>--compaction-strategy <COMPACTION-STRATEGY>Specifies which compaction strategy to use.
+-U <COMPARATOR>--comparator <COMPARATOR>Specifies which column comparator to use. Supported types are: TimeUUIDType, AsciiType, and UTF8Type.
+-I <COMPRESSION>--compression <COMPRESSION>Specifies the compression to use for SSTables. Default is no compression.
+-e <CONSISTENCY-LEVEL>--consistency-level <CONSISTENCY-LEVEL>Consistency level to use.
+-x <CREATE-INDEX>--create-index <CREATE-INDEX>Type of index to create on columns (KEYS).
+-L l--enable-cqlPerform queries using CQL (Cassandra Query Language).
+-y <TYPE>--family-type <TYPE>Sets the table type.
+-f <FILE>--file <FILE>Write output to a given file.
+-h--helpShow help.
+-k--keep-goingIgnore errors when inserting or reading. When set, --keep-trying has no effect. Default is false.
+-K <KEEP-TRYING>--keep-trying <KEEP-TRYING>Retry on-going operation N times (in case of failure). Use a positive integer. The default is 10.
+-g <KEYS-PER-CALL>-g, --keys-per-call <KEYS-PER-CALL>Number of keys to per call. Default is 1000.
+-d <NODES>--nodes <NODES>Nodes to perform the test against. Must be comma separated with no spaces. Default is localhost.
+-D <NODESFILE>--nodesfile <NODESFILE>File containing host nodes (one per line).
+-W --no-replicate-on-writeSet replicate_on_write to false for counters. Only for counters with a consistency level of ONE (CL=ONE).
+-F <NUM-DIFFERENT-KEYS>--num-different-keys <NUM-DIFFERENT-KEYS>Number of different keys. If less than NUM-KEYS, the same key is re-used multiple times. Default is NUM-KEYS.
+-n <NUMKEYS>--num-keys <NUMKEYS>Number of keys to write or read. Default is 1,000,000.
+-o <OPERATION>--operation <OPERATION>Operation to perform: INSERT, READ, INDEXED_RANGE_SLICE, MULTI_GET, COUNTER_ADD, COUNTER_GET. Default is INSERT.
+-p <PORT>--port <PORT>Thrift port. Default is 9160.
+-i <PROGRESS-INTERVAL>--progress-interval <PROGRESS-INTERVAL>The interval, in seconds, at which progress is output. Default is 10 seconds.
+-Q <QUERY-NAMES>--query-names <QUERY-NAMES>Comma-separated list of column names to retrieve from each row.
+-r--randomUse random key generator. When used --stdev has no effect. Default is false.
+-l <REPLICATION-FACTOR>--replication-factor <REPLICATION-FACTOR>Replication Factor to use when creating tables. Default is 1.
+-R <REPLICATION-STRATEGY>--replication-strategy <REPLICATION-STRATEGY>Replication strategy to use (only on insert and when a keyspace does not exist.) The default is SimpleStrategy.
+-T <SEND-TO>--send-to <SEND-TO>Sends the command as a request to the cassandra-stressd daemon at the specified IP address. The daemon must already be running at that address.
+-N <SKIP-KEYS>--skip-keys <SKIP-KEYS>Fraction of keys to skip initially. Default is 0.
+-s <STDEV>--stdev <STDEV>Standard deviation. Default is 0.1.
+-O <STRATEGY-PROPERTIES>--strategy-properties <STRATEGY-PROPERTIES>Replication strategy properties in the following format: <dc_name>:<num>,<dc_name>:<num>, .... For use with NetworkTopologyStrategy.
+-t <THREADS> --threads <THREADS> Number of threads to use. Default is 50.
+-m--unframedUse unframed transport. Default is false.
+-P--use-prepared-statements(CQL only) Perform queries using prepared statements.
+

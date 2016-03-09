@@ -1,0 +1,116 @@
+Cassandra bulk loader (sstableloader)
+Provides the ability to bulk load external data into a cluster, load existing SSTables into another cluster with a different number of nodes or replication strategy, and restore snapshots.
+
+
+The Cassandra bulk loader, also called the sstableloader, provides the ability to: Bulk load external data into a cluster.
+Load existing SSTables into another cluster with a different number of nodes or replication strategy.
+Restore snapshots. 
+
+The sstableloader streams a set of SSTable data files to a live cluster; it does not simply copy the set of SSTables to every node, but transfers the relevant part of the data to each node, conforming to the replication strategy of the cluster. The table into which the data is loaded does not need to be empty.
+
+If tables are repaired in a different cluster, after being loaded, the tables will be unrepaired.
+
+Prerequisites 
+
+Because sstableloader uses Cassandra gossip, make sure of the following:
+The cassandra.yaml configuration file is in the classpath and properly configured.
+At least one node in the cluster is configured as seed. 
+In the cassandra.yaml file, the following properties are properly configured for the cluster that you are importing into: cluster_name
+listen_address
+storage_port
+rpc_address
+rpc_port
+
+
+When using sstableloader to load external data, you must first generate SSTables. 
+
+If using DataStax Enterprise, you can use Sqoop to migrate external data to Cassandra.
+
+Generating SSTables 
+
+SSTableWriter is the API to create raw Cassandra data files locally for bulk load into your cluster. The Cassandra source code includes the CQLSSTableWriter implementation for creating SSTable files from external data without needing to understand the details of how those map to the underlying storage engine. Import the org.apache.cassandra.io.sstable.CQLSSTableWriter class, and define the schema for the data you want to import, a writer for the schema, and a prepared insert statement, as shown in Cassandra 2.0.1, 2.0.2, and a quick peek at 2.0.3.
+
+Using sstableloader 
+
+Before loading the data, you must define the schema of the tables with CQL or Thrift.
+
+To get the best throughput from SSTable loading, you can use multiple instances of sstableloader to stream across multiple machines. No hard limit exists on the number of SSTables that sstableloader can run at the same time, so you can add additional loaders until you see no further improvement.
+
+If you use sstableloader on the same machine as the Cassandra node, you can't use the same network interface as the Cassandra node. However, you can use the JMX StorageService > bulkload() call from that node. This method takes the absolute path to the directory where the SSTables are located, and loads them just as sstableloader does. However, because the node is both source and destination for the streaming, it increases the load on that node. This means that you should load data from machines that are not Cassandra nodes when loading into a live cluster.
+
+
+Usage: 
+
+Packaged installs: 
+$ sstableloader [options] path_to_keyspace
+
+Tarball installs: 
+$ cd install_location/bin
+$ sstableloader [options] path_to_keyspace
+
+The sstableloader bulk loads the SSTables found in the keyspace directory to the configured target cluster, where the parent directories of the directory path are used as the target keyspace/table name.Go to the location of the SSTables:$ cd /var/lib/cassandra/data/Keyspace1/Standard1/
+
+To view the contents of the keyspace:$ ls 
+
+Keyspace1-Standard1-jb-60-CRC.db
+Keyspace1-Standard1-jb-60-Data.db
+...
+Keyspace1-Standard1-jb-60-TOC.txt
+
+To bulk load the files, specify the path to Keyspace1/Standard1/ in the target cluster:$ sstableloader -d 110.82.155.1 /var/lib/cassandra/data/Keyspace1/Standard1/ ##  package installation
+
+$ install_location/bin/sstableloader -d 110.82.155.1 /var/lib/cassandra/data/Keyspace1/Standard1/ ## tarball installation
+
+This bulk loads all files.
+
+
+
+sstableloader options
+
+
+Short option
+
+Long option
+
+Description
+
+
+-alg--ssl-alg <ALGORITHM>Client SSL algorithm (default: SunX509).
+-ciphers--ssl-ciphers <CIPHER-SUITES> Client SSL. Comma-separated list of encryption suites.
+-d --nodes <initial_hosts>Required. Connect to a list of (comma separated) hosts for initial cluster information.
+-f--conf-path <path_to_config_file>Path to the cassandra.yaml path for streaming throughput and client/server SSL.
+-h--helpDisplay help.
+-i --ignore <NODES>Do not stream to this comma separated list of nodes.
+-ks--keystore <KEYSTORE>Client SSL. Full path to the keystore.
+-kspw--keystore-password <KEYSTORE-PASSWORD>Client SSL. Password for the keystore.
+ --no-progressDo not display progress.
+-p--port <rpc port>RPC port (default: 9160).
+-prtcl--ssl-protocol <PROTOCOL>Client SSL. Connections protocol to use (default: TLS).
+-pw--password <password> Password for Cassandra authentication.
+-st--store-type <STORE-TYPE> Client SSL. Type of store.
+-t--throttle <throttle>Throttle speed in Mbits (default: unlimited).
+-tf--transport-factory <transport factory>Fully-qualified ITransportFactory class name for creating a connection to Cassandra.
+-ts--truststore <TRUSTSTORE> Client SSL. Full path to truststore.
+-tspw--truststore-password <TRUSTSTORE-PASSWORD>Client SSL. Password of the truststore.
+-u--username <username>User name for Cassandra authentication.
+-v--verboseVerbose output.
+
+The following cassandra.yaml options can be over-ridden from the command line: 
+
+
+Option in cassandra.yaml
+
+Command line example
+
+
+stream_throughput_outbound_megabits_per_sec--throttle 300
+server_encryption_options--ssl-protocol none
+client_encryption_options--keystore-password MyPassword 
+
+
+
+Related reference
+
+
+
+The cassandra.yaml configuration file

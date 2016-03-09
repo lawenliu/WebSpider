@@ -1,0 +1,62 @@
+Examples of read consistency levels
+Read request examples with different consistency levels.
+
+The following diagrams show examples of read requests using these consistency levels:QUORUM in a single data center
+ONE in a single data center
+QUORUM in two data centers
+LOCAL_QUORUM in two data centers
+ONE in two data centers
+LOCAL_ONE in two data centers
+
+Rapid read protection diagram shows how the speculative retry table property affects consistency.
+
+
+A single data center cluster with a consistency level of QUORUM 
+
+In a single data center cluster with a replication factor of 3, and a read consistency level of QUORUM, 2 of the 3 replicas for the given row must respond to fulfill the read request. If the contacted replicas have different versions of the row, the replica with the most recent version will return the requested data. In the background, the third replica is checked for consistency with the first two, and if needed, a read repair is initiated for the out-of-date replicas.
+
+
+
+
+
+
+A single data center cluster with a consistency level of ONE 
+
+In a single data center cluster with a replication factor of 3, and a read consistency level of ONE, the closest replica for the given row is contacted to fulfill the read request. In the background a read repair is potentially initiated, based on the read_repair_chance setting of the table, for the other replicas.
+
+
+
+
+
+
+A two data center cluster with a consistency level of QUORUM 
+
+In a two data center cluster with a replication factor of 3, and a read consistency of QUORUM, 4 replicas for the given row must resond to fulfill the read request. The 4 replicas can be from any data center. In the background, the remaining replicas are checked for consistency with the first four, and if needed, a read repair is initiated for the out-of-date replicas.
+
+
+
+
+
+
+A two data center cluster with a consistency level of LOCAL_QUORUM 
+
+In a multiple data center cluster with a replication factor of 3, and a read consistency of LOCAL_QUORUM, 2 replicas in the same data center as the coordinator node for the given row must respond to fulfill the read request. In the background, the remaining replicas are checked for consistency with the first 2, and if needed, a read repair is initiated for the out-of-date replicas.
+
+
+
+
+
+
+A two data center cluster with a consistency level of ONE 
+
+In a multiple data center cluster with a replication factor of 3, and a read consistency of ONE, the closest replica for the given row, regardless of data center, is contacted to fulfill the read request. In the background a read repair is potentially initiated, based on the read_repair_chance setting of the table, for the other replicas.
+
+
+
+
+
+
+A two data center cluster with a consistency level of LOCAL_ONE 
+
+In a multiple data center cluster with a replication factor of 3, and a read consistency of LOCAL_ONE, the closest replica for the given row in the same data center as the coordinator node is contacted to fulfill the read request. In the background a read repair is potentially initiated, based on the read_repair_chance setting of the table, for the other replicas.
+

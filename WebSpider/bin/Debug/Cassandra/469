@@ -1,0 +1,22 @@
+Interpreting the output of cassandra-stress
+About the output from the running tests.
+
+Each line reports data for the interval between the last elapsed time and current elapsed time, which is set by the --progress-interval option (default 10 seconds).
+7251,725,725,56.1,95.1,191.8,10
+19523,1227,1227,41.6,86.1,189.1,21
+41348,2182,2182,22.5,75.7,176.0,31
+...
+
+
+Data
+
+Description
+
+totalTotal number of operations since the start of the test.
+interval_op_rateNumber of operations per second performed during the interval.
+interval_key_rateNumber of keys/rows read or written per second during the interval (normally be the same as interval_op_rate unless doing range slices). 
+latencyAverage latency in milliseconds for each operation during that interval.
+95th95% of the time the latency was less than the number displayed in the column (Cassandra 1.2 or later).
+99th99% of the time the latency was less than the number displayed in the column (Cassandra 1.2 or later).
+elapsedNumber of seconds elapsed since the beginning of the test.
+

@@ -1,0 +1,37 @@
+Understanding the architecture
+Important topics for understanding Cassandra.
+Topics in this section: 
+
+Architecture in brief
+
+Essential information for understanding and using Cassandra.
+
+
+Internode communications (gossip)
+
+Cassandra uses a protocol called gossip to discover location and state information about the other nodes participating in a Cassandra cluster.
+
+
+Data distribution and replication
+
+How data is distributed and factors influencing replication.
+
+
+Partitioners
+
+A partitioner determines how data is distributed across the nodes in the cluster (including replicas).
+
+
+Snitches
+
+A snitch determines which data centers and racks nodes belong to.
+
+
+Client requests
+
+Client read or write requests can be sent to any node in the cluster because all nodes in Cassandra are peers.
+
+
+Planning a cluster deployment
+
+Vital information about successfully deploying a Cassandra cluster.

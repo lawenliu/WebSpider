@@ -1,0 +1,13 @@
+Stopping Cassandra as a service
+Stop the Cassandra Java server process on packaged installations.
+
+
+Stop the Cassandra Java server process on packaged installations.
+
+
+Procedure
+
+
+You must have root or sudo permissions to stop the Cassandra service: 
+$ sudo service cassandra stop
+

@@ -1,0 +1,33 @@
+About data consistency
+How up-to-date and synchronized a row of data is on all replicas.
+
+Consistency refers to how up-to-date and synchronized a row of Cassandra data is on all of its replicas. Cassandra extends the concept of eventual consistency by offering tunable consistency. For any given read or write operation, the client application decides how consistent the requested data must be.
+
+A tutorial in the CQL documentation compares consistency levels using cqlsh tracing.
+
+Even at low consistency levels, Cassandra writes to all replicas of the partition key, even replicas in other data centers. The consistency level determines only the number of replicas that need to acknowledge the write success to the client application. Typically, a client specifies a consistency level that is less than the replication factor specified by the keyspace. This practice ensures that the coordinating server node reports the write successful even if some replicas are down or otherwise not responsive to the write. 
+
+The read consistency level specifies how many replicas must respond to a read request before returning data to the client application. Cassandra checks the specified number of replicas for data to satisfy the read request.
+
+
+About built-in consistency repair features 
+
+You can use these built-in repair utilities to ensure that data remains consistent across replicas.
+Read repair
+Hinted handoff
+Anti-entropy node repair
+Topics in this section: 
+
+Configuring data consistency
+
+Consistency levels in Cassandra can be configured to manage availability versus data accuracy.
+
+
+Read requests
+
+The three types of read requests that a coordinator node can send to a replica.
+
+
+Write requests
+
+How write requests work.

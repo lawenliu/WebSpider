@@ -1,0 +1,15 @@
+Internal authentication
+Internal authentication is based on Cassandra-controlled login accounts and passwords. 
+
+Like object permission management using internal authorization, internal authentication is based on Cassandra-controlled login accounts and passwords. Internal authentication works for the following clients when you provide a user name and password to start up the client: 
+Astyanax
+cassandra-cli
+cqlsh
+DataStax drivers - produced and certified by DataStax to work with Cassandra.
+Hector
+pycassa
+
+Internal authentication stores usernames and bcrypt-hashed passwords in the system_auth.credentials table.
+
+PasswordAuthenticator is an IAuthenticator implementation that you can use to configure Cassandra for internal authentication out-of-the-box.
+

@@ -1,0 +1,19 @@
+Starting Cassandra as a service
+Start the Cassandra Java server process for packaged installations.
+
+
+Start the Cassandra Java server process for packaged installations. Startup scripts are provided in /etc/init.d. The service runs as the cassandra user. 
+
+
+Procedure
+
+
+
+You must have root or sudo permissions to start Cassandra as a service.
+
+
+On initial start-up, each node must be started one at a time, starting with your seed nodes: 
+$ sudo service cassandra start
+
+On Enterprise Linux systems, the Cassandra service runs as a java process.
+

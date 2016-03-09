@@ -1,0 +1,52 @@
+Recovering from a single disk failure using JBOD
+Recovering from a single disk failure in a disk array using JBOD.
+
+
+How to recover from a single disk failure in a disk array using JBOD (just a bunch of disks). 
+
+
+Node can restart
+Stop Cassandra and shut down the node.
+Replace the failed disk.
+Start the node and Cassandra.
+Run nodetool repair on the node.
+
+
+Node cannot restart
+
+If the node cannot restart, it is possible the system directory is corrupted. If the node cannot restart after completing these steps, see Replacing a dead node.
+
+If using the node uses vnodes:Stop Cassandra and shut down the node.
+Replace the failed disk.
+On a healthy node run the following command:$ nodetool ring | grep ip_address_of_node | awk ' {print $NF ","}' | xargs
+
+On the node with the new disk, add the list of tokens from the previous step (separated by commas), under initial_token in the cassandra.yaml file.
+Clear each system directory for every functioning drive:
+Assuming disk1 has failed and the data_file_directories setting in the cassandra.yaml for each drive is:
+-/mnt1/cassandra/data
+-/mnt2/cassandra/data
+-/mnt3/cassandra/data
+
+Run the following commands:$ rm -fr /mnt2/cassandra/data/system
+$ rm -fr /mnt3/cassandra/data/system
+
+Start the node and Cassandra.
+Run nodetool repair.
+After the node is fully integrated into the cluster, it is recommended to return to normal vnode settings: num_tokens: number_of_tokens 
+#initial_token
+
+
+If the node uses assigned tokens (single-token architecture):Stop Cassandra and shut down the node.
+Replace the failed disk.
+Clear each system directory for every functioning drive:
+Assuming disk1 has failed and the data_file_directories setting in the cassandra.yaml for each drive is:
+-/mnt1/cassandra/data
+-/mnt2/cassandra/data
+-/mnt3/cassandra/data
+
+Run the following commands:$ rm -fr /mnt2/cassandra/data/system
+$ rm -fr /mnt3/cassandra/data/system
+
+Start the node and Cassandra.
+Run nodetool repair on the node.
+

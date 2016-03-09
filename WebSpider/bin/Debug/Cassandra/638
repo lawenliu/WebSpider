@@ -1,0 +1,13 @@
+Stopping Cassandra as a stand-alone process
+Stop the Cassandra Java server process on tarball installations.
+
+
+Stop the Cassandra Java server process on packaged installations.
+
+
+Procedure
+
+Find the Cassandra Java process ID (PID), and then kill the process using its PID number: 
+$ ps auwx | grep cassandra
+$ sudo kill pid
+

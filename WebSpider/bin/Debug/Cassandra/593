@@ -1,0 +1,57 @@
+status
+Provide information about the cluster, such as the state, load, and IDs.
+
+
+Provide information about the cluster, such as the state, load, and IDs.
+
+
+Synopsis 
+nodetool <options> status (-r | --resolve-ip ) -- <keyspace>
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-r, or --resolve-ip, means to provide node names instead of IP addresses.
+-- Separates an option and argument that could be mistaken for a option.
+keyspace is a keyspace name.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+The status command provides the following information:
+ Status - U (up) or D (down) 
+Indicates whether the node is functioning or not.
+
+ State - N (normal), L (leaving), J (joining), M (moving) 
+The state of the node in relation to the cluster.
+
+ Address 
+The node's URL.
+
+ Load - updates every 90 seconds 
+The amount of file system data under the cassandra data directory after excluding all content in the snapshots subdirectories. Because all SSTable data files are included, any data that is not cleaned up, such as TTL-expired cell or tombstoned data) is counted.
+
+ Tokens 
+The number of tokens set for the node.
+
+ Owns 
+The percentage of the data owned by the node per data center times the replication factor. For example, a node can own 33% of the ring, but show100% if the replication factor is 3.
+
+Attention: If your cluster uses multiple data centers with different keyspaces that use different replication strategies or replication factors, you must specify a keyspace to get meaningful ownship information.
+
+ Host ID 
+The network ID of the node.
+
+ Rack 
+The rack or, in the case of Amazon EC2, the availability zone of the node.
+

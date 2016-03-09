@@ -1,0 +1,41 @@
+compactionstats
+Provide statistics about a compaction.
+
+
+Provide statistics about a compaction.
+
+
+Synopsis 
+nodetool <options> compactionstats
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number>
+( -pw | --password ) <password >
+( -u | --username ) <user name>
+
+-- separates an option and argument that could be mistaken for a option.
+data center is the name of an arbitrarily chosen data center from which to select sources for streaming.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope
+
+
+Description 
+
+The total column shows the total number of uncompressed bytes of SSTables being compacted. The system log lists the names of the SSTables compacted. 
+
+
+Example 
+$ bin/nodetool compactionstats
+pending tasks: 5
+          compaction type        keyspace           table       completed           total      unit  progress
+               Compaction       Keyspace1       Standard1       282310680       302170540     bytes    93.43%
+               Compaction       Keyspace1       Standard1        58457931       307520780     bytes    19.01%
+Active compaction remaining time :   0h00m16s
+      
+

@@ -1,0 +1,105 @@
+Recommended production settings
+Recommendations for production environments.
+
+
+Recommendations for production environments; adjust them accordingly for your implementation.
+
+
+Optimizing SSDs 
+
+For the majority of Linux distributions, SSDs are not configured optimally by default. The following steps ensures best practice settings for SSDs: 
+Ensure that the SysFS rotational flag is set to false (zero). 
+This overrides any detection by the operating system to ensure the drive is considered an SSD. 
+
+Repeat for any block devices created from SSD storage, such as mdarrays.
+Set the IO scheduler to either deadline or noop:The noop scheduler is the right choice when the target block device is an array of SSDs behind a high-end IO controller that performs IO optimization. 
+The deadline scheduler optimizes requests to minimize IO latency. If in doubt, use the deadline scheduler.
+
+Set the read-ahead value for the block device to 8KB. 
+This setting tells the operating system not to read extra bytes, which can increase IO time and pollute the cache with bytes that weren’t requested by the user.
+
+
+For example, if the SSD is /dev/sda, in /etc/rc.local:
+echo deadline > /sys/block/sda/queue/scheduler
+#OR...
+#echo noop > /sys/block/sda/queue/scheduler 
+echo 0 > /sys/class/block/sda/queue/rotational
+echo 8 > /sys/class/block/sda/queue/read_ahead_kb
+
+
+Disable zone_reclaim_mode on NUMA systems 
+The Linux kernel can be inconsistent in enabling/disabling zone_reclaim_mode. This can result in odd performance problems.
+To ensure that zone_reclaim_mode is disabled:echo 0 > /proc/sys/vm/zone_reclaim_mode
+
+For more information, see Peculiar Linux kernel performance problem on NUMA systems.
+
+
+User resource limits 
+
+You can view the current limits using the ulimit -a command. Although limits can also be temporarily set using this command, DataStax recommends making the changes permanent:  
+
+Packaged installs: Ensure that the following settings are included in the /etc/security/limits.d/cassandra.conf file: cassandra - memlock unlimited
+cassandra - nofile 100000
+cassandra - nproc 32768
+cassandra - as unlimited
+
+Tarball installs: Ensure that the following settings are included in the /etc/security/limits.conf file: * - memlock unlimited
+* - nofile 100000
+* - nproc 32768
+* - as unlimited
+
+If you run Cassandra as root, some Linux distributions such as Ubuntu, require setting the limits for root explicitly instead of using *: root - memlock unlimited
+root - nofile 100000
+root - nproc 32768
+root - as unlimited
+
+For CentOS, RHEL, OEL systems, also set the nproc limits in /etc/security/limits.d/90-nproc.conf : * - nproc 32768
+
+For all installations, add the following line to /etc/sysctl.conf : vm.max_map_count = 131072
+
+To make the changes take effect, reboot the server or run the following command: $ sudo sysctl -p
+
+To confirm the limits are applied to the Cassandra process, run the following command where pid is the process ID of the currently running Cassandra process: $ cat /proc/<pid>/limits
+
+For more information, see Insufficient user resource limits errors.
+
+
+Disable swap 
+
+You must disable swap entirely. Failure to do so can severely lower performance. Because Cassandra has multiple replicas and transparent failover, it is preferable for a replica to be killed immediately when memory is low rather than go into swap. This allows traffic to be immediately redirected to a functioning replica instead of continuing to hit the replica that has high latency due to swapping. If your system has a lot of DRAM, swapping still lowers performance significantly because the OS swaps out executable code so that more DRAM is available for caching disks.
+
+If you insist on using swap, you can set vm.swappiness=1. This allows the kernel swap out the absolute least used parts.
+$ sudo swapoff --all
+
+To make this change permanent, remove all swap file entries from /etc/fstab.
+
+For more information, see Nodes seem to freeze after some period of time. 
+
+
+Synchronize clocks 
+
+The clocks on all nodes should be synchronized. You can use NTP (Network Time Protocol) or other methods. 
+
+This is required because columns are only overwritten if the timestamp in the new version of the column is more recent than the existing column.
+
+
+Optimum blockdev --setra settings for RAID for spinning disks 
+
+Typically, a readahead of 128 is recommended, especially on Amazon EC2 RAID0 devices.
+
+Check to ensure setra is not set to 65536:
+sudo blockdev --report /dev/<device>
+
+To set setra:
+sudo blockdev --setra 128 /dev/<device>
+
+
+Java Virtual Machine 
+
+The latest 64-bit version of Oracle Java Platform, Standard Edition 8 or OpenJDK 7.
+
+
+Java Native Access 
+
+Java Native Access (JNA) is required for production installations.
+

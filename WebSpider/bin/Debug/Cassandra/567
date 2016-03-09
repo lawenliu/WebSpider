@@ -1,0 +1,30 @@
+info
+Provides node information, such as load and uptime.
+
+
+Provides node information, such as load and uptime.
+
+
+Synopsis 
+nodetool <options> info ( -T | --tokens )
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-T or --tokens means provide all token information.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+Provides node information including the token and on disk storage (load) information, times started (generation), uptime in seconds, and heap memory usage.
+

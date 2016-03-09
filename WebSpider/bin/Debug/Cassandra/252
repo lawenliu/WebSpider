@@ -1,0 +1,47 @@
+Configuration
+Configuration topics.
+Topics in this section: 
+
+The cassandra.yaml configuration file
+
+The cassandra.yaml file is the main configuration file for Cassandra.
+
+
+Configuring gossip settings
+
+Using the cassandra.yaml file to configure gossip.
+
+
+Configuring the heap dump directory
+
+Analyzing the heap dump file can help troubleshoot memory problems. 
+
+
+Generating tokens
+
+If not using virtual nodes (vnodes), you still need to calculate tokens for your cluster.
+
+
+Configuring virtual nodes
+
+Topics about configuring virtual nodes.
+
+
+Logging configuration
+
+About Cassandra logging functionality using Simple Logging Facade for Java (SLF4J) with log4j.
+
+
+Commit log archive configuration
+
+Cassandra provides commit log archiving and point-in-time recovery.
+
+
+Using multiple network interfaces
+
+Steps for configuring Cassandra for multiple network interfaces or when using different regions in cloud implementations.
+
+
+Hadoop support
+
+Cassandra support for integrating Hadoop with Cassandra.

@@ -1,0 +1,46 @@
+Preparing server certificates
+Steps to generate SSL certificates for client-to-node encryption or node-to-node encryption.
+
+
+How to generate SSL certificates for client-to-node encryption or node-to-node encryption. 
+
+If you generate the certificates for one type of encryption, you do not need to generate them again for the other: the same certificates are used for both. All nodes must have all the relevant SSL certificates on all nodes. A keystore contains private keys. The truststore contains SSL certificates for each node and doesn't require signing by a trusted and recognized public certification authority.
+
+
+Procedure
+Generate the private and public key pair for the nodes of the cluster. 
+
+A prompt for the new keystore and key password appears.
+
+Leave key password the same as the keystore password. 
+Repeat steps 1 and 2 on each node using a different alias for each one. 
+keytool -genkey -keyalg RSA -alias <cassandra_node0> -keystore .keystore
+
+Export the public part of the certificate to a separate file and copy these certificates to all other nodes. 
+keytool -export -alias cassandra -file cassandranode0.cer -keystore .keystore
+
+Add the certificate of each node to the truststore of each node, so nodes can verify the identity of other nodes. 
+keytool -import -v -trustcacerts -alias <cassandra_node0> -file <cassandra_node0>.cer -keystore .truststore
+keytool -import -v -trustcacerts -alias <cassandra_node1> -file <cassandra_node1>.cer -keystore .truststore
+. . .
+
+Distribute the .keystore and .truststore files to all Cassandra nodes. 
+Make sure .keystore is readable only to the Cassandra daemon and not by any user of the system. 
+
+Adding new trusted users
+
+
+Add new users when client certificate authentication is enabled.
+
+
+How to add new users when client certificate authentication is enabled.
+
+
+
+Prerequisites
+The client certificate authentication must be enabled (require_client_auth=true).
+
+Procedure
+Generate the certificate as described in Client-to-node encryption. 
+Import the user's certificate into every node's truststore using keytool: 
+keytool -import -v -trustcacerts -alias <username> -file <certificate file> -keystore .truststore

@@ -1,0 +1,97 @@
+snapshot
+Take a snapshot of one or more keyspaces, or of a table, to backup data.
+
+
+Take a snapshot of one or more keyspaces, or of a table, to backup data.
+
+
+Synopsis 
+nodetool <options> snapshot ( 
+  ( -cf <table> | --column-family <table> ) 
+  ( -t <tag> | --tag <tag> )
+  -- ( <keyspace> ) | ( <keyspace> ... )
+)
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-cf, or --column-family, followed by the name of the table to be backed up.
+-t or --tag, followed by the snapshot name.
+-- Separates an option and argument that could be mistaken for a option.
+keyspace is one keyspace name that is required when using the -cf option, or one or more optional keyspace names, separated by a space.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+Use this command to back up data using a snapshot. Depending on how you use the command, the following data is included:  All keyspaces on a node. 
+Omit the optional keyspace and table parameters, as shown in the first example.
+
+ One or more keyspaces and all tables in the named keyspaces. 
+Include one or more names of the keyspaces, as shown in the second and third examples.
+
+ A single table. 
+Include the name of a single keyspace and a table using the -cf option, as shown in the last example.
+
+
+Cassandra flushes the node before taking a snapshot, takes the snapshot, and stores the data in the snapshots directory of each keyspace in the data directory. If you do not specify the name of a snapshot directory using the -t option, Cassandra names the directory using the timestamp of the snapshot, for example 1391460334889. Follow the procedure for taking a snapshot before upgrading Cassandra. When upgrading, backup all keyspaces. For more information about snapshots, see Apache documentation . 
+
+
+Example: All keyspaces 
+
+Take a snapshot of all keyspaces on the node. On Linux, in the Cassandra bin directory, for example: 
+$ ./nodetool snapshot
+
+The following message appears:
+Requested creating snapshot(s) for [all keyspaces] with snapshot name [1391464041163]
+Snapshot directory: 1391464041163
+
+Because you did not specify a snapshot name, Cassandra names snapshot directories using the timestamp of the snapshot. If the keyspace contains no data, empty directories are not created.
+
+
+Example: Single keyspace snapshot 
+
+Assuming you created the keyspace and tables in the music service example, take a snapshot of the music keyspace and name the snapshot 2014.06.24. On Linux, in the Cassandra bin directory, for example: 
+$ ./nodetool snapshot -t 2014.06.24 music
+
+The following message appears:
+Requested creating snapshot(s) for [music] with snapshot name [2014.06.24]
+Snapshot directory: 2014.06.24
+
+Assuming the music keyspace contains two tables, songs and playlists, taking a snapshot of the keyspace creates multiple snapshot directories named 2014.06.24. A number of .db files containing the data are located in these directories. For example: $ cd /var/lib/cassandra/data/music/playlists-bf8118508cfd11e3972273ded3cb6170/snapshots/2014.06.24
+$ ls
+music-playlists-ka-1-CompressionInfo.db  music-playlists-ka-1-Index.db       music-playlists-ka-1-TOC.txt
+music-playlists-ka-1-Data.db             music-playlists-ka-1-Statistics.db
+music-playlists-ka-1-Filter.db           music-playlists-ka-1-Summary.db
+$ cd /var/lib/cassandra/data/music/songs-b8e385a08cfd11e3972273ded3cb6170/2014.06.24/snapshots/2014.06.24
+music-songs-ka-1-CompressionInfo.db	music-songs-ka-1-Index.db		music-songs-ka-1-TOC.txt
+music-songs-ka-1-Data.db		music-songs-ka-1-Statistics.db
+music-songs-ka-1-Filter.db		music-songs-ka-1-Summary.db
+
+
+Example: Multiple keyspaces snapshot 
+
+Assuming you created a keyspace named mykeyspace in addition to the music keyspace, take a snapshot of both keyspaces. On Linux, in the Cassandra bin directory, for example: 
+$ ./nodetool snapshot mykeyspace music
+
+The following message appears:
+Requested creating snapshot(s) for [mykeyspace, music] with snapshot name [1391460334889]
+Snapshot directory: 1391460334889
+
+
+Example: Single table snapshot 
+
+Take a snapshot of only the playlists table in the music keyspace. On Linux, in the Cassandra bin directory, for example: 
+$ ./nodetool snapshot -cf playlists music
+Requested creating snapshot(s) for [music] with snapshot name [1391461910600]
+Snapshot directory: 1391461910600
+Cassandra creates the snapshot directory named 1391461910600 that contains the backup data of playlists table in /var/lib/cassandra/data/music/playlists-bf8118508cfd11e3972273ded3cb6170/snapshots, for example. 
+

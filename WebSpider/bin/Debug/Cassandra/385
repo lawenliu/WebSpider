@@ -1,0 +1,40 @@
+Backing up and restoring data
+Cassandra backs up data by taking a snapshot of all on-disk data files (SSTable files) stored in the data directory. 
+
+Cassandra backs up data by taking a snapshot of all on-disk data files (SSTable files) stored in the data directory. You can take a snapshot of all keyspaces, a single keyspace, or a single table while the system is online.
+
+Using a parallel ssh tool (such as pssh), you can snapshot an entire cluster. This provides an eventually consistent backup. Although no one node is guaranteed to be consistent with its replica nodes at the time a snapshot is taken, a restored snapshot resumes consistency using Cassandra's built-in consistency mechanisms.
+
+After a system-wide snapshot is performed, you can enable incremental backups on each node to backup data that has changed since the last snapshot: each time an SSTable is flushed, a hard link is copied into a /backups subdirectory of the data directory (provided JNA is enabled).
+
+Note: If JNA is enabled, snapshots are performed by hard links. If not enabled, I/O activity increases as the files are copied from one location to another, which significantly reduces efficiency.
+Topics in this section: 
+
+Taking a snapshot
+
+Steps for taking a global snapshot or per node.
+
+
+Deleting snapshot files
+
+Steps to delete snapshot files.
+
+
+Enabling incremental backups
+
+Steps to enable incremental backups. When incremental backups are enabled, Cassandra hard-links each flushed SSTable to a backups directory under the keyspace data directory. 
+
+
+Restoring from a Snapshot
+
+Methods for restoring from a snapshot.
+
+
+Restoring a snapshot into a new cluster
+
+Steps for restoring a snapshot by recovering the cluster into another newly created cluster.
+
+
+Recovering from a single disk failure using JBOD
+
+Recovering from a single disk failure in a disk array using JBOD.

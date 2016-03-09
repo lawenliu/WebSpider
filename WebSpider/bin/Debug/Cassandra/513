@@ -1,0 +1,33 @@
+rebuild_index
+Performs a full rebuild of the index for a table.
+
+
+Performs a full rebuild of the index for a table.
+
+
+Synopsis 
+nodetool <options> rebuild_index -- <keyspace> <table> ( <index> ... )
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option and argument that could be mistaken for a option.
+keyspace is a keyspace name.
+table is a table name.
+index is a list of index names separated by a space.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+Fully rebuilds one or more indexes for a table. 
+

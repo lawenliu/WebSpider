@@ -1,0 +1,30 @@
+setstreamthroughput
+Sets the throughput capacity in MB for streaming in the system, or disable throttling.
+
+
+Sets the throughput capacity in MB for streaming in the system, or disable throttling.
+
+
+Synopsis 
+nodetool <options> setstreamthroughput -- <value_in_mb>
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option and argument that could be mistaken for a option.
+value_in_mb is the throughput capacity in MB per second for streaming.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+Set value_in_MB to 0 to disable throttling. 
+

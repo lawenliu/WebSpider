@@ -1,0 +1,13 @@
+About deletes
+How Cassandra deletes data and why deleted data can reappear.
+
+The way Cassandra deletes data differs from the way a relational database deletes data. A relational database might spend time scanning through data looking for expired data and throwing it away or an administrator might have to partition expired data by month, for example, to clear it out faster. Data in a Cassandra column can have an optional expiration date called TTL (time to live). Use CQL to set the TTL in seconds for data. Cassandra marks TTL data with a tombstone after the requested amount of time has expired. Tombstones exist for a period of time defined by gc_grace_seconds. After data is marked with a tombstone, the data is automatically removed during the normal compaction process.
+
+Facts about deleted data to keep in mind are:Cassandra does not immediately remove data marked for deletion from disk. The deletion occurs during compaction.
+If you use the sized-tiered or date-tiered compaction strategy, you can drop data immediately by manually starting the compaction process. Before doing so, understand the documented disadvantages of the process.
+A deleted column can reappear if you do not run node repair routinely.
+
+Why deleted data can reappear
+
+Marking data with a tombstone signals Cassandra to retry sending a delete request to a replica that was down at the time of delete. If the replica comes back up within the grace period of time, it eventually receives the delete request. However, if a node is down longer than the grace period, the node can miss the delete because the tombstone disappears after gc_grace_seconds. Cassandra always attempts to replay missed updates when the node comes back up again. After a failure, it is a best practice to run node repair to repair inconsistencies across all of the replicas when bringing a node back into the cluster. If the node doesn't come back within gc_grace,_seconds, remove the node, wipe it, and bootstrap it again.
+

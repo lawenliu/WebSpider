@@ -1,0 +1,17 @@
+References
+Reference topics.
+Topics in this section: 
+
+Starting and stopping Cassandra
+
+Topics for starting and stopping Cassandra.
+
+
+Install locations
+
+Install location topics.
+
+
+Cassandra-CLI utility (deprecated)
+
+Cassandra stores storage configuration attributes in the system keyspace.

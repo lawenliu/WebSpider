@@ -1,0 +1,35 @@
+sethintedhandoffthrottlekb
+Sets hinted handoff throttle in kb/sec per delivery thread. (Cassandra 2.0.11 and later)
+
+
+Sets hinted handoff throttle in kb/sec per delivery thread. (Cassandra 2.0.11 and later)
+
+
+Synopsis 
+nodetool <options> sethintedhandoffthrottlekb <value_in_kb/sec>
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number>
+( -pw | --password ) <password >
+( -u | --username ) <user name> 
+( -pwf <passwordFilePath | --password-file <passwordFilePath> )
+
+value_in_kb/sec is the throttle time.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope
+
+
+Description 
+
+When a node detects that a node for which it is holding hints has recovered, it begins sending the hints to that node. This setting specifies the maximum sleep interval per delivery thread in kilobytes per second after delivering each hint. The interval shrinks proportionally to the number of nodes in the cluster. For example, if there are two nodes in the cluster, each delivery thread uses the maximum interval; if there are three nodes, each node throttles to half of the maximum interval, because the two nodes are expected to deliver hints simultaneously.
+
+
+Example 
+nodetool sethintedhandoffthrottlekb 2048
+

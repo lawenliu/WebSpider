@@ -1,0 +1,32 @@
+setcachecapacity
+Set global key and row cache capacities in megabytes.
+
+
+Set global key and row cache capacities in megabytes.
+
+
+Synopsis 
+nodetool <options> setcachecapacity -- <key-cache-capacity> <row-cache-capacity>
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option and argument that could be mistaken for a option.
+key-cache-capacity is the maximum size in MB of the key cache in memory.
+row-cache-capacity corresponds to the maximum size in MB of the row cache in memory.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+The key-cache-capacity argument corresponds to the key_cache_size_in_mb parameter in the cassandra.yaml. Each key cache hit saves one seek and each row cache hit saves a minimum of two seeks. Devoting some memory to the key cache is usually a good tradeoff considering the positive effect on the response time. The default value is empty, which means a minimum of five percent of the heap in MB or 100 MB. 
+The row-cache-capacity argument corresponds to the row_cache_size_in_mb parameter in the cassandra.yaml. By default, row caching is zero (disabled).
+

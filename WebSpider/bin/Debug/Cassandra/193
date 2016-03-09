@@ -1,0 +1,13 @@
+How the row cache affects reads
+A brief description and illustration about how the row cache affects reads.
+
+Typical of any database, reads are fastest when the most in-demand data (or hot working set) fits into memory. Although all modern storage systems rely on some form of caching to allow for fast access to hot data, not all of them degrade gracefully when the cache capacity is exceeded and disk I/O is required. Cassandra's read performance benefits from built-in caching, shown in the following diagram.
+
+
+
+
+
+The red lines in the SSTables in this diagram are fragments of a row that Cassandra needs to combine to give the user the requested results. Cassandra caches the merged value, not the raw row fragments. That saves some CPU and disk I/O.
+
+The row cache is not write-through. If a write comes in for the row, the cache for it is invalidated and is not be cached again until it is read again. 
+

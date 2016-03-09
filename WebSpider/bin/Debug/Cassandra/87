@@ -1,0 +1,5 @@
+Planning an Amazon EC2 cluster
+Important information for deploying a production Cassandra cluster on Amazon EC2.
+
+For planning an Amazon cluster, see the latest AMI documentation.
+

@@ -1,0 +1,39 @@
+rebuild
+Rebuilds data by streaming from other nodes.
+
+
+Rebuilds data by streaming from other nodes.
+
+
+Synopsis 
+nodetool <options> rebuild -- <data center>
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option and argument that could be mistaken for a option.
+ data center is the name of an arbitrarily chosen data center from which to select sources for streaming. 
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+This command operates on multiple nodes in a cluster. Like bootstrap, rebuild only streams data from a single source replica per range. Use this command to bring up a new data center in an existing cluster. See Adding a data center to a cluster . 
+
+
+For example, when adding a new data center, you would run the following on all nodes in the new data center:
+nodetool rebuild -- name_of_existing_data_center
+
+Attention: If you don't specify the existing data center in the command line, the new nodes will appear to rebuild successfully, but will not contain any data.
+
+You can run rebuild on one or more nodes at the same time. The choices depends on whether your cluster can handle the extra IO and network pressure of running on multiple nodes. Running on one node at a time has the least impact on the existing cluster. 
+

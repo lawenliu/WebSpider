@@ -1,0 +1,132 @@
+Initializing a multiple node cluster (single data center)
+A deployment scenario for a Cassandra cluster with a single data center.
+
+
+This topic contains information for deploying a Cassandra cluster with a single data center. If you're new to Cassandra, and haven't set up a cluster, see the Cassandra & DataStax Enterprise Essentials or 10 Minute Cassandra Walkthrough.
+
+
+
+Prerequisites
+Each node must be correctly configured before starting the cluster. You must determine or perform the following before starting the cluster:A good understanding of how Cassandra works. Be sure to read at least Understanding the architecture, Data replication, and Cassandra's rack feature.
+Install Cassandra on each node.
+Choose a name for the cluster.
+Get the IP address of each node.
+Determine which nodes will be seed nodes. Do not make all nodes seed nodes. Please read Internode communications (gossip).
+Determine the snitch and replication strategy. The GossipingPropertyFileSnitch and NetworkTopologyStrategy are recommended for production environments.
+If using multiple data centers, determine a naming convention for each data center and rack, for example: DC1, DC2 or 100, 200 and RAC1, RAC2 or R101, R102. Choose the name carefully; renaming a data center is not possible.
+Other possible configuration settings are described in The cassandra.yaml configuration file and property files such as cassandra-rackdc.properties.
+
+
+This example describes installing a 6 node cluster spanning 2 racks in a single data center. Each node is configured to use the GossipingPropertyFileSnitch and 256 virtual nodes (vnodes). 
+
+In Cassandra, the term data center is a grouping of nodes. Data center is synonymous with replication group, that is, a grouping of nodes configured together for replication purposes.
+
+
+Procedure
+Suppose you install Cassandra on these nodes: 
+node0 110.82.155.0 (seed1)
+node1 110.82.155.1
+node2 110.82.155.2
+node3 110.82.156.3 (seed2)
+node4 110.82.156.4
+node5 110.82.156.5
+
+
+Note: It is a best practice to have more than one seed node per data center. 
+
+If you have a firewall running in your cluster, you must open certain ports for communication between the nodes. See Configuring firewall port access. 
+If Cassandra is running, you must stop the server and clear the data: 
+
+Doing this removes the default cluster_name (Test Cluster) from the system table. All nodes must use the same cluster name.
+
+
+Package installations:
+Stop Cassandra: 
+$ sudo service cassandra stop
+
+Clear the data: 
+$ sudo rm -rf /var/lib/cassandra/data/system/*
+
+
+
+Tarball installations: 
+Stop Cassandra: 
+$ ps auwx | grep cassandra
+$ sudo  kill pid
+
+Clear the data: 
+$ sudo rm -rf /var/lib/cassandra/data/system/*
+
+
+Set the properties in the cassandra.yaml file for each node: 
+Package installations: /etc/cassandra/cassandra.yaml
+Tarball installations: install_location/conf/cassandra.yaml
+
+Note: After making any changes in the cassandra.yaml file, you must restart the node for the changes to take effect.
+
+Properties to set:num_tokens: recommended value: 256
+-seeds: internal IP address of each seed node
+Seed nodes do not bootstrap, which is the process of a new node joining an existing cluster. For new clusters, the bootstrap process on seed nodes is skipped.
+
+listen_address: 
+If not set, Cassandra asks the system for the local address, the one associated with its hostname. In some cases Cassandra doesn't produce the correct address and you must specify the listen_address.
+
+endpoint_snitch: name of snitch (See endpoint_snitch.) If you are changing snitches, see Switching snitches.
+auto_bootstrap: false (Add this setting only when initializing a fresh cluster with no data.) 
+
+Note: If the nodes in the cluster are identical in terms of disk layout, shared libraries, and so on, you can use the same copy of the cassandra.yaml file on all of them.
+
+
+Example:
+cluster_name: 'MyCassandraCluster'
+num_tokens: 256
+seed_provider:
+  - class_name: org.apache.cassandra.locator.SimpleSeedProvider
+    parameters:
+         - seeds: "110.82.155.0,110.82.155.3"
+listen_address:
+rpc_address: 0.0.0.0
+endpoint_snitch: GossipingPropertyFileSnitch
+
+In the cassandra-rackdc.properties file, assign the data center and rack names you determined in the Prerequisites. For example: 
+# indicate the rack and dc for this node
+dc=DC1
+rack=RAC1
+
+After you have installed and configured Cassandra on all nodes, start the seed nodes one at a time, and then start the rest of the nodes. 
+
+Note: If the node has restarted because of automatic restart, you must first stop the node and clear the data directories, as described above. 
+
+Package installations:
+$ sudo service cassandra start
+
+Tarball installations:
+$ cd install_location 
+$ bin/cassandra
+
+To check that the ring is up and running, run: 
+
+Package installations:
+$ nodetool status
+
+Tarball installations:
+$ cd install_location 
+$ bin/nodetool status
+
+
+Each node should be listed and it's status and state should be UN (Up Normal).
+
+
+
+Related reference
+
+
+
+The cassandra.yaml configuration file
+
+
+Related information
+
+
+
+Install locations

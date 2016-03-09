@@ -1,0 +1,38 @@
+Package installation directories
+Configuration files directory locations.
+
+
+The configuration files are located in the following directories:
+
+
+Configuration Files
+
+Locations
+
+cassandra.yaml/etc/cassandra
+cassandra-topology.properties/etc/cassandra
+cassandra-rackdc.properties/etc/cassandra
+cassandra-env.sh /etc/cassandra
+cassandra.in.sh/usr/share/cassandra
+
+The packaged releases install into these directories:
+
+
+Directories
+
+Description
+
+/var/lib/cassandraData directories
+/var/log/cassandraLog directory
+/var/run/cassandraRuntime files
+/usr/share/cassandraEnvironment settings
+/usr/share/cassandra/libJAR files
+/usr/binBinary files
+/usr/sbin 
+/etc/cassandraConfiguration files
+/etc/init.dService startup script
+/etc/security/limits.dCassandra user limits
+/etc/default 
+
+For DataStax Enterprise installs, see Configuration File Locations.
+

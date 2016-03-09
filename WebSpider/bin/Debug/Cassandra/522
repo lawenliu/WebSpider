@@ -1,0 +1,32 @@
+setcachekeystosave
+Sets the number of keys saved by each cache for faster post-restart warmup.
+
+
+Sets the number of keys saved by each cache for faster post-restart warmup.
+
+
+Synopsis 
+nodetool <options> setcachekeystosave -- <key-cache-keys-to-save> <row-cache-keys-to-save>
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option and argument that could be mistaken for a option.
+key-cache-keys-to-save is the number of keys from the key cache to save to the saved caches directory.
+row-cache-keys-to-save is the number of keys from the row cache to save to the saved caches directory.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+This command saves the specified number of key and row caches to the saved caches directory, which you specify in the cassandra.yaml. The key-cache-keys-to-save argument corresponds to the key_cache_keys_to_save in the cassandra.yaml, which is disabled by default, meaning all keys will be saved. The row-cache-keys-to-save argument corresponds to the row_cache_keys_to_save in the cassandra.yaml, which is disabled by default.
+

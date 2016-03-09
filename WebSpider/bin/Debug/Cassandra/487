@@ -1,0 +1,28 @@
+disablegossip
+Disables the gossip protocol.
+
+
+Disables the gossip protocol.
+
+
+Synopsis 
+nodetool <options> disablegossip
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+This command effectively marks the node as being down.
+

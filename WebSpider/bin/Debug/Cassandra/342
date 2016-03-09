@@ -1,0 +1,35 @@
+Monitoring and adjusting caching
+Use nodetool to make changes to cache options and then monitor the effects of each change.
+
+Make changes to cache options in small, incremental adjustments, then monitor the effects of each change using DataStax OpsCenter or the nodetool utility. The output of the nodetool info command shows the following row cache and key cache metrics, which are configured in the cassandra.yaml file:Cache size in bytes
+Capacity in bytes
+Number of hits
+Number of requests
+Recent hit rate
+Duration in seconds after which Cassandra saves the key cache.
+
+For example, on start-up, the information from nodetool info might look something like this:
+Token            : (invoke with -T/--tokens to see all 256 tokens)
+ID               : 387d15ba-7103-491b-9327-1a691dbb504a
+Gossip active    : true
+Thrift active    : true
+Native Transport active: true
+Load             : 11.35 KB
+Generation No    : 1384180190
+Uptime (seconds) : 437
+Heap Memory (MB) : 136.33 / 1996.81
+Data Center      : datacenter1
+Rack             : rack1
+Exceptions       : 0
+Key Cache        : size 360 (bytes), capacity 103809024 (bytes), 15 hits, 19 requests, 0.789 recent hit rate, 14400 save period in seconds
+Row Cache        : size 0 (bytes), capacity 0 (bytes), 0 hits, 0 requests, NaN recent hit rate, 0 save period in seconds
+
+In the event of high memory consumption, consider tuning data caches.
+
+
+
+Related reference
+
+
+
+The cassandra.yaml configuration file

@@ -1,0 +1,18 @@
+Installing the JNA on Debian or Ubuntu Systems
+Installing JNA can improve Cassandra memory usage. 
+
+
+Installing JNA can improve Cassandra memory usage. When installed and configured, Linux does not swap out the JVM, and thus avoids related performance issues. The latest version is recommended.
+
+
+Procedure
+
+Install the JNA with the following command: 
+$ sudo apt-get install libjna-java
+
+For Ubuntu 10.04 LTS, update to JNA 3.4 as follows:Download the jna.jar from https://github.com/twall/jna.
+Remove older versions of the JNA from the /usr/share/java/ directory.
+Place the new jna.jar file in /usr/share/java/ directory.
+Create a symbolic link to the file:
+ln -s /usr/share/java/jna.jar install_location/lib
+

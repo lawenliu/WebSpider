@@ -1,0 +1,54 @@
+Installing Oracle JDK on Debian or Ubuntu Systems
+Steps for installing the Oracle JDK on Debian-based systems.
+
+
+Configure your operating system to use the latest version of Java Platform, Standard Edition 8 or OpenJDK 7. 
+
+Note: After installing the JDK, you may need to set JAVA_HOME to your profile:
+For shell or bash: export JAVA_HOME=path_to_java_home
+
+For csh (C shell): setenv JAVA_HOME=path_to_java_home
+
+The Oracle Java Platform, Standard Edition (JDK) has been removed from the official software repositories of Ubuntu and only provides a binary (.bin) version. You can get the JDK from the Java SE Downloads.
+
+
+Procedure
+Check which version of the JDK your system is using: 
+$ java -version
+
+
+If Oracle Java is used, the results should look like:
+java version "1.8.0_65"
+Java(TM) SE Runtime Environment (build 1.8.0_65-b17)
+Java HotSpot(TM) 64-Bit Server VM (build 25.65-b01, mixed mode)
+
+
+If necessary, go to Oracle Java SE Downloads, accept the license agreement, and download the installer for your distribution. 
+
+Note: If installing the Oracle JDK in a cloud environment, accept the license agreement, download the installer to your local client, and then use scp (secure copy) to transfer the file to your cloud machines.
+
+Make a directory for the JDK: 
+$ sudo mkdir -p /usr/lib/jvm
+
+Unpack the tarball and install the JDK: 
+$ sudo tar zxvf jdk-8u65-linux-x64.tar.gz -C /usr/lib/jvm
+
+
+The JDK files are installed into a directory called /usr/lib/jvm/jdk-8u_version.
+
+Tell the system that there's a new Java version available:  
+$ sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.8.0_version/bin/java" 1
+
+
+If updating from a previous version that was removed manually, execute the above command twice, because you'll get an error message the first time.
+
+Set the new JDK as the default: 
+$ sudo update-alternatives --set java /usr/lib/jvm/jdk1.8.0_version/bin/java
+
+Make sure your system is now using the correct JDK. For example: 
+$ java -version
+
+java version "1.8.0_65"
+Java(TM) SE Runtime Environment (build 1.8.0_65-b17)
+Java HotSpot(TM) 64-Bit Server VM (build 25.65-b01, mixed mode)
+

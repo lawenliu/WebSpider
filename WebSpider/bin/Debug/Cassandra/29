@@ -1,0 +1,7 @@
+Client requests
+Client read or write requests can be sent to any node in the cluster because all nodes in Cassandra are peers.
+
+Client read or write requests can be sent to any node in the cluster because all nodes in Cassandra are peers. When a client connects to a node and issues a read or write request, that node serves as the coordinator for that particular client operation.
+
+The job of the coordinator is to act as a proxy between the client application and the nodes (or replicas) that own the data being requested. The coordinator determines which nodes in the ring should get the request based on the cluster configured partitioner and replica placement strategy.
+

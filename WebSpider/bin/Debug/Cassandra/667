@@ -1,0 +1,24 @@
+Cannot initialize class org.xerial.snappy.Snappy
+An error may occur when Snappy compression/decompression is enabled although its library is available from the classpath.
+
+
+An error may occur when Snappy compression/decompression is enabled although its library is available from the classpath.
+
+java.util.concurrent.ExecutionException: java.lang.NoClassDefFoundError:
+    Could not initialize class org.xerial.snappy.Snappy
+...
+Caused by: java.lang.NoClassDefFoundError: Could not initialize class org.xerial.snappy.Snappy
+   at org.apache.cassandra.io.compress.SnappyCompressor.initialCompressedBufferLength
+       (SnappyCompressor.java:39)
+
+The native library snappy-1.0.4.1-libsnappyjava.so for Snappy compression is included in the snappy-java-1.0.4.1.jar file. When the JVM initializes the JAR, the library is added to the default temp directory. If the default temp directory is mounted with a noexec option, it results in the above exception.
+
+One solution is to specify a different temp directory that has already been mounted without the noexec option, as follows:
+If you use the DSE/Cassandra command $_BIN/dse cassandra or $_BIN/cassandra, simply append the command line:DSE: bin/dse cassandra -t -Dorg.xerial.snappy.tempdir=/path/to/newtmp
+Cassandra: bin/cassandra -Dorg.xerial.snappy.tempdir=/path/to/newtmp
+
+If starting from a package using service dse start or service cassandra start, add a system environment variable JVM_OPTS with the value:
+JVM_OPTS=-Dorg.xerial.snappy.tempdir=/path/to/newtmp
+
+The default cassandra-env.sh looks for the variable and appends to it when starting the JVM.
+

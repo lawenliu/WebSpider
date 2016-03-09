@@ -1,0 +1,34 @@
+Thread pool and read/write latency statistics
+Increases in pending tasks on thread pool statistics can indicate when to add additional capacity. 
+
+Cassandra maintains distinct thread pools for different stages of execution. Each of the thread pools provide statistics on the number of tasks that are active, pending, and completed. Trends on these pools for increases in the pending tasks column indicate when to add additional capacity. After a baseline is established, configure alarms for any increases above normal in the pending tasks column. Use nodetool tpstats on the command line to view the thread pool details shown in the following table. 
+
+Compaction Metrics
+
+
+Thread Pool
+
+Description
+
+
+AE_SERVICE_STAGEShows anti-entropy tasks.
+CONSISTENCY-MANAGERHandles the background consistency checks if they were triggered from the client's consistency level.
+FLUSH-SORTER-POOLSorts flushes that have been submitted.
+FLUSH-WRITER-POOLWrites the sorted flushes.
+GOSSIP_STAGEActivity of the Gossip protocol on the ring.
+LB-OPERATIONSThe number of load balancing operations.
+LB-TARGETUsed by nodes leaving the ring.
+MEMTABLE-POST-FLUSHERMemtable flushes that are waiting to be written to the commit log.
+MESSAGE-STREAMING-POOLStreaming operations. Usually triggered by bootstrapping or decommissioning nodes.
+MIGRATION_STAGETasks resulting from the call of system_* methods in the API that have modified the schema.
+MISC_STAGE
+MUTATION_STAGEAPI calls that are modifying data.
+READ_STAGEAPI calls that have read data.
+RESPONSE_STAGEResponse tasks from other nodes to message streaming from this node.
+STREAM_STAGEStream tasks from this node.
+
+
+Read/Write latency metrics 
+
+Cassandra tracks latency (averages and totals) of read, write, and slicing operations at the server level through StorageProxyMBean.
+

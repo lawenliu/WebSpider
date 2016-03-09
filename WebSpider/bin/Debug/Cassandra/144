@@ -1,0 +1,46 @@
+Using cqlsh with SSL encryption
+Using a cqlshrc file with SSL encryption.
+
+
+Using a .cqlshrc file, or cqlshrc file means you don't have to override the SSL_CERTFILE environmental variables every time. 
+
+Note: You cannot use cqlsh when client certificate authentication is enabled (require_client_auth=true). 
+
+
+
+Procedure
+
+To run cqlsh with SSL encryption, create a .cassandra/cqlshrc file in your home or client program directory.  
+
+Sample files are available in the following directories:Cassandra package installations: /etc/cassandra
+Cassandra tarball installations: install_location/conf
+
+
+
+Example
+[authentication]
+username = fred
+password = !!bang!!$
+
+[connection]
+hostname = 127.0.0.1
+port = 9042
+
+[ssl]
+certfile = ~/keys/cassandra.cert
+validate = true ## Optional, true by default
+
+[certfiles]  ## Optional section, overrides the default certfile in the [ssl] section
+192.168.1.3 = ~/keys/cassandra01.cert
+192.168.1.4 = ~/keys/cassandra02.cert
+
+Note: 
+When validate is enabled, the host in the certificate is compared to the host of the machine that it is connected to. The SSL certificate must be provided either in the configuration file or as an environment variable. The environment variables (SSL_CERTFILE and SSL_VALIDATE) override any options set in this file.
+
+
+
+Related reference
+
+
+
+The cassandra.yaml configuration file

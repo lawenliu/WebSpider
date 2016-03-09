@@ -1,0 +1,77 @@
+Enabling JMX authentication
+The default settings for Cassandra make JMX accessible only from localhost. To enable remote JMX connections, change the LOCAL_JMX setting in cassandra-env.sh.
+
+
+The default settings for Cassandra make JMX accessible only from localhost. If you want to enable remote JMX connections, change the LOCAL_JMX setting in cassandra-env.sh and enable authentication and/or ssl. After you enable JMX authentication, ensure that tools that use JMX, such as nodetool and DataStax OpsCenter, are configured to use authentication. 
+
+To use JMX authentication for OpsCenter, follow the steps in Modifying OpsCenter cluster connections.
+
+
+Procedure
+Open the cassandra-env.sh file for editing and update or add these lines:  
+JVM_OPTS="$JVM_OPTS -Dcom.sun.management.jmxremote.authenticate=true"
+JVM_OPTS="$JVM_OPTS -Dcom.sun.management.jmxremote.password.file=/etc/cassandra/jmxremote.password"
+If the LOCAL_JMX setting is in your file:LOCAL_JMX=no
+
+Copy the jmxremote.password.template from /jdk_install_location/lib/management/ to /etc/cassandra/ and rename it to jmxremote.password: 
+cp /<jdk_install_dir/lib/management/jmxremote.password.template /etc/cassandra/jmxremote.password
+
+Change the ownership of jmxremote.password to the user you run cassandra with and change permission to read only: 
+chown cassandra:cassandra /etc/cassandra/jmxremote.password
+chmod 400 /etc/cassandra/jmxremote.password
+
+Edit jmxremote.password and add the user and password for JMX-compliant utilities: 
+monitorRole QED
+controlRole R&D
+cassandra cassandrapassword
+
+Note: This cassandra user and cassandra password is just an example. Specify the user and password for your environment.
+
+Add the cassandra user with read and write permission to /jdk_install_location/lib/management/jmxremote.access: 
+monitorRole readonly
+cassandra readwrite
+controlRole readwrite \
+create javax.management.monitor.,javax.management.timer. \
+unregister
+
+Restart Cassandra.  
+Run nodetool with the cassandra user and password.  
+$ nodetool status -u cassandra -pw cassandra
+
+
+
+
+Results
+If you run nodetool without user and password, you see an error similar to:root@VM1 cassandra]# nodetool status
+Exception in thread "main" java.lang.SecurityException: Authentication failed! Credentials required
+at com.sun.jmx.remote.security.JMXPluggableAuthenticator.authenticationFailure(Unknown Source)
+at com.sun.jmx.remote.security.JMXPluggableAuthenticator.authenticate(Unknown Source)
+at sun.management.jmxremote.ConnectorBootstrap$AccessFileCheckerAuthenticator.authenticate(Unknown Source)
+at javax.management.remote.rmi.RMIServerImpl.doNewClient(Unknown Source)
+at javax.management.remote.rmi.RMIServerImpl.newClient(Unknown Source)
+at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+at java.lang.reflect.Method.invoke(Unknown Source)
+at sun.rmi.server.UnicastServerRef.dispatch(Unknown Source)
+at sun.rmi.transport.Transport$1.run(Unknown Source)
+at sun.rmi.transport.Transport$1.run(Unknown Source)
+at java.security.AccessController.doPrivileged(Native Method)
+at sun.rmi.transport.Transport.serviceCall(Unknown Source)
+at sun.rmi.transport.tcp.TCPTransport.handleMessages(Unknown Source)
+at sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run0(Unknown Source)
+at sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run(Unknown Source)
+at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+at java.lang.Thread.run(Unknown Source)
+at sun.rmi.transport.StreamRemoteCall.exceptionReceivedFromServer(Unknown Source)
+at sun.rmi.transport.StreamRemoteCall.executeCall(Unknown Source)
+at sun.rmi.server.UnicastRef.invoke(Unknown Source)
+at javax.management.remote.rmi.RMIServerImpl_Stub.newClient(Unknown Source)
+at javax.management.remote.rmi.RMIConnector.getConnection(Unknown Source)
+at javax.management.remote.rmi.RMIConnector.connect(Unknown Source)
+at javax.management.remote.JMXConnectorFactory.connect(Unknown Source)
+at org.apache.cassandra.tools.NodeProbe.connect(NodeProbe.java:146)
+at org.apache.cassandra.tools.NodeProbe.<init>(NodeProbe.java:116)
+at org.apache.cassandra.tools.NodeCmd.main(NodeCmd.java:1099)
+

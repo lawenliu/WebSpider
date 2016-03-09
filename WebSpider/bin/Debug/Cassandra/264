@@ -1,0 +1,18 @@
+Changing the rotation and size of the Cassandra system.log
+Controlling the rotation and size of the system.log. 
+
+
+Cassandra's system.log logging configuration is controlled by the log4j-server.properties file in the following directories:
+file in the following directories:Packaged installs: /etc/cassandra
+Tarball installs: install_location/conf
+
+
+The maximum log file size and number of backup copies are controlled by the following lines:
+log4j.appender.R.maxFileSize=20MB
+log4j.appender.R.maxBackupIndex=50
+
+The default configuration rolls the log file once the size exceeds 20MB and maintains up to 50 backups. When the maxFileSize is reached, the current log file is renamed to system.log.1 and a new system.log is started. Any previous backups are renumbered from system.log.n to system.log.n+1, which means the higher the number, the older the file. When the maximum number of backups is reached, the oldest file is deleted.
+
+By default, logging output is placed the /var/log/cassandra/system.log. You can change the location of the output by editing the log4j.appender.R.File path. Be sure that the directory exists and is writable by the process running Cassandra.
+If an issue occurred but has already been rotated out of the current system.log, check to see if it is captured in an older backup. If you want to keep more history, increase the maxFileSize, maxBackupIndex, or both. Make sure you have enough space to store the additional logs.
+

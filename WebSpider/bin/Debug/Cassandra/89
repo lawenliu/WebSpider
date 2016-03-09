@@ -1,0 +1,30 @@
+Calculating user data size
+Accounting for storage overhead in determining user data size.
+
+
+As with all data storage systems, the size of your raw data will be larger once it is loaded into Cassandra due to storage overhead. On average, raw data is about two times larger on disk after it is loaded into the database, but could be much smaller or larger depending on the characteristics of your data and tables. The following calculations account for data persisted to disk, not for data stored in memory.
+
+
+Procedure
+Determine column overhead: 
+regular_total_column_size = column_name_size + column_value_size + 15
+counter - expiring_total_column_size = column_name_size + column_value_size + 23
+
+
+Every column in Cassandra incurs 15 bytes of overhead. Since each row in a table can have different column names as well as differing numbers of columns, metadata is stored for each column. For counter columns and expiring columns, you should add an additional 8 bytes (23 bytes total).
+
+Account for row overhead. 
+Every row in Cassandra incurs 23 bytes of overhead.
+
+Estimate primary key index size: 
+primary_key_index = number_of_rows * ( 32 + average_key_size )
+
+
+Every table also maintains a partition index. This estimation is in bytes.
+
+Determine replication overhead: 
+replication_overhead = total_data_size * ( replication_factor - 1 )
+
+
+The replication factor plays a role in how much disk capacity is used. For a replication factor of 1, there is no overhead for replicas (as only one copy of data is stored in the cluster). If replication factor is greater than 1, then your total data storage requirement will include replication overhead.
+

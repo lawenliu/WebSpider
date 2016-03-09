@@ -1,0 +1,38 @@
+Changing Logging Levels
+Changing logging levels using the log4j-server.properties file.
+
+
+The default logging level is determined by the following line in the log4j-server.properties file:
+log4j.rootLogger=INFO,stdout,R
+
+To exert more fine-grained control over your logging, you can specify the logging level for specific categories. The categories usually (but not always) correspond to the package and class name of the code doing the logging. For example, the following setting logs DEBUG messages from all classes in the org.apache.cassandra.db package:
+log4j.logger.org.apache.cassandra.db=DEBUG
+
+In this example, DEBUG messages are logged specifically from the StorageProxy class in the org.apache.cassandra.service package:
+log4j.logger.org.apache.cassandra.service.StorageProxy=DEBUG
+
+To determine which category a particular message in the log belongs to, you change the following line:
+log4j.appender.R.layout.ConversionPattern=%5p [%t] %d{ISO8601} %F (line %L) %m%n
+
+
+Procedure
+Add %c at the beginning of the conversion pattern: 
+log4j.appender.R.layout.ConversionPattern=%c %5p [%t] %d{ISO8601} %F (line %L) %m%n
+
+Each log message is now prefixed with the category.
+
+After Cassandra runs for a while, use the following command to determine which categories are logging the most messages: 
+cat system.log.* | egrep 'TRACE|DEBUG|INFO|WARN|ERROR|FATAL' | awk '{ print $1 }' | sort | uniq -c | sort -n
+
+If you find that a particular class logs too many messages, use the following format to set a less verbose logging level for that class by adding a line for that class: 
+loggerog4j.logger.package.class=WARN
+
+For example a busy Solr node can log numerous INFO messages from the SolrCore, LogUpdateProcessorFactory, and SolrIndexSearcher classes. To suppress these messages, add the following lines:
+
+log4j.logger.org.apache.solr.core.SolrCore = WARN
+log4j.logger.org.apache.solr.update.processor.LogUpdateProcessorFactory=WARN
+log4j.logger.org.apache.solr.search.SolrIndexSearcher=WARN
+
+
+After determining which category a particular message belongs to you may want to revert the messages back to the default format. Do this by removing %c from the ConversionPattern. 
+

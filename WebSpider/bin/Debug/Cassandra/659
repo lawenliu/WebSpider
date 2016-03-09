@@ -1,0 +1,11 @@
+Peculiar Linux kernel performance problem on NUMA systems
+Problems due to zone_reclaim_mode.
+
+
+Problems due to zone_reclaim_mode. The Linux kernel can be inconsistent in enabling/disabling zone_reclaim_mode. This can result in odd performance problems: Random huge CPU spikes resulting in large increases in latency and throughput.
+Programs hanging indefinitely apparently doing nothing.
+Symptoms appearing and disappearing suddenly.
+After a reboot, the symptoms generally do not show again for some time.
+
+To ensure that zone_reclaim_mode is disabled:echo 0 > /proc/sys/vm/zone_reclaim_mode
+

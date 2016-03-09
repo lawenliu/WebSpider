@@ -1,0 +1,36 @@
+Configuring authentication
+Steps for configuring authentication.
+
+
+To configure Cassandra to use internal authentication, first make a change to the cassandra.yaml file and increase the replication factor of the system_auth keyspace, as described in this procedure. Next, start up Cassandra using the default user name and password (cassandra/cassandra), and start cqlsh using the same credentials. Finally, use these CQL statements to set up user accounts to authorize users to access the database objects:
+ALTER USER
+CREATE USER
+DROP USER
+LIST USERS
+
+Note: To configure authorization, see Configuring internal authorization.
+
+
+Procedure
+Change the authenticator option in the cassandra.yaml to PasswordAuthenticator.
+By default, the authenticator option is set to AllowAllAuthenticator.
+
+authenticator: PasswordAuthenticator
+
+Increase the replication factor for the system_auth keyspace to N (number of nodes). 
+If you use the default, 1, and the node with the lone replica goes down, you will not be able to log into the cluster because the system_auth keyspace was not replicated.
+
+Restart the Cassandra client.
+The default superuser name and password that you use to start the client is stored in Cassandra.
+
+<client startup string> -u cassandra -p cassandra
+
+Start cqlsh using the superuser name and password.
+./cqlsh -u cassandra -p cassandra
+
+Create another superuser, not named cassandra. This step is optional but highly recommended. 
+Log in as that new superuser. 
+Change the cassandra user password to something long and incomprehensible, and then forget about it. It won't be used again. 
+Take away the cassandra user's superuser status. 
+Use the CQL statements listed previously to set up user accounts and then grant permissions to access the database objects. 
+

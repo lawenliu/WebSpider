@@ -1,0 +1,25 @@
+Lightweight transactions
+A description about lightweight transactions and when to use them.
+
+While durable transactions with eventual/tunable consistency is quite satisfactory for many use cases, situations do arise where more is needed. Lightweight transactions, also known as compare and set, that use linearizable consistency can probably fulfill those needs. 
+
+For example, two users attempting to create a unique user account in the same cluster could overwrite each other’s work with neither user knowing about it. To avoid this situation, Cassandra introduces lightweight transactions (or ‘compare and set’).
+
+Using and extending the Paxos consensus protocol (which allows a distributed system to agree on proposed data additions/modifications with a quorum-based algorithm, and without the need for any one ‘master’ database or two-phase commit), Cassandra now offers a way to ensure a transaction isolation level similar to the serializable level offered by RDBMS’s. Extensions to CQL enable an easy way to carry out such operations.
+
+A new IF clause has been introduced for both the INSERT and UPDATE commands that lets the user invoke lightweight transactions. For example, if a user wants to ensure an insert they are about to make into a new accounts table is unique for a new customer, they would use the IF NOT EXISTS clause:  
+INSERT INTO customer_account (customerID, customer_email) 
+VALUES (‘LauraS’, ‘lauras@gmail.com’)
+IF NOT EXISTS;
+
+
+DML modifications via UPDATE can also make use of the new IF clause by comparing one or more columns to various values:
+UPDATE customer_account
+SET    customer_email=’laurass@gmail.com’
+IF     customer_email=’lauras@gmail.com’; 
+
+
+Behind the scenes, Cassandra is making four round trips between a node proposing a lightweight transaction and any needed replicas in the cluster to ensure proper execution so performance is affected. Consequently, reserve lightweight transactions for those situations where they are absolutely necessary; Cassandra’s normal eventual consistency can be used for everything else.
+
+A SERIAL consistency level allows reading the current (and possibly uncommitted) state of data without proposing a new addition or update. If a SERIAL read finds an uncommitted transaction in progress, Cassandra commits the transaction as part of the read. 
+

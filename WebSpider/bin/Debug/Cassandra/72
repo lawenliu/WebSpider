@@ -1,0 +1,5 @@
+RackInferringSnitch
+Determines the location of nodes by rack and data center corresponding to the IP addresses.
+
+The RackInferringSnitch determines the location of nodes by rack and data center, which are assumed to correspond to the 3rd and 2nd octet of the node's IP address, respectively.
+

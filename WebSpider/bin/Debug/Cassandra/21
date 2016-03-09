@@ -1,0 +1,7 @@
+SimpleSnitch
+The SimpleSnitch is used only for single-data center deployments.
+
+The SimpleSnitch is used only for single-data center deployments. The SimpleSnitch (the default) does not recognize data center or rack information. Use it for single-data center deployments or single-zone in public clouds.
+
+Using a SimpleSnitch, you define the keyspace to use SimpleStrategy and specify a replication factor.
+

@@ -1,0 +1,39 @@
+Uninstalling DataStax Community
+Steps for uninstalling Cassandra by install type.
+
+
+Select the uninstall method for your type of installation.
+
+
+Uninstalling Debian- and RHEL-based packages
+
+Use this method when you have installed DataStax Community using APT or  Yum.
+Stop the Cassandra and DataStax Agent services:$ sudo service cassandra stop
+
+Make sure all services are stopped:$ ps auwx | grep cassandra
+$ ps auwx | grep datastax-agent ## If the DataStax Agent was installed.
+
+If services are still running, use the PID to kill the service:$ sudo kill cassandra_pid
+$ sudo kill datastax_agent_pid  ## If the DataStax Agent was installed.
+
+Remove the library and log directories:$ sudo rm -r /var/lib/cassandra
+$ sudo rm -r /var/log/cassandra
+
+Remove the installation directories:
+RHEL-based packages:$ sudo yum remove "cassandra-*" "datastax-*" ## datastax-x required if the DataStax Agent was installed.
+
+Debian-based packages:
+$ sudo apt-get purge "cassandra-*" "datastax-*"  ## datastax-x required if the DataStax Agent was installed..
+
+
+
+Uninstalling the binary tarball
+
+Use this method when you have installed DataStax Community using the binary tarball.
+Stop the node: $ ps auwx | grep cassandra
+$ sudo  kill <pid>
+
+Stop the DataStax Agent if installed:$ sudo kill datastax_agent_pid
+
+Remove the installation directory.
+

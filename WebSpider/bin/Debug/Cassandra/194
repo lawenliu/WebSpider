@@ -1,0 +1,42 @@
+About transactions and concurrency control
+A brief description about transactions and concurrency control.
+
+Cassandra does not use RDBMS ACID transactions with rollback or locking mechanisms, but instead offers atomic, isolated, and durable transactions with eventual/tunable consistency that lets the user decide how strong or eventual they want each transaction’s consistency to be. Atomic
+Everything in a transaction succeeds or the entire transaction is rolled back.
+
+Consistent
+A transaction cannot leave the database in an inconsistent state.
+
+Isolated
+Transactions cannot interfere with each other.
+
+Durable
+Completed transactions persist in the event of crashes or server failure.
+
+
+As a non-relational database, Cassandra does not support joins or foreign keys, and consequently does not offer consistency in the ACID sense. For example, when moving money from account A to B the total in the accounts does not change. Cassandra supports atomicity and isolation at the row-level, but trades transactional isolation and atomicity for high availability and fast write performance. Cassandra writes are durable.
+Topics in this section: 
+
+Lightweight transactions
+
+A description about lightweight transactions and when to use them.
+
+
+Atomicity
+
+A brief description about atomicity in Cassandra.
+
+
+Consistency
+
+Types of consistency offered by Cassandra.
+
+
+Isolation
+
+About row-level isolation in Cassandra.
+
+
+Durability
+
+About durable writes in Cassandra.

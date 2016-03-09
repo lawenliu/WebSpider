@@ -1,0 +1,136 @@
+Anti-patterns in Cassandra
+Implementation or design patterns that are ineffective and/or counterproductive in Cassandra production installations. Correct patterns are suggested in most cases.
+
+Implementation or design patterns that are ineffective and/or counterproductive in Cassandra production installations. Correct patterns are suggested in most cases.
+
+
+Storage area network 
+
+SAN storage is not recommended for on-premises deployments. 
+
+Note: Storage in clouds works very differently. Customers should contact DataStax for questions.
+
+Although used frequently in Enterprise IT environments, SAN storage has proven to be a difficult and expensive architecture to use with distributed databases for a variety of reasons, including:SAN ROI does not scale along with that of Cassandra, in terms of capital expenses and engineering resources.
+In distributed architectures, SAN generally introduces a bottleneck and single point of failure because Cassandra's IO frequently surpasses the array controller's ability to keep up.
+External storage, even when used with a high-speed network and SSD, adds latency for all operations. 
+Heap pressure is increased because pending I/O operations take longer.
+When the SAN transport shares operations with internal and external Cassandra traffic, it can saturate the network and lead to network availability problems.
+
+Taken together these factors can create problems that are difficult to resolve in production. In particular, new users deploying Cassandra with SAN must first develop adequate methods and allocate sufficient engineering resources to identify these issues before they become a problem in production. For example, methods are needed for all key scaling factors, such as operational rates and SAN fiber saturation.
+
+Impact of Shared Storage on Cassandra details metrics on how severely performance can be affected.
+
+
+Network attached storage 
+
+Storing SSTables on a network attached storage (NAS) device is not recommended. Using a NAS device often results in network related bottlenecks resulting from high levels of I/O wait time on both reads and writes. The causes of these bottlenecks include:
+Router latency.
+The Network Interface Card (NIC) in the node.
+The NIC in the NAS device.
+
+If you are required to use NAS for your environment, please contact a technical resource from DataStax for assistance.
+
+
+Shared network file systems 
+
+Shared network file systems (NFS) have the same limitations as NAS. The temptation with NFS implementations is to place all SSTables in a node into one NFS. Doing this deprecates one of Cassandra's strongest features: No Single Point of Failure (SPOF). When all SSTables from all nodes are stored onto a single NFS, the NFS becomes a SPOF. To best use Cassandra, avoid using NFS.
+
+
+Excessive heap space size 
+
+DataStax recommends using the default heap space size for most use cases. Exceeding this size can impair the Java virtual machine's (JVM) ability to perform fluid garbage collections (GC). The following table shows a comparison of heap space performances reported by a Cassandra user:
+
+
+Heap
+
+CPU utilization
+
+Queries per second
+
+Latency
+
+40 GB50%7501 second
+8 GB5% 8500 (not maxed out)10 ms
+
+For information on heap sizing, see Tuning Java resources.
+
+
+Cassandra's rack feature 
+
+This information applies only to single-token architecture, not to virtual nodes.
+
+Defining one rack for the entire cluster is the simplest and most common implementation. Multiple racks should be avoided for the following reasons:
+Most users tend to ignore or forget rack requirements that racks should be organized in an alternating order. This order allows the data to get distributed safely and appropriately.
+Many users are not using the rack information effectively. For example, setting up with as many racks as nodes (or similar non-beneficial scenarios).
+Expanding a cluster when using racks can be tedious. The procedure typically involves several node moves and must ensure that racks are distributing data correctly and evenly. When clusters need immediate expansion, racks should be the last concern.
+
+To use racks correctly:
+Use the same number of nodes in each rack.
+Use one rack and place the nodes in different racks in an alternating pattern. This allows you to still get the benefits of Cassandra's rack feature, and allows for quick and fully functional cluster expansions. Once the cluster is stable, you can swap nodes and make the appropriate moves to ensure that nodes are placed in the ring in an alternating fashion with respect to the racks.
+
+Also see About Replication in Cassandra in the Cassandra 1.1 documentation.
+
+
+SELECT ... IN or index lookups 
+
+SELECT ... IN and index lookups (formerly secondary indexes) should be avoided except for specific scenarios. See When not to use IN in SELECT and When not to use an index in Indexing in CQL for Cassandra 2.0. 
+
+
+Using the Byte Ordered Partitioner 
+
+The Byte Ordered Partitioner (BOP) is not recommended.
+
+Use virtual nodes (vnodes) and use either the Murmur3Partitioner (default) or the RandomPartitioner. Vnodes allow each node to own a large number of small ranges distributed throughout the cluster. Using vnodes saves you the effort of generating tokens and assigning tokens to your nodes. If not using vnodes, these partitioners are recommended because all writes occur on the hash of the key and are therefore spread out throughout the ring amongst tokens range. These partitioners ensure that your cluster evenly distributes data by placing the key at the correct token using the key's hash value. Even if data becomes stale and needs to be deleted, this ensures that data removal also takes place while evenly distributing data around the cluster.
+
+
+Reading before writing 
+Reads take time for every request, as they typically have multiple disk hits for uncached reads. In work flows requiring reads before writes, this small amount of latency can affect overall throughput. All write I/O in Cassandra is sequential so there is very little performance difference regardless of data size or key distribution.
+
+Load balancers 
+
+Cassandra was designed to avoid the need for load balancers. Putting load balancers between Cassandra and Cassandra clients is harmful to performance, cost, availability, debugging, testing, and scaling. All high-level clients, such as Astyanax and pycassa, implement load balancing directly.
+
+
+Insufficient testing 
+
+Be sure to test at scale and production loads. This the best way to ensure your system will function properly when your application goes live. The information you gather from testing is the best indicator of what throughput per node is needed for future expansion calculations.
+
+To properly test, set up a small cluster with production loads. There will be a maximum throughput associated with each node count before the cluster can no longer increase performance. Take the maximum throughput at this cluster size and apply it linearly to a cluster size of a different size. Next extrapolate (graph) your results to predict the correct cluster sizes for required throughputs for your production cluster. This allows you to predict the correct cluster sizes for required throughputs in the future. The Netflix case study shows an excellent example for testing.
+
+
+Lack of familiarity with Linux 
+
+Linux has a great collection of tools. Become familiar with the Linux built-in tools. It will help you greatly and ease operation and management costs in normal, routine functions. The essential list of tools and techniques to learn are:
+Parallel SSH and Cluster SSH: The pssh and cssh tools allow SSH access to multiple nodes. This is useful for inspections and cluster wide changes.
+Passwordless SSH: SSH authentication is carried out by using public and private keys. This allows SSH connections to easily hop from node to node without password access. In cases where more security is required, you can implement a password Jump Box and/or VPN.
+Useful common command-line tools include:top: Provides an ongoing look at CPU processor activity in real time.
+System performance tools: Tools such as iostat, mpstat, iftop, sar, lsof, netstat, htop, vmstat, and similar can collect and report a variety of metrics about the operation of the system.
+vmstat: Reports information about processes, memory, paging, block I/O, traps, and CPU activity.
+iftop: Shows a list of network connections. Connections are ordered by bandwidth usage, with the pair of hosts responsible for the most traffic at the top of list. This tool makes it easier to identify the hosts causing network congestion.
+
+
+
+Running without the recommended settings 
+
+Be sure to use the recommended settings in the Cassandra documentation.
+
+Also be sure to consult the Planning a Cassandra cluster deployment documentation, which discusses hardware and other recommendations before making your final hardware purchases.
+
+
+Repeated DROP TABLE/CREATE TABLE with same table name
+
+Customers who have previously dropped a table and recreated it with the same name reported various issues including:
+old data not being deleted, i.e. data from previous version of the table reappeared in queries
+read timeouts
+table queries returningTombstoneOverwhelmingException
+
+failed table compactions
+
+The issue is that Cassandra keeps track of the table names internally even after the table is dropped. When a new table is created with the same name, Cassandra associates the table with the old reference ID and so continues to access the old SSTables on disk, and returns deleted rows (tombstones) during reads.
+
+The preferred solution to solve this anti-pattern is to use the TRUNCATE command to remove data from a table if you wish to rewrite all the data at a later time.
+
+
+More anti-patterns 
+For more about anti-patterns, visit Matt Dennis` slideshare.
+

@@ -1,0 +1,14 @@
+Installing the JNA from the JAR file
+Installing JNA can improve Cassandra memory usage. 
+
+
+Installing JNA can improve Cassandra memory usage. When installed and configured, Linux does not swap out the JVM, and thus avoids related performance issues. The latest version is recommended.
+
+
+Procedure
+Download the jna.jar or jna-platform.jar from https://github.com/twall/jna. 
+Add the JAR file to install_location/lib (or place it in the CLASSPATH). 
+Add the following lines in the /etc/security/limits.conf file for the user/group that runs Cassandra: 
+$USER soft memlock unlimited
+$USER hard memlock unlimited
+

@@ -1,0 +1,74 @@
+Adding or replacing single-token nodes
+Steps for adding or replacing nodes in single-token architecture clusters.
+
+
+This topic applies only to clusters using single-token architecture, not vnodes.
+
+
+About adding Capacity to an Existing Cluster 
+
+Cassandra allows you to add capacity to a cluster by introducing new nodes to the cluster in stages and by adding an entire data center. When a new node joins an existing cluster, it needs to know:
+Its position in the ring and the range of data it is responsible for, which is assigned by the initial_token and the partitioner.
+The seed nodes to contact for learning about the cluster and establish the gossip process.
+The name of the cluster it is joining and how the node should be addressed within the cluster.
+Any other non-default settings made to cassandra.yaml on your existing cluster.
+
+When you add one or more nodes to a cluster, you must calculate the tokens for the new nodes. Use one of the following approaches:
+Add capacity by doubling the cluster sizeAdding capacity by doubling (or tripling or quadrupling) the number of nodes is less complicated when assigning tokens. Existing nodes can keep their existing token assignments, and new nodes are assigned tokens that bisect (or trisect) the existing token ranges. For example, when you generate tokens for six nodes, three of the generated token values will be the same as if you generated for three nodes. To clarify, you first obtain the token values that are already in use, and then assign the newly calculated token values to the newly added nodes.Recalculate new tokens for all nodes and move nodes around the ringWhen increases capacity by a non-uniform number of nodes, you must recalculate tokens for the entire cluster, and then use nodetool move to assign the new tokens to the existing nodes. After all nodes are restarted with their new token assignments, run a nodetool cleanup to remove unused keys on all nodes. These operations are resource intensive and should be done during low-usage times.Add one node at a time and leave the initial_token property emptyWhen the initial_token is empty, Cassandra splits the token range of the heaviest loaded node and places the new node into the ring at that position. This approach is unlikely to result in a perfectly balanced ring, but will alleviate hot spots.
+
+Adding Nodes to a Cluster 
+Install Cassandra on the new nodes, but do not start them.
+Calculate the tokens for the nodes based on the expansion strategy you are using the Token Generating Tool.You can skip this step if you want the new nodes to automatically pick a token range when joining the cluster.
+Set the cassandra.yaml for the new nodes.
+Set the initial_token according to your token calculations (or leave it unset if you want the new nodes to automatically pick a token range when joining the cluster).
+Start Cassandra on each new node. Allow two minutes between node initializations. You can monitor the startup and data streaming process using nodetool netstats.
+After the new nodes are fully bootstrapped, some token assignments must be changed on the old nodes to balance the token assignment across the cluster. Assign the new initial_token property value to all nodes that require new tokens, and run nodetool move new_token one node at a time.
+After all nodes have their new tokens assigned, run nodetool cleanup one node at a time for each node. Wait for cleanup to complete before doing the next node. This step removes the keys that no longer belong to the previously existing nodes. 
+Note: Cleanup may be safely postponed for low-usage hours.
+
+
+
+Adding a Data Center to a Cluster 
+
+Before starting this procedure, please read the guidelines in Adding Capacity to an Existing Cluster above.
+Ensure that you are using NetworkTopologyStrategy for all of your keyspaces.
+For each new node, edit the configuration properties in the cassandra.yaml file:Set auto_bootstrap to False.
+Set the initial_token. Be sure to offset the tokens in the new data center, see Generating tokens.
+Set the cluster name.
+Set any other non-default settings.
+Set the seed lists. Every node in the cluster must have the same list of seeds and include at least one node from each data center. Typically one to three seeds are used per data center.
+
+Update either the cassandra-topology.properties (PropertyFileSnitch) or cassandra-rackdc.properties (GossipingPropertyFileSnitch) on all servers to include the new nodes. You do not need to restart.
+The location of the conf directory depends on the type of installation:Packaged installs: /etc/cassandra/conf
+Tarball installs: install_location/conf
+
+Ensure that your client does not auto-detect the new nodes so that they aren't contacted by the client until explicitly directed. For example in Hector, set hostConfig.setAutoDiscoverHosts(false);
+
+If using a QUORUM consistency level for reads or writes, check the LOCAL_QUORUM or EACH_QUORUM consistency level to make sure that the level meets the requirements for multiple data centers.
+Start the new nodes.
+After all nodes are running in the cluster:Change the replication factor for your keyspace for the expanded cluster. 
+Run nodetool rebuild on each node in the new data center.
+
+
+
+Replacing a Dead Node 
+Confirm that the node is dead using the nodetool ring command on any live node in the cluster.
+The nodetool ring command shows a Down status for the token value of the dead node:
+
+
+
+
+
+Install Cassandra on the replacement node.
+Remove any preexisting Cassandra data on the replacement node:$ sudo rm -rf /var/lib/cassandra/* 
+
+Set auto_bootstrap: true. (If auto_bootstrap is not in the cassandra.yaml file, it automatically defaults to true.)
+Set the initial_token in the cassandra.yaml file to the value of the dead node's token -1. Using the value from the above graphic, this is 28356863910078205288614550619314017621-1:initial_token: 28356863910078205288614550619314017620
+
+Configure any non-default settings in the node's cassandra.yaml to match your existing cluster.
+Start the new node.
+After the new node has finished bootstrapping, check that it is marked up using the nodetool ring command.
+Run nodetool repair on each keyspace to ensure the node is fully consistent. For example:$ nodetool repair -h 10.46.123.12 keyspace_name
+
+Remove the dead node.
+

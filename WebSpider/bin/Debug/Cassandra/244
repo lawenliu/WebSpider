@@ -1,0 +1,7 @@
+Multiple data center write requests
+How write requests work when using multiple data centers.
+
+In multiple data center deployments, Cassandra optimizes write performance by choosing one coordinator node. The coordinator node contacted by the client application forwards the write request to each replica node in each all the data centers.
+
+If using a consistency level of LOCAL_ONE or LOCAL_QUORUM, only the nodes in the same data center as the coordinator node must respond to the client request in order for the request to succeed. This way, geographical latency does not impact client request response times.
+

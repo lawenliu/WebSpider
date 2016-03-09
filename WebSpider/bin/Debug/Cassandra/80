@@ -1,0 +1,29 @@
+Planning a cluster deployment
+Vital information about successfully deploying a Cassandra cluster.
+
+When planning a Cassandra cluster deployment, you should have a good idea of the initial volume of data you plan to store and a good estimate of your typical application workload.
+Topics in this section: 
+
+Selecting hardware for enterprise implementations
+
+Choosing appropriate hardware depends on selecting the right balance of the following resources: memory, CPU, disk type, number of nodes, and network.
+
+
+Planning an Amazon EC2 cluster
+
+Important information for deploying a production Cassandra cluster on Amazon EC2.
+
+
+Calculating usable disk capacity
+
+Determining how much data your Cassandra nodes can hold.
+
+
+Calculating user data size
+
+Accounting for storage overhead in determining user data size.
+
+
+Anti-patterns in Cassandra
+
+Implementation or design patterns that are ineffective and/or counterproductive in Cassandra production installations. Correct patterns are suggested in most cases.

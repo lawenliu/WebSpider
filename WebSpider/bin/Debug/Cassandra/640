@@ -1,0 +1,18 @@
+Clearing the data as a stand-alone process
+Removes all data from a tarball installation.
+
+
+Removes all data from a tarball installation.
+
+
+Procedure
+
+To clear all data from the default directories, including the commitlog and saved_caches:
+After stopping the process, run the following command from the install directory: 
+$ cd install_location
+$ sudo rm -rf data/*
+
+To clear the only the data directory: 
+$ cd install_location
+$ sudo rm -rf data/data/*
+

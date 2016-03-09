@@ -1,0 +1,42 @@
+Database internals
+Topics about the Cassandra database.
+Topics in this section: 
+
+Managing data
+
+An overview of Cassandra's storage structure.
+
+
+Cassandra storage basics
+
+Understanding how Casssandra stores data.
+
+
+The write path of an update
+
+A brief description of the write path of an update.
+
+
+About deletes
+
+How Cassandra deletes data and why deleted data can reappear.
+
+
+About hinted handoff writes
+
+How hinted handoff works and how it optimizes the cluster.
+
+
+About reads
+
+How Cassandra combines results from the active memtable and potentially mutliple SSTables to satisfy a read.
+
+
+About transactions and concurrency control
+
+A brief description about transactions and concurrency control.
+
+
+About data consistency
+
+How up-to-date and synchronized a row of data is on all replicas.

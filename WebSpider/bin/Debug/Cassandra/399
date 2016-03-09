@@ -1,0 +1,342 @@
+The nodetool utility
+A command line interface for Cassandra for managing a cluster.
+
+
+Command format 
+
+The nodetool utility is a command line interface for managing a cluster.
+Packaged installs: nodetool -h HOSTNAME [-p JMX_PORT ] COMMAND
+Tarball installs: install_location/bin/nodetool -h HOSTNAME [-p JMX_PORT ] COMMAND
+Remote Method Invocation: nodetool -h HOSTNAME [-p JMX_PORT -u JMX_USERNAME -pw JMX_PASSWORD ] COMMAND
+If a username and password for RMI authentication are set explicitly in the cassandra-env.sh file for the host, then you must specify credentials.
+
+
+Most nodetool commands operate on a single node in the cluster if -h is not used to identify one or more other nodes. These commands operate cluster-wide: rebuild
+repair
+taketoken
+
+If the node from which you issue the command is the intended target, you do not need the -h option to identify the target; otherwise, identify the target node, or nodes, using the -h option.
+
+
+Getting nodetool help 
+nodetool helpProvides a listing of nodetool commands.nodetool help command nameProvides help on a specific command. For example $ nodetool help upgradesstables
+Topics in this section: 
+
+cfhistograms
+
+Provides statistics about a table that could be used to plot a frequency function.
+
+
+cfstats
+
+Provides statistics about tables.
+
+
+cleanup
+
+Cleans up keyspaces and partition keys no longer belonging to a node.
+
+
+clearsnapshot
+
+Removes one or more snapshots.
+
+
+compact
+
+Forces a major compaction on one or more tables.
+
+
+compactionhistory
+
+Provides the history of compaction operations.
+
+
+compactionstats
+
+Provide statistics about a compaction.
+
+
+decommission
+
+Deactivates a node by streaming its data to another node.
+
+
+describering
+
+Provides the partition ranges of a keyspace.
+
+
+disableautocompaction
+
+Disables autocompaction for a keyspace and one or more tables.
+
+
+disablebackup
+
+Disables incremental backup.
+
+
+disablebinary
+
+Disables the native transport.
+
+
+disablegossip
+
+Disables the gossip protocol.
+
+
+disablehandoff
+
+Disables storing of future hints on the current node.
+
+
+disablethrift
+
+Disables the Thrift server.
+
+
+drain
+
+Drains the node.
+
+
+enableautocompaction
+
+Enables autocompaction for a keyspace and one or more tables.
+
+
+enablebackup
+
+Enables incremental backup.
+
+
+enablebinary
+
+Re-enables native transport.
+
+
+enablegossip
+
+Re-enables gossip.
+
+
+enablehandoff
+
+Re-enables the storing of future hints on the current node.
+
+
+enablethrift
+
+Re-enables the Thrift server.
+
+
+flush
+
+Flushes one or more tables from the memtable.
+
+
+getcompactionthreshold
+
+Provides the minimum and maximum compaction thresholds in megabytes for a table.
+
+
+getendpoints
+
+Provides the end points that own the partition key.
+
+
+getsstables
+
+Provides the SSTables that own the partition key.
+
+
+getstreamthroughput
+
+Provides the megabytes per second throughput limit for streaming in the system.
+
+
+gossipinfo
+
+Provides the gossip information for the cluster.
+
+
+info
+
+Provides node information, such as load and uptime.
+
+
+invalidatekeycache
+
+Resets the global key cache parameter to the default, which saves all keys.
+
+
+invalidaterowcache
+
+Resets the global key cache parameter, row_cache_keys_to_save, to the default (not set), which saves all keys. 
+
+
+join
+
+Causes the node to join the ring.
+
+
+move
+
+Moves the node on the token ring to a new token.
+
+
+netstats
+
+Provides network information about the host.
+
+
+pausehandoff
+
+Pauses the hints delivery process.
+
+
+proxyhistograms
+
+Provides a histogram of network statistics.
+
+
+rangekeysample
+
+Provides the sampled keys held across all keyspaces.
+
+
+rebuild
+
+Rebuilds data by streaming from other nodes.
+
+
+rebuild_index
+
+Performs a full rebuild of the index for a table.
+
+
+refresh
+
+Loads newly placed SSTables onto the system without a restart.
+
+
+removenode
+
+Provides the status of current node removal, forces completion of pending removal, or removes the identified node.
+
+
+repair
+
+Repairs one or more tables.
+
+
+resetlocalschema
+
+Reset the node's local schema and resynchronizes.
+
+
+resumehandoff
+
+Resume hints delivery process.
+
+
+ring
+
+Provides node status and information about the ring.
+
+
+scrub
+
+Rebuild SSTables for one or more Cassandra tables.
+
+
+setcachecapacity
+
+Set global key and row cache capacities in megabytes.
+
+
+setcachekeystosave
+
+Sets the number of keys saved by each cache for faster post-restart warmup.
+
+
+setcompactionthreshold
+
+Sets minimum and maximum compaction thresholds for a table.
+
+
+setcompactionthroughput
+
+Sets the throughput capacity for compaction in the system, or disables throttling.
+
+
+sethintedhandoffthrottlekb
+
+Sets hinted handoff throttle in kb/sec per delivery thread. (Cassandra 2.0.11 and later)
+
+
+setstreamthroughput
+
+Sets the throughput capacity in MB for streaming in the system, or disable throttling.
+
+
+settraceprobability
+
+Sets the probability for tracing a request.
+
+
+snapshot
+
+Take a snapshot of one or more keyspaces, or of a table, to backup data.
+
+
+status
+
+Provide information about the cluster, such as the state, load, and IDs.
+
+
+statusbinary
+
+Provide the status of native transport.
+
+
+statusthrift
+
+Provide the status of the Thrift server.
+
+
+stop
+
+Stops the compaction process.
+
+
+stopdaemon
+
+Stops the cassandra daemon.
+
+
+taketoken
+
+Deprecated. Do not use. Using this command can result in data loss.
+
+
+tpstats
+
+Provides usage statistics of thread pools.
+
+
+truncatehints
+
+Truncates all hints on the local node, or truncates hints for the one or more endpoints. 
+
+
+upgradesstables
+
+Rewrites SSTables for tables that are not running the current version of Cassandra.
+
+
+version
+
+Provides the version number of Cassandra running on the specified node.

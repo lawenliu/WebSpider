@@ -1,0 +1,27 @@
+Installing the Oracle JDK and the JNA
+Instructions for various platforms.
+Topics in this section: 
+
+Installing Oracle JDK on RHEL-based Systems
+
+You must configure your operating system to use the Oracle JDK 7 or 8, or OpenJDK 7.
+
+
+Installing Oracle JDK on Debian or Ubuntu Systems
+
+Steps for installing the Oracle JDK on Debian-based systems.
+
+
+Installing the JNA on RHEL or CentOS Systems
+
+Installing JNA can improve Cassandra memory usage. 
+
+
+Installing the JNA on Debian or Ubuntu Systems
+
+Installing JNA can improve Cassandra memory usage. 
+
+
+Installing the JNA from the JAR file
+
+Installing JNA can improve Cassandra memory usage. 

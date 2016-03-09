@@ -1,0 +1,263 @@
+The cassandra.yaml configuration file
+The cassandra.yaml file is the main configuration file for Cassandra.
+
+
+The cassandra.yaml file is the main configuration file for Cassandra.
+
+Important: After changing properties in the cassandra.yaml file, you must restart the node for the changes to take effect. It is located in the following directories:
+Cassandra package installations: /etc/cassandra
+Cassandra tarball installations: install_location/conf
+DataStax Enterprise package installations: /etc/dse/cassandra
+DataStax Enterprise tarball installations: install_location/resources/cassandra/conf
+
+The configuration properties are grouped into the following sections:
+Quick start 
+The minimal properties needed for configuring a cluster.
+
+Commonly used
+Properties most frequently used when configuring Cassandra.
+
+Performance tuning
+ Tuning performance and system resource utilization, including commit log, compaction, memory, disk I/O, CPU, reads, and writes.
+
+Advanced
+Properties for advanced users or properties that are less commonly used.
+
+Security
+Server and client security settings.
+
+
+Note: Values with note indicate default values that are defined internally, missing, commented out, or implementation depends on other properties in the cassandra.yaml file. Additionally, some commented out values may not match the actual default value; these values are recommended when changing from the default.
+
+
+Quick start properties 
+
+The minimal properties needed for configuring a cluster.
+
+Related information: Initializing a multiple node cluster (single data center) and Initializing a multiple node cluster (multiple data centers).
+cluster_name (Default: Test Cluster) The name of the cluster. This setting prevents nodes in one logical cluster from joining another. All nodes in a cluster must have the same value.listen_address (Default: localhost) The IP address or hostname that Cassandra binds to for listening to other Cassandra nodes. If you do not know if or have your networking properly configured, it's best to use your private IP addresses. If you want your nodes to be able to communicate, you must change this setting:Generally set to empty. If the node is properly configured (host name, name resolution, and so on), Cassandra uses InetAddress.getLocalHost() to get the local address from the system.
+For a single node cluster, you can use the default setting (localhost).
+If Cassandra can't find the correct address, you must specify the IP address or host name.
+Never specify 0.0.0.0; it is always wrong.
+
+Default directories
+
+If you have changed any of the default directories during installation, make sure you have root access and set these properties:
+commitlog_directory (Default: Packaged installs: /var/lib/cassandra/commitlog, Tarball installs: install_location/data/commitlog) The directory where the commit log is stored. For optimal write performance, it is recommended the commit log be on a separate disk partition (ideally, a separate physical device) from the data file directories. Using an HDD is acceptable because the commit log is append only.data_file_directories (Default:Packaged installs: /var/lib/cassandra/data, Tarball installs: install_location/data/data) The directory location where table data (SSTables) is stored. As a production best practice, use RAID 0 and SSDs.saved_caches_directory (Default: Packaged installs: /var/lib/cassandra/saved_caches, Tarball installs: install_location/data/saved_caches) The directory location where table key and row caches are stored. 
+
+Commonly used properties 
+
+Properties most frequently used when configuring Cassandra.
+
+Before starting a node for the first time, you should carefully evaluate your requirements.
+
+Common initialization properties
+
+Note: Be sure to set the properties in the Quick start section as well.
+commit_failure_policy (Default: stop) Policy for commit disk failures:stop: Shut down gossip and Thrift, leaving the node effectively dead, but can be inspected using JMX.
+stop_commit: Shut down the commit log, letting writes collect but continuing to service reads (as in pre-2.0.5 Cassandra).
+ignore: Ignore fatal errors and let the batches fail.
+disk_failure_policy (Default: stop) Sets how Cassandra responds to disk failure. stop: Shuts down gossip and Thrift, leaving the node effectively dead, but it can still be inspected using JMX. 
+stop_paranoid: Shut down gossip and Thrift even for single-SSTable errors.
+best_effort: Cassandra does its best in the event of disk errors. If it cannot write to a disk, the disk is blacklisted for writes and the node continues writing elsewhere. If Cassandra cannot read from the disk, those SSTables are marked unreadable, and the node continues serving data from readable SSTables. This means you will see obsolete data at consistency level of ONE. 
+ignore: Use for upgrading. Cassandra acts as in versions prior to 1.2. Ignores fatal errors and lets the requests fail; all file system errors are logged but otherwise ignored. It is recommended using stop or best_effort. 
+
+Related information: Handling Disk Failures In Cassandra 1.2 blog and Recovering from a single disk failure using JBOD.
+endpoint_snitch (Default: org.apache.cassandra.locator.SimpleSnitch) Sets which snitch Cassandra uses for locating nodes and routing requests. It must be set to a class that implements IEndpointSnitch. For descriptions of the available snitches, see Snitches.
+Note: The GossipingPropertyFileSnitch is recommended for production. It defines a node's data center and rack and uses gossip for propagating this information to other nodes.
+rpc_address (Default: localhost) The listen address for client connections. Valid values are:0.0.0.0: Listens on all configured interfaces. 
+IP address
+hostname
+unset: Resolves the address using the hostname configuration of the node. If left unset, the hostname must resolve to the IP address of this node using /etc/hostname, /etc/hosts, or DNS.
+
+Related information: Network
+seed_provider The addresses of hosts deemed contact points. Cassandra nodes use the -seeds list to find each other and learn the topology of the ring. class_name (Default: org.apache.cassandra.locator.SimpleSeedProvider) The class within Cassandra that handles the seed logic. It can be customized, but this is typically not required.
+-seeds (Default: 127.0.0.1) A comma-delimited list of IP addresses. When running multiple nodes, you must change the list from the default value. In multiple data-center clusters, the seed list should include at least one node from each data center (replication group). More than a single seed node per data center is recommended for fault tolerance. Otherwise, gossip has to communicate with another data center when bootstrapping a node. Making every node a seed node is not recommended because of increased maintenance and reduced gossip performance. Gossip optimization is not critical, but it is recommended to use a small seed list (approximately three nodes per data center).
+
+Related information: Initializing a multiple node cluster (single data center) and Initializing a multiple node cluster (multiple data centers).
+
+Common compaction settings
+compaction_throughput_mb_per_sec (Default: 16) Throttles compaction to the specified total throughput across the entire system. The faster you insert data, the faster you need to compact in order to keep the SSTable count down. The recommended Value is 16 to 32 times the rate of write throughput (in MB/second). Setting the value to 0 disables compaction throttling. 
+Related information: Configuring compaction
+
+Common memtable settings
+memtable_total_space_in_mb (Default: 1/4 of the heap)note Specifies the total memory used for all memtables on a node. This replaces the per-table storage settings memtable_operations_in_millions and memtable_throughput_in_mb. 
+Related information: Tuning the Java heap
+
+Common disk settings
+concurrent_reads (Default: 32) For workloads with more data than can fit in memory, the bottleneck is reads fetching data from disk. Setting to (16 × number_of_drives) allows operations to queue low enough in the stack so that the OS and drives can reorder them.The default setting applies to both logical volume managed (LVM) and RAID drives.concurrent_writes (Default: 32) Writes in Cassandra are rarely I/O bound, so the ideal number of concurrent writes depends on the number of CPU cores in your system. The recommended value is 8 × number_of_cpu_cores. 
+Common automatic backup settings
+incremental_backups (Default: false) Backs up data updated since the last snapshot was taken. When enabled, Cassandra creates a hard link to each SSTable flushed or streamed locally in a backups/ subdirectory of the keyspace data. Removing these links is the operator's responsibility. 
+Related information: Enabling incremental backups
+snapshot_before_compaction (Default: false) Enable or disable taking a snapshot before each compaction. This option is useful to back up data when there is a data format change. Be careful using this option because Cassandra does not clean up older snapshots automatically. 
+Related information: Configuring compaction
+
+Common fault detection setting
+phi_convict_threshold (Default: 8)note Adjusts the sensitivity of the failure detector on an exponential scale. Lower values increase the likelihood that an unresponsive node will be marked as down, while higher values decrease the likelihood that transient failures will cause a node failure. In unstable network environments (such as EC2 at times), raising the value to 10 or 12 helps prevent false failures. Values higher than 12 and lower than 5 are not recommended.
+Related information: Failure detection and recovery
+
+
+Performance tuning properties 
+
+Tuning performance and system resource utilization, including commit log, compaction, memory, disk I/O, CPU, reads, and writes.
+
+Commit log settings
+commitlog_sync (Default: periodic) The method that Cassandra uses to acknowledge writes in milliseconds:periodic: Used with commitlog_sync_period_in_ms (Default: 10000 - 10 seconds) to control how often the commit log is synchronized to disk. Periodic syncs are acknowledged immediately. 
+batch: Used with commitlog_sync_batch_window_in_ms (Default: disabled)note to control how long Cassandra waits for other writes before performing a sync. When using this method, writes are not acknowledged until fsynced to disk. 
+
+Related information: Durability
+commitlog_periodic_queue_size (Default: 1024 × number_of_cpu_cores) pending entries on the commitlog queue). When writing very large blobs, reduce this number. For example, 16 × number_of_cpu_cores works reasonably well for 1MB blobs. This setting should be at least as large as the concurrent_writes setting.commitlog_segment_size_in_mb (Default: 32) Sets the size of the individual commitlog file segments. A commitlog segment may be archived, deleted, or recycled after all its data has been flushed to SSTables. This amount of data can potentially include commitlog segments from every table in the system. The default size is usually suitable for most commitlog archiving, but if you want a finer granularity, 8 or 16 MB is reasonable. See Commit log archive configuration.commitlog_total_space_in_mb (Default: 32 for 32-bit JVMs, 1024 for 64-bit JVMs)note Total space used for commitlogs. If the used space goes above this value, Cassandra rounds up to the next nearest segment multiple and flushes memtables to disk for the oldest commitlog segments, removing those log segments. This reduces the amount of data to replay on start-up, and prevents infrequently-updated tables from indefinitely keeping commitlog segments. A small total commitlog space tends to cause more flush activity on less-active tables. 
+Related information: Configuring memtable throughput
+
+Compaction settings
+
+Related information: Configuring compaction
+compaction_preheat_key_cache (Default: true) When set to true, cached row keys are tracked during compaction, and re-cached to their new positions in the compacted SSTable. If you have extremely large key caches for tables, set the value to false; see Global row and key caches properties. concurrent_compactors (Default: 1 per CPU core)note Sets the number of concurrent compaction processes allowed to run simultaneously on a node, not including validation compactions for anti-entropy repair. Simultaneous compactions help preserve read performance in a mixed read-write workload by mitigating the tendency of small SSTables to accumulate during a single long-running compaction. If compactions run too slowly or too fast, change compaction_throughput_mb_per_sec first. in_memory_compaction_limit_in_mb (Default: 64) Size limit for rows being compacted in memory. Larger rows spill to disk and use a slower two-pass compaction process. When this occurs, a message is logged specifying the row key. The recommended value is 5 to 10 percent of the available Java heap size. multithreaded_compaction (Default: false) When set to true, each compaction operation uses one thread per core and one thread per SSTable being merged. This is typically useful only on nodes with SSD hardware. With HDD hardware, the goal is to limit the disk I/O for compaction (see compaction_throughput_mb_per_sec).
+Note: It is strongly recommended to not enable multithreaded_compaction. In most cases it has severe performance impact. See CASSANDRA-6142.
+preheat_kernel_page_cache (Default: false) Enable or disable kernel page cache preheating from contents of the key cache after compaction. When enabled it preheats only first page (4KB) of each row to optimize for sequential access. It can be harmful for fat rows, see CASSANDRA-4937 for more details.
+Memtable settings
+file_cache_size_in_mb (Default: smaller of 1/4 heap or 512) Total memory to use for SSTable-reading buffers.memtable_flush_queue_size (Default: 4) The number of full memtables to allow pending flush (memtables waiting for a write thread). At a minimum, set to the maximum number of indexes created on a single table. 
+Related information: Flushing data from the memtable
+memtable_flush_writers (Default: 1 per data directory)note Sets the number of memtable flush writer threads. These threads are blocked by disk I/O, and each one holds a memtable in memory while blocked. If you have a large Java heap size and many data directories, you can increase the value for better flush performance. 
+Related information: Flushing data from the memtable
+
+Cache and index settings
+column_index_size_in_kb (Default: 64) Add column indexes to a row when the data reaches this size. This value defines how much row data must be de-serialized to read the column. Increase this setting if your column values are large or if you have a very large number of columns. If consistently reading only a few columns from each row or doing many partial-row reads, keep it small. All index data is read for each access, so take that into consideration when setting the index size. populate_io_cache_on_flush (Default: false)note Adds newly flushed or compacted SSTables to the operating system page cache, potentially evicting other cached data to make room. Enable when all data in the table is expected to fit in memory. See also the global option, compaction_preheat_key_cache.
+Related information: CQLCompression Subproperties in CQL for Cassandra 2.x.
+reduce_cache_capacity_to (Default: 0.6) Sets the size percentage to which maximum cache capacity is reduced when Java heap usage reaches the threshold defined by reduce_cache_sizes_at.reduce_cache_sizes_at (Default: 0.85) When Java heap usage (after a full concurrent mark sweep (CMS) garbage collection) exceeds this percentage, Cassandra reduces the cache capacity to the fraction of the current size as specified by reduce_cache_capacity_to. To disable, set the value to 1.0. 
+Disks settings
+stream_throughput_outbound_megabits_per_sec (Default: 200)note Throttles all outbound streaming file transfers on a node to the specified throughput. Cassandra does mostly sequential I/O when streaming data during bootstrap or repair, which can lead to saturating the network connection and degrading client (RPC) performance.trickle_fsync (Default: false) When doing sequential writing, enabling this option tells fsync to force the operating system to flush the dirty buffers at a set interval trickle_fsync_interval_in_kb. Enable this parameter to avoid sudden dirty buffer flushing from impacting read latencies. Recommended to use on SSDs, but not on HDDs.trickle_fsync_interval_in_kb (Default: 10240]). Sets the size of the fsync in kilobytes.
+
+Advanced properties 
+
+Properties for advanced users or properties that are less commonly used.
+
+Advanced initialization properties
+auto_bootstrap  (Default: true) This setting has been removed from default configuration. It makes new (non-seed) nodes automatically migrate the right data to themselves. When initializing a fresh cluster without data, add auto_bootstrap: false.
+Related information: Initializing a multiple node cluster (single data center) and Initializing a multiple node cluster (multiple data centers).
+batch_size_warn_threshold_in_kb (Default: 64kb per batch) Log WARN on any batch size exceeding this value in kilobytes. Caution should be taken on increasing the size of this threshold as it can lead to node instability.broadcast_address (Default: listen_address)note The IP address a node tells other nodes in the cluster to contact it by. It allows public and private address to be different. For example, use the broadcast_address parameter in topologies where not all nodes have access to other nodes by their private IP addresses.
+If your Cassandra cluster is deployed across multiple Amazon EC2 regions and you use the Ec2MultiRegionSnitch, set the broadcast_address to public IP address of the node and the listen_address to the private IP. See Ec2MultiRegionSnitch.
+initial_token (Default: disabled) Used in the single-node-per-token architecture, where a node owns exactly one contiguous range in the ring space. Setting this property overrides num_tokens. If you not using vnodes or have num_tokens set it to 1 or unspecified (#num_tokens), you should always specify this parameter when setting up a production cluster for the first time and when adding capacity. For more information, see this parameter in the Cassandra 1.1 Node and Cluster Configuration documentation.num_tokens (Default: 256)note Defines the number of tokens randomly assigned to this node on the ring when using virtual nodes (vnodes). The more tokens, relative to other nodes, the larger the proportion of data that the node stores. Generally all nodes should have the same number of tokens assuming equal hardware capability. The recommended value is 256. If unspecified (#num_tokens), Cassandra uses 1 (equivalent to #num_tokens : 1) for legacy compatibility and uses the initial_token setting.If you do not wish to use vnodes, comment #num_tokens : 256 or set num_tokens : 1 and use initial_token. If you already have an existing cluster with one token per node and wish to migrate to vnodes, see Enabling virtual nodes on an existing production cluster.
+Note: If using DataStax Enterprise, the default setting of this property depends on the type of node and type of install.
+partitioner (Default: org.apache.cassandra.dht.Murmur3Partitioner) Distributes rows (by key) across nodes in the cluster. Any IPartitioner may be used, including your own as long as it is in the class path. Cassandra provides the following partitioners for backwards compatibility: RandomPartitioner 
+ByteOrderedPartitioner 
+OrderPreservingPartitioner (deprecated) 
+
+Related information: Partitioners
+storage_port (Default: 7000) The port for inter-node communication. 
+Advanced automatic backup setting 
+auto_snapshot (Default: true) Enable or disable whether a snapshot is taken of the data before keyspace truncation or dropping of tables. To prevent data loss, using the default setting is strongly advised. If you set to false, you will lose data on truncation or drop.
+Key caches and global row properties 
+
+When creating or modifying tables, you enable or disable the key cache (partition key cache) or row cache for that table by setting the caching parameter. Other row and key cache tuning and configuration options are set at the global (node) level. Cassandra uses these settings to automatically distribute memory for each table on the node based on the overall workload and specific table usage. You can also configure the save periods for these caches globally.
+
+Related information: Configuring caches
+key_cache_keys_to_save (Default: disabled - all keys are saved)note Number of keys from the key cache to save. key_cache_save_period (Default: 14400 - 4 hours) Duration in seconds that keys are saved in cache. Caches are saved to saved_caches_directory. Saved caches greatly improve cold-start speeds and has relatively little effect on I/O.key_cache_size_in_mb (Default: empty) A global cache setting for tables. It is the maximum size of the key cache in memory. When no value is set, the cache is set to the smaller of 5% of the available heap, or 100MB. To disable set to 0. row_cache_keys_to_save (Default: disabled - all keys are saved)note Number of keys from the row cache to save.row_cache_size_in_mb (Default: 0 - disabled) A global cache setting for tables.row_cache_save_period (Default: 0 - disabled) Duration in seconds that rows are saved in cache. Caches are saved to saved_caches_directory.memory_allocator (Default: NativeAllocator) The off-heap memory allocator. In addition to caches, this property affects storage engine metadata. Supported values:NativeAllocator
+JEMallocAllocator - Experiments show that jemalloc saves some memory compared to the native allocator because it is more fragmentation resistant. To use, install jemalloc as a library and modify cassandra-env.sh (instructions in file).
+
+CAUTION:
+
+JEMalloc version 3.6.0 or later should be used with option. Known errors occur with earlier versions.
+
+Tombstone settings
+
+When executing a scan, within or across a partition, tombstones must be kept in memory to allow returning them to the coordinator. The coordinator uses them to ensure other replicas know about the deleted rows. Workloads that generate numerous tombstones may cause performance problems and exhaust the server heap. Adjust these thresholds only if you understand the impact and want to scan more tombstones. Additionally, you can adjust these thresholds at runtime using the StorageServiceMBean. 
+
+Related information: Cassandra anti-patterns: Queues and queue-like datasets
+tombstone_warn_threshold (Default: 1000) The maximum number of tombstones a query can scan before warning.tombstone_failure_threshold (Default: 100000) The maximum number of tombstones a query can scan before aborting.
+Network timeout settings
+range_request_timeout_in_ms (Default: 10000) The time in milliseconds that the coordinator waits for sequential or index scans to complete. read_request_timeout_in_ms (Default: 10000) The time in milliseconds that the coordinator waits for read operations to complete. cas_contention_timeout_in_ms (Default: 1000) The time in milliseconds that the coordinator continues to retry a CAS (compare and set) operation that contends with other proposals for the same row.truncate_request_timeout_in_ms (Default: 60000) The time in milliseconds that the coordinator waits for truncates to complete. The long default value allows for flushing of all tables, which ensures that anything in the commitlog is removed that could cause truncated data to reappear. If auto_snapshot is disabled, you can reduce this time. write_request_timeout_in_ms (Default: 10000) The time in milliseconds that the coordinator waits for write operations to complete. request_timeout_in_ms (Default: 10000) The default time out in milliseconds for other, miscellaneous operations.
+Related information: About hinted handoff writes
+
+Inter-node settings
+cross_node_timeout (Default: false) Enable or disable operation timeout information exchange between nodes (to accurately measure request timeouts). If disabled Cassandra assumes the request was forwarded to the replica instantly by the coordinator. 
+CAUTION:
+
+Before enabling this property make sure NTP (network time protocol) is installed and the times are synchronized between the nodes.
+internode_send_buff_size_in_bytes (Default: N/A)note Sets the sending socket buffer size in bytes for inter-node calls.internode_recv_buff_size_in_bytes (Default: N/A)note Sets the receiving socket buffer size in bytes for inter-node calls.internode_compression (Default: all) Controls whether traffic between nodes is compressed. The valid values are: all: All traffic is compressed.
+dc: Traffic between data centers is compressed.
+none: No compression.
+inter_dc_tcp_nodelay (Default: false) Enable or disable tcp_nodelay for inter-data center communication. When disabled larger, but fewer, network packets are sent. This reduces overhead from the TCP protocol itself. However, if cross data-center responses are blocked, it will increase latency.streaming_socket_timeout_in_ms (Default: 0 - never timeout streams)note Enable or disable socket timeout for streaming operations. When a timeout occurs during streaming, streaming is retried from the start of the current file. Avoid setting this value too low, as it can result in a significant amount of data re-streaming. 
+Native transport (CQL Binary Protocol) 
+start_native_transport (Default: true) Enable or disable the native transport server. Note that the address on which the native transport is bound is the same as the rpc_address. However, the port is different from the rpc_port and specified in native_transport_port.native_transport_port (Default: 9042) Port on which the CQL native transport listens for clients.native_transport_max_threads (Default: 128)note The maximum number of thread handling requests. The meaning is the same as rpc_max_threads.native_transport_max_frame_size_in_mb (Default: 256MB) The maximum size of allowed frame. Frame (requests) larger than this are rejected as invalid.
+RPC (remote procedure call) settings
+
+Settings for configuring and tuning client connections.
+rpc_port (Default: 9160) The port for the Thrift RPC service, which is used for client connections.start_rpc (Default: true) Starts the Thrift RPC server.rpc_keepalive (Default: true) Enable or disable keepalive on client connections.rpc_max_threads (Default: unlimited)note Regardless of your choice of RPC server (rpc_server_type), the number of maximum requests in the RPC thread pool dictates how many concurrent requests are possible. However, if you are using the parameter sync in the rpc_server_type, it also dictates the number of clients that can be connected. For a large number of client connections, this could cause excessive memory usage for the thread stack. Connection pooling on the client side is highly recommended. Setting a maximum thread pool size acts as a safeguard against misbehaved clients. If the maximum is reached, Cassandra blocks additional connections until a client disconnects. rpc_min_threads (Default: 16)note Sets the minimum thread pool size for remote procedure calls. rpc_recv_buff_size_in_bytes (Default: N/A)note Sets the receiving socket buffer size for remote procedure calls.rpc_send_buff_size_in_bytes (Default: N/A)note Sets the sending socket buffer size in bytes for remote procedure calls.rpc_server_type (Default: sync) Cassandra provides three options for the RPC server. On Windows, sync is about 30% slower than hsha. On Linux, sync and hsha performance is about the same, but hsha uses less memory. sync: (default) One connection per thread in the RPC pool. For a very large number of clients, memory is the limiting factor. On a 64 bit JVM, 128KB is the minimum stack size per thread. Connection pooling is strongly recommended. 
+hsha: Half synchronous, half asynchronous. The RPC thread pool is used to manage requests, but the threads are multiplexed across the different clients. All Thrift clients are handled asynchronously using a small number of threads that does not vary with the number of clients (and thus scales well to many clients). The RPC requests are synchronous (one thread per active request). 
+Your own RPC server: You must provide a fully-qualified class name of an o.a.c.t.TServerFactory that can create a server instance. 
+
+Advanced fault detection settings
+
+Settings to handle poorly performing or failing nodes.
+dynamic_snitch_badness_threshold (Default: 0.1) Sets the performance threshold for dynamically routing requests away from a poorly performing node. A value of 0.2 means Cassandra continues to prefer the static snitch values until the node response time is 20% worse than the best performing node. Until the threshold is reached, incoming client requests are statically routed to the closest replica (as determined by the snitch). Having requests consistently routed to a given replica can help keep a working set of data hot when read repair is less than 1. dynamic_snitch_reset_interval_in_ms (Default: 600000) Time interval in milliseconds to reset all node scores, which allows a bad node to recover. dynamic_snitch_update_interval_in_ms (Default: 100) The time interval in milliseconds for calculating read latency.hinted_handoff_enabled (Default: true) Enable or disable hinted handoff. It can also contain a list of data centers to enable per data-center. For example hinted_handoff_enabled: DC1,DC2. A hint indicates that the write needs to be replayed to an unavailable node. Where Cassandra writes the hint depends on the version: Prior to 1.0: Writes to a live replica node. 
+1.0 and later: Writes to the coordinator node.
+
+Related information: About hinted handoff writes
+hinted_handoff_throttle_in_kb (Default: 1024) Maximum throttle per delivery thread in kilobytes per second. This rate reduces proportionally to the number of nodes in the cluster. For example, if there are two nodes in the cluster, each delivery thread will use the maximum rate; if there are three, each node will throttle to half of the maximum, since the two nodes are expected to deliver hints simultaneously.max_hint_window_in_ms (Default: 10800000 - 3 hours) Defines how long in milliseconds to generate and save hints for an unresponsive node. After this interval, new hints are no longer generated until the node is back up and responsive. If the node goes down again, a new interval begins. This setting can prevent a sudden demand for resources when a node is brought back online and the rest of the cluster attempts to replay a large volume of hinted writes.
+Related information: Failure detection and recovery
+max_hints_delivery_threads (Default: 2) Number of threads with which to deliver hints. For multiple data center deployments, consider increasing this number because cross data-center handoff is generally slower. batchlog_replay_throttle_in_kb (Default: 1024) Maximum throttle in KBs per second, total. It is reduced proportionally to the number of nodes in the cluster.
+Request scheduler properties
+
+Settings to handle incoming client requests according to a defined policy. If you need to use these properties, your nodes are overloaded and dropping requests. It is recommended that you add more nodes and not try to prioritize requests.
+request_scheduler (Default: org.apache.cassandra.scheduler.NoScheduler) Defines a scheduler to handle incoming client requests according to a defined policy. This scheduler is useful for throttling client requests in single clusters containing multiple keyspaces. This is specifically for requests from the client and does not affect inter-node communication. Valid values are: org.apache.cassandra.scheduler.NoScheduler: No scheduling takes place and does not have any options. 
+org.apache.cassandra.scheduler.RoundRobinScheduler: See request_scheduler_options properties. 
+A Java class that implements the RequestScheduler interface. 
+request_scheduler_id (Default: keyspace)note An identifier on which to perform request scheduling. Currently the only valid value is keyspace.request_scheduler_options (Default: disabled) Contains a list of properties that define configuration options for request_scheduler: throttle_limit: (Default: 80) The number of active requests per client. Requests beyond this limit are queued up until running requests complete. Recommended value is ((concurrent_reads + concurrent_writes) × 2).
+default_weight: (Default: 5)note How many requests are handled during each turn of the RoundRobin. 
+weights: (Default: Keyspace1: 1, Keyspace2: 5) How many requests are handled during each turn of the RoundRobin, based on the request_scheduler_id. Takes a list of keyspaces: weights.
+
+Thrift interface properties
+
+Legacy API for older clients. CQL is a simpler and better API for Cassandra.
+thrift_framed_transport_size_in_mb (Default: 15) Frame size (maximum field length) for Thrift. The frame is the row or part of the row that the application is inserting. thrift_max_message_length_in_mb (Default: 16) The maximum length of a Thrift message in megabytes, including all fields and internal Thrift overhead (1 byte of overhead for each frame). Message length is usually used in conjunction with batches. A frame length greater than or equal to 24 accommodates a batch with four inserts, each of which is 24 bytes. The required message length is greater than or equal to 24+24+24+24+4 (number of frames).
+
+Security properties 
+
+Server and client security settings.
+authenticator (Default: AllowAllAuthenticator) The authentication backend. It implements IAuthenticator, which is used to identify users. The available authenticators are:AllowAllAuthenticator: Disables authentication; no checks are performed.
+PasswordAuthenticator: Authenticates users with user names and hashed passwords stored in the system_auth.credentials table. If you use this authenticator, increase the system_auth keyspace replication factor.
+
+Related information: Internal authentication
+internode_authenticator (Default: enabled)note Internode authentication backend, implementing org.apache.cassandra.auth.AllowAllInternodeAuthenticator. Allows or disallows connections from peer nodes.authorizer (Default: AllowAllAuthorizer) The authorization backend. It implements IAuthenticator, which limits access and provides permissions. The available authorizers are: AllowAllAuthorizer: Disables authorization; allows any action to any user.
+CassandraAuthorizer: Stores permissions in system_auth.permissions table. If you use this authenticator, increase the system_auth keyspace replication factor.
+
+Related information: Object permissions
+permissions_validity_in_ms (Default: 2000) How long permissions in cache remain valid. Depending on the authorizer, fetching permissions can be resource intensive. This setting is automatically disabled when AllowAllAuthorizer is set. 
+Related information: Object permissions
+server_encryption_options Enable or disable inter-node encryption. You must also generate keys and provide the appropriate key and trust store locations and passwords. No custom encryption options are currently enabled. The available options are:internode_encryption: (Default: none) Enable or disable encryption of inter-node communication using the TLS_RSA_WITH_AES_128_CBC_SHA cipher suite for authentication, key exchange, and encryption of data transfers. The available inter-node options are: all: Encrypt all inter-node communications.
+none: No encryption.
+dc: Encrypt the traffic between the data centers (server only).
+rack: Encrypt the traffic between the racks(server only).
+
+keystore: (Default: conf/.keystore) The location of a Java keystore (JKS) suitable for use with Java Secure Socket Extension (JSSE), which is the Java version of the Secure Sockets Layer (SSL), and Transport Layer Security (TLS) protocols. The keystore contains the private key used to encrypt outgoing messages.
+keystore_password: (Default: cassandra) Password for the keystore. 
+truststore: (Default: conf/.truststore) Location of the truststore containing the trusted certificate for authenticating remote servers. 
+truststore_password: (Default: cassandra) Password for the truststore. 
+
+The passwords used in these options must match the passwords used when generating the keystore and truststore. For instructions on generating these files, see Creating a Keystore to Use with JSSE.
+
+The advanced settings are:
+protocol: (Default: TLS) 
+algorithm: (Default: SunX509)
+store_type: (Default: JKS)
+cipher_suites: (Default: TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA) 
+require_client_auth: (Default: false) Enables or disables certificate authentication.
+
+Related information: Node-to-node encryption
+client_encryption_options Enable or disable client-to-node encryption. You must also generate keys and provide the appropriate key and trust store locations and passwords. No custom encryption options are currently enabled. The available options are:enabled: (Default: false) To enable, set to true. 
+keystore: (Default: conf/.keystore) The location of a Java keystore (JKS) suitable for use with Java Secure Socket Extension (JSSE), which is the Java version of the Secure Sockets Layer (SSL), and Transport Layer Security (TLS) protocols. The keystore contains the private key used to encrypt outgoing messages. 
+keystore_password: (Default: cassandra) Password for the keystore. This must match the password used when generating the keystore and truststore.
+require_client_auth: (Default: false) Enables or disables certificate authentication. (Available starting with Cassandra 1.2.3.)
+truststore: (Default: conf/.truststore) Set if require_client_auth is true. 
+truststore_password: <truststore_password> Set if require_client_auth is true.
+
+The advanced settings are:
+protocol: (Default: TLS) 
+algorithm: (Default: SunX509)
+store_type: (Default: JKS)
+cipher_suites: (Default: TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA) 
+
+Related information: Client-to-node encryption
+ssl_storage_port (Default: 7001) The SSL port for encrypted communication. Unused unless enabled in encryption_options.
+

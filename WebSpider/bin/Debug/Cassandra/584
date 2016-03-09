@@ -1,0 +1,35 @@
+scrub
+Rebuild SSTables for one or more Cassandra tables.
+
+
+Rebuild SSTables for one or more Cassandra tables.
+
+
+Synopsis 
+nodetool <options> scrub <keyspace> -- ( -ns | --no-snapshot ) ( -s | --skip-corrupted ) ( <table> ... )
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number>
+( -pw | --password ) <password >
+( -u | --username ) <user name>
+( -pwf <passwordFilePath | --password-file <passwordFilePath> )
+
+-- Separates an option and argument that could be mistaken for a option.
+keyspace is the name of a keyspace.
+-ns, or --no-snapshot, triggers a snapshot of the scrubbed table first assuming snapshots are not disabled (the default).
+- s, or --skip-corrupted skips corrupted partitions even when scrubbing counter tables. (default false)
+table is one or more table names, separated by a space.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) means not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope
+
+
+Description 
+Rebuilds SSTables on a node for the named tables and snapshots data files before rebuilding as a safety measure. If possible use upgradesstables. While scrub rebuilds SSTables, it also discards data that it deems broken and creates a snapshot, which you have to remove manually. If scrub can't validate the column value against the column definition's data type, it logs the partition key and skips to the next partition. If the -ns option is specified, snapshot creation is disabled.
+Skipping corrupt rows in tables having counter columns results in undercounts. By default the scrub operation stops if you attempt to skip such a row. To force the scrub to skip the row and continue scrubbing, re-run nodetool scrub using the --skip-corrupted option.
+

@@ -1,0 +1,60 @@
+netstats
+Provides network information about the host.
+
+
+Provides network information about the host.
+
+
+Synopsis 
+nodetool <options> netstats
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+The default host is the connected host if the user does not include a host name or IP address in the command. The output includes the following information: JVM settings
+ Mode 
+Read repair statistics
+ Attempted 
+The number of successfully completed read repair operations 
+
+ Mismatch (blocking) 
+The number of read repair operations since server restart that blocked a query.
+
+ Mismatch (background) 
+The number of read repair operations since server restart performed in the background.
+
+ Pool name 
+Information about client read and write requests by thread pool. 
+
+
+
+Example 
+
+Get the network information for a node 10.171.147.128:
+nodetool -h 10.171.147.128 netstats
+
+An example of output is:
+Mode: NORMAL
+Not sending any streams.
+Not receiving any streams.
+Read Repair Statistics:
+Attempted: 1
+Mismatch (Blocking): 0
+Mismatch (Background): 0
+Pool Name                    Active   Pending      Completed
+Commands                        n/a         0              0
+Responses                       n/a         0              0
+

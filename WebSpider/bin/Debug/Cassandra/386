@@ -1,0 +1,28 @@
+Taking a snapshot
+Steps for taking a global snapshot or per node.
+
+
+Snapshots are taken per node using the nodetool snapshot command. To take a global snapshot, run the nodetool snapshot command using a parallel ssh utility, such as pssh.
+
+A snapshot first flushes all in-memory writes to disk, then makes a hard link of the SSTable files for each keyspace. You must have enough free disk space on the node to accommodate making snapshots of your data files. A single snapshot requires little disk space. However, snapshots can cause your disk usage to grow more quickly over time because a snapshot prevents old obsolete data files from being deleted. After the snapshot is complete, you can move the backup files to another location if needed, or you can leave them in place.
+
+Note: Cassandra can only restore data from a snapshot when the table schema exists. It is recommended that you also backup the schema.
+
+
+Procedure
+
+Run the nodetool snapshot command, specifying the hostname, JMX port, and keyspace. For example: 
+$ nodetool -h localhost -p 7199 snapshot mykeyspace
+
+
+
+Results
+
+The snapshot is created in data_directory_location/keyspace_name/table_name/snapshots/snapshot_name directory. Each snapshot directory contains numerous .db files that contain the data at the time of the snapshot.
+
+For example:
+
+Packaged installs:  /var/lib/cassandra/data/mykeyspace/mytable/snapshots/1406227071618/mykeyspace-1-Data.db
+
+Tarball installs: install_location/data/data/mykeyspace/mytable/snapshots/1406227071618/mykeyspace-1-Data.db
+

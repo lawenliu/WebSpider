@@ -1,0 +1,39 @@
+Repairing nodes
+Node repair makes data on a replica consistent with data on other nodes.
+
+Node repair makes data on a replica consistent with data on other nodes. To understand how repair works and the information described in this topic, please read the blog article Advanced repair techniques.
+
+The nodetool repair command repairs inconsistencies across all of the replicas for a given range of data. Run repair in these situations:
+As a best practice, you should schedule repairs weekly.
+Note: If deletions never occur, you should still schedule regular repairs. Be aware that setting a column to null is a delete.
+
+During node recovery. For example, when bringing a node back into the cluster after a failure.
+On nodes containing data that is not read frequently.
+To update data on a node that has been down.
+
+Guidelines for running routine node repair include:
+The hard requirement for routine repair frequency is the value of gc_grace_seconds. Run a repair operation at least once on each node within this time period. Following this important guideline ensures that deletes are properly handled in the cluster. 
+Schedule regular repair operations for low-usage hours. 
+To minimize impact, use nodetool repair and do not invoke more than one repair at a time.
+In systems that seldom delete or overwrite data, you can raise the value of gc_grace with minimal impact to disk space. This allows wider intervals for scheduling repair operations with the nodetool utility.
+
+Repair requires intensive disk I/O. This occurs because of the validation compaction used for building the Merkle tree. To mitigate heavy disk usage:
+Use the nodetool compaction throttling options (setcompactionthroughput and setcompactionthreshold).
+Use nodetool repair. 
+The repair command takes a snapshot of each replica immediately and then sequentially repairs each replica from the snapshots. For example, if you have RF=3 and A, B and C represents three replicas, this command takes a snapshot of each replica immediately and then sequentially repairs each replica from the snapshots (A<->B, A<->C, B<->C) instead of repairing A, B, and C all at once. This allows the dynamic snitch to maintain performance for your application via the other replicas, because at least one replica in the snapshot is not undergoing repair.
+
+Recall that snapshots are hardlinks to existing SSTables, immutable, and require almost no disk space. This means that for any given replica set, only one replica at a time performs the validation compaction. This allows the dynamic snitch to maintain performance for your application via the other replicas.
+
+Note: Using the nodetool repair -pr (–partitioner-range) option repairs only the primary range for that node, the other replicas for that range still have to perform the Merkle tree calculation, causing a validation compaction. Because all the replicas are compacting at the same time, all the nodes may be slow to respond for that portion of the data. 
+
+
+This happens because the Merkle trees don’t have infinite resolution and Cassandra makes a tradeoff between the size and space. Currently, Cassandra uses a fixed depth of 15 for the tree (32K leaf nodes). For a node containing a million partitions with one damaged partition, about 30 partitions are streamed, which is the number that fall into each of the leaves of the tree. Of course, the problem gets worse when more partitions exist per node, and results in a lot of disk space usage and needless compaction. 
+
+To mitigate overstreaming, you can use subrange repair. Subrange repair allows for repairing only a portion of the data belonging to the node. Because the Merkle tree precision is fixed, this effectively increases the overall precision. 
+
+To use subrange repair:
+Use the Java describe_splits call to ask for a split containing 32K partitions.
+Iterate throughout the entire range incrementally or in parallel. This completely eliminates the overstreaming behavior and wasted disk usage overhead.
+Pass the tokens you received for the split to the nodetool repair -st (–start-token) and -et (–end-token) options.
+Pass the -local (–in-local-dc) option to nodetool to repair only within the local data center. This reduces the cross data-center transfer load.
+

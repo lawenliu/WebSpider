@@ -1,0 +1,60 @@
+Installing DataStax Community on any Linux-based platform
+Install on all Linux-based platforms using a binary tarball. 
+
+
+Use these steps to install Cassandra on all Linux-based platforms using a binary tarball.
+
+Use this install for Mac OS X and platforms without package support, or if you do not have or want a root installation.
+
+
+For a complete list of supported platforms, see DataStax Community – Supported Platforms. 
+
+
+
+Prerequisites
+Latest version of Oracle Java Platform, Standard Edition 8 (JDK) is recommended or OpenJDK 7. 
+Note: The JDK is recommended for development and production systems. It provides tools that are not in the JRE, such as jstack, jmap, jps, and jstat, that are useful for troubleshooting.
+
+Java Native Access (JNA) is required for production installations (latest version recommended). See Installing the JNA.
+Python 2.6+ (needed if installing OpsCenter).
+If you are using Ubuntu 10.04 LTS, you must update to JNA 3.4, as described in Installing the JNA from the JAR file.
+If you are using an older RHEL-based Linux distribution, such as CentOS-5, you may see the following error: GLIBCXX_3.4.9 not found. You must replace the Snappy compression/decompression library (snappy-java-1.0.5.jar) with the snappy-java-1.0.4.1.jar. 
+
+
+The binary tarball runs as a stand-alone process.
+
+
+Procedure
+
+In a terminal window:
+Check which version of Java is installed by running the following command: 
+$ java -version
+
+
+Note: It is recommended to use the latest version of Oracle Java 8 on all nodes. (Oracle Java 7 is also supported.)
+See Installing Oracle JDK on RHEL-based Systems.
+
+Download the DataStax Community:  
+$ curl -L http://downloads.datastax.com/community/dsc-2.0.tar.gz | tar xz
+
+Check Download DataStax Community Edition on Planet Cassandra for the latest version. 
+
+You can also download from Planet Cassandra.
+
+Go to the install directory: 
+$ cd dsc-cassandra-2.0.x
+
+The DataStax Community distribution of Cassandra is ready for configuration.
+
+
+
+
+What's next
+Initializing a multiple node cluster (single data center)
+Initializing a multiple node cluster (multiple data centers)
+Recommended production settings
+Installing OpsCenter
+Key components for configuring Cassandra 
+Tarball installation directories
+Starting Cassandra as a stand-alone process
+

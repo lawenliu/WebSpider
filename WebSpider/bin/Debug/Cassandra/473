@@ -1,0 +1,29 @@
+The sstableupgrade tool
+Upgrade the SSTables in the specified table or snapshot to match the currently installed version of Cassandra.
+
+
+This tool rewrites the SSTables in the specified table or snapshot to match the currently installed version of Cassandra.
+
+If restoring with sstableloader, you must upgrade your snapshots before restoring for any snapshot taken in a major version older than the major version that Cassandra is currently running. 
+
+
+Usage:
+Packaged installs:  sstableupgrade [options] <keyspace> <cf> [snapshot]
+Tarball installs:  install_location/bin/sstableupgrade [options] <keyspace> <cf> [snapshot]
+
+The snapshot option only upgrades the specified snapshot.
+
+
+Options
+
+
+Flag
+
+Option
+
+Description
+
+
+--debug Display stack traces.
+ -h--helpDisplay help.
+

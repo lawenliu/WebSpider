@@ -1,0 +1,44 @@
+Hadoop support
+Cassandra support for integrating Hadoop with Cassandra.
+
+Cassandra 2.0.11 improves support for integrating Hadoop with Cassandra:MapReduce
+Apache Pig
+Apache Hive
+
+You can use Cassandra 2.0.11 and later with Hadoop 2.x or 1.x with some restrictions.Isolate Cassandra and Hadoop nodes in separate data centers.
+Before starting the data centers of Cassandra/Hadoop nodes, disable virtual nodes (vnodes).
+To disable virtual nodes:In the cassandra.yaml file, set num_tokens to 1.
+Uncomment the initial_token property and set it to 1 or to the value of a generated token for a multi-node cluster.
+Start the cluster for the first time.
+Do not disable or enable vnodes on an existing cluster.
+
+
+Setup and configuration, described in the Apache docs, involves overlaying a Hadoop cluster on Cassandra nodes, configuring a separate server for the Hadoop NameNode/JobTracker, and installing a Hadoop TaskTracker and Data Node on each Cassandra node. The nodes in the Cassandra data center can draw from data in the HDFS Data Node as well as from Cassandra. The Job Tracker/Resource Manager (JT/RM) receives MapReduce input from the client application. The JT/RM sends a MapReduce job request to the Task Trackers/Node Managers (TT/NM) and optional clients, MapReduce, Hive, and Pig. The data is written to Cassandra and results sent back to the client.
+
+
+
+
+
+The Apache docs also cover how to get configuration and integration support.
+
+
+Input and Output Formats 
+
+Hadoop jobs can receive data from CQL tables and indexes and you can load data into Cassandra from a Hadoop job. Cassandra 2.0.11 supports the following formats for these tasks:
+CQL partition input format: ColumnFamilyInputFormat class.
+BulkOutputFormat class introduced in Cassandra 1.1
+
+Cassandra 2.0.11 and later supports the CqlOutputFormat, which is the CQL-compatible version of the BulkOutputFormat class. The CQLOutputFormat acts as a Hadoop-specific OutputFormat. Reduce tasks can store keys (and corresponding bound variable values) as CQL rows (and respective columns) in a given CQL table. 
+
+Cassandra 2.0.11 supports using the CQLOutputFormat with Apache Pig.
+
+
+Running the wordcount example 
+
+Wordcount example JARs are located in the examples directory of the Cassandra source code installation. There are CQL and legacy examples in the hadoop_cql3_word_count and hadoop_word_count subdirectories, respectively. Follow instructions in the readme files.
+
+
+Isolating Hadoop and Cassandra workloads 
+
+When you create a keyspace using CQL, Cassandra creates a virtual data center for a cluster, even a one-node cluster, automatically. You assign nodes that run the same type of workload to the same data center. The separate, virtual data centers for different types of nodes segregate workloads running Hadoop from those running Cassandra. Segregating workloads ensures that only one type of workload is active per data center. Separating nodes running a sequential data load, from nodes running any other type of workload, such as Cassandra real-time OLTP queries is a best practice. 
+

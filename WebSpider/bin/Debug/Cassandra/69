@@ -1,0 +1,5 @@
+CloudstackSnitch
+Use this snitch for Apache Cloudstack environments. 
+
+Use the CloudstackSnitch for Apache Cloudstack environments. Because zone naming is free-form in Apache Cloudstack, this snitch uses the widely-used <country> <location> <az> notation. 
+

@@ -1,0 +1,27 @@
+Enabling virtual nodes on a new cluster
+Steps and recommendations for enabling virtual nodes (vnodes) on a new cluster.
+
+
+Generally when all nodes have equal hardware capability, they should have the same number of virtual nodes (vnodes). If the hardware capabilities vary among the nodes in your cluster, assign a proportional number of vnodes to the larger machines. For example, you could designate your older machines to use 128 vnodes and your new machines (that are twice as powerful) with 256 vnodes.
+
+
+Procedure
+
+Set the number of tokens on each node in your cluster with the num_tokens parameter in the cassandra.yaml file. 
+
+The recommended value is 256. Do not set the initial_token parameter.
+
+
+
+Related reference
+
+
+
+The cassandra.yaml configuration file
+
+
+Related information
+
+
+
+Install locations

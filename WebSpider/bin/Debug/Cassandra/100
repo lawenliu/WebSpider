@@ -1,0 +1,16 @@
+Clearing the data for an AMI restart
+Clearing the data for an Amazon Machine Image restart.
+
+
+Use these steps to clear the data for an Amazon Machine Image (AMI) restart. The logs for AMIs are stored in the same location as the data. To preserve the log files, you need to delete everything except the log directory.
+
+
+Procedure
+
+To clear the data from the default directories:
+
+After stopping the service, run the following command: 
+$ sudo rm -rf /var/lib/cassandra/commitlog
+$ sudo rm -rf /var/lib/cassandra/data
+$ sudo rm -rf /var/lib/cassandra/saved_caches
+

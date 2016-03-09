@@ -1,0 +1,28 @@
+join
+Causes the node to join the ring.
+
+
+Causes the node to join the ring.
+
+
+Synopsis 
+nodetool <options> join
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+Causes the node to join the ring, assuming the node was initially not started in the ring using the -Djoin_ring=false cassandra utility option. The joining node should be properly configured with the desired options for seed list, initial token, and auto-bootstrapping. 
+

@@ -1,0 +1,44 @@
+Configuring compaction
+Steps for configuring compaction. The compaction process merges keys, combines columns, evicts tombstones, consolidates SSTables, and creates a new index in the merged SSTable.
+
+
+As discussed earlier, the compaction process merges keys, combines columns, evicts tombstones, consolidates SSTables, and creates a new index in the merged SSTable.
+
+In the cassandra.yaml file, you configure these global compaction parameters:
+snapshot_before_compaction
+in_memory_compaction_limit_in_mb
+multithreaded_compaction
+compaction_preheat_key_cache
+concurrent_compactors
+compaction_throughput_mb_per_sec
+
+The compaction_throughput_mb_per_sec parameter is designed for use with large partitions because compaction is throttled to the specified total throughput across the entire system. 
+
+Cassandra provides a start-up option for testing compaction strategies without affecting the production workload.
+
+Using CQL, you configure a compaction strategy:SizeTieredCompactionStrategy (STCS)
+DateTieredCompactionStrategy (DTCS)
+LeveledCompactionStrategy (LCS)
+
+Note: When using DTCS disabling read repair is recommended. Use full repair as necessary.
+
+To configure the compaction strategy property and CQL compaction subproperties, such as the maximum number of SSTables to compact and minimum SSTable size, use CREATE TABLE or ALTER TABLE.
+
+
+Procedure
+Update a table to set the compaction strategy using the ALTER TABLE statement. 
+ALTER TABLE users WITH
+  compaction = { 'class' :  'LeveledCompactionStrategy'  }
+
+Change the compaction strategy property to SizeTieredCompactionStrategy and specify the minimum number of SSTables to trigger a compaction using the CQL min_threshold attribute. 
+ALTER TABLE users
+  WITH compaction =
+  {'class' : 'SizeTieredCompactionStrategy', 'min_threshold' : 6 }
+
+
+
+
+Results
+
+You can monitor the results of your configuration using compaction metrics, see Compaction metrics.
+

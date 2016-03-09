@@ -1,0 +1,36 @@
+clearsnapshot
+Removes one or more snapshots.
+
+
+Removes one or more snapshots.
+
+
+Synopsis 
+nodetool <options> clearsnapshot -t <snapshot > -- ( <keyspace> ... )
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-t means the following file contains the snapshot.
+-- Separates an option from an argument that could be mistaken for a option.
+keyspace is one or more keyspace names, separated by a space.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+Deletes snapshots for one or more keyspaces. To remove all snapshots, omit the snapshot name.
+
+CAUTION:
+
+Removing all snapshots or all specific keyspace snapshot also removes OpsCenter backups.
+

@@ -1,0 +1,15 @@
+Virtual nodes
+Overview of virtual nodes (vnodes).
+
+Vnodes simplify many tasks in Cassandra:
+You no longer have to calculate and assign tokens to each node.
+Rebalancing a cluster is no longer necessary when adding or removing nodes. When a node joins the cluster, it assumes responsibility for an even portion of data from the other nodes in the cluster. If a node fails, the load is spread evenly across other nodes in the cluster.
+Rebuilding a dead node is faster because it involves every other node in the cluster.
+Improves the use of heterogeneous machines in a cluster. You can assign a proportional number of vnodes to smaller and larger machines.
+
+For more information, see the article Virtual nodes in Cassandra 1.2 and Enabling virtual nodes on an existing production cluster.
+Topics in this section: 
+
+How data is distributed across a cluster (using virtual nodes)
+
+Vnodes use consistent hashing to distribute data without requiring new token generation and assignment.

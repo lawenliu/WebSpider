@@ -1,0 +1,12 @@
+Initializing a cluster
+Topics for deploying a cluster.
+Topics in this section: 
+
+Initializing a multiple node cluster (single data center)
+
+A deployment scenario for a Cassandra cluster with a single data center.
+
+
+Initializing a multiple node cluster (multiple data centers)
+
+A deployment scenario for a Cassandra cluster with multiple data centers.

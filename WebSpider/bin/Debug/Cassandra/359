@@ -1,0 +1,85 @@
+Tuning Java resources
+Consider tuning Java resources in the event of a performance degradation or high memory consumption.
+
+Consider tuning Java resources in the event of a performance degradation or high memory consumption.
+
+There are two files that control environment settings for Cassandra:
+ conf/cassandra-env.sh 
+Java Virtual Machine (JVM) configuration settings
+
+ bin/cassandra-in.sh 
+Sets up Cassandra environment variables such as CLASSPATH and JAVA_HOME.
+
+
+
+Heap sizing options 
+
+If you decide to change the Java heap sizing, both MAX_HEAP_SIZE and HEAP_NEWSIZE should should be set together in conf/cassandra-env.sh.
+ MAX_HEAP_SIZE 
+Sets the maximum heap size for the JVM. The same value is also used for the minimum heap size. This allows the heap to be locked in memory at process start to keep it from being swapped out by the OS.
+
+ HEAP_NEWSIZE 
+The size of the young generation. The larger this is, the longer GC pause times will be. The shorter it is, the more expensive GC will be (usually). A good guideline is 100 MB per CPU core.
+
+
+
+Tuning the Java heap 
+
+Because Cassandra is a database, it spends significant time interacting with the operating system's I/O infrastructure through the JVM, so a well-tuned Java heap size is important. Cassandra's default configuration opens the JVM with a heap size that is based on the total amount of system memory:
+
+
+
+System Memory
+
+Heap Size
+
+
+Less than 2GB1/2 of system memory
+2GB to 4GB1GB
+Greater than 4GB1/4 system memory, but not more than 8GB
+
+Many users new to Cassandra are tempted to turn up Java heap size too high, which consumes the majority of the underlying system's RAM. In most cases, increasing the Java heap size is actually detrimental for these reasons:
+In most cases, the capability of Java to gracefully handle garbage collection above 8GB quickly diminishes.
+ Modern operating systems maintain the OS page cache for frequently accessed data and are very good at keeping this data in memory, but can be prevented from doing its job by an elevated Java heap size. 
+
+If you have more than 2GB of system memory, which is typical, keep the size of the Java heap relatively small to allow more memory for the page cache.
+
+Some Solr users have reported that increasing the stack size improves performance under Tomcat. To increase the stack size, uncomment and modify the default -Xss128k setting in the cassandra-env.sh file. Also, decreasing the memtable space to make room for Solr caches might improve performance. Modify the memtable space using the memtable_total_space_in_mb property in the cassandra.yaml file.
+
+Because MapReduce runs outside the JVM, changes to the JVM do not affect Analytics/Hadoop operations directly.
+
+
+How Cassandra uses memory 
+
+Using a java-based system like Cassandra, you can typically allocate about 8GB of memory on the heap before garbage collection pause time starts to become a problem. Modern machines have much more memory than that and Cassandra can make use of additional memory as page cache when files on disk are accessed. Allocating more than 8GB of memory on the heap poses a problem due to the amount of Cassandra metadata about data on disk. The Cassandra metadata resides in memory and is proportional to total data. Some of the components grow proportionally to the size of total memory. 
+
+In Cassandra 1.2 and later, the Bloom filter and compression offset map that store this metadata reside off-heap, greatly increasing the capacity per node of data that Cassandra can handle efficiently. In Cassandra 2.0, the partition summary also resides off-heap. 
+
+
+About the off-heap row cache 
+
+Cassandra can store cached rows in native memory, outside the Java heap. This results in both a smaller per-row memory footprint and reduced JVM heap requirements, which helps keep the heap size in the sweet spot for JVM garbage collection performance. 
+
+
+Tuning Java garbage collection 
+
+Cassandra's GCInspector class logs information about garbage collection whenever a garbage collection takes longer than 200ms. Garbage collections that occur frequently and take a moderate length of time to complete (such as ConcurrentMarkSweep taking a few seconds), indicate that there is a lot of garbage collection pressure on the JVM. Remedies include adding nodes, lowering cache sizes, or adjusting the JVM options regarding garbage collection.
+
+
+JMX options 
+
+Cassandra exposes a number of statistics and management operations via Java Management Extensions (JMX). Java Management Extensions (JMX) is a Java technology that supplies tools for managing and monitoring Java applications and services. Any statistic or operation that a Java application has exposed as an MBean can then be monitored or manipulated using JMX. JConsole, the nodetool utility, and DataStax OpsCenter are examples of JMX-compliant management tools. 
+
+By default, you can modify the following properties in the conf/cassandra-env.sh file to configure JMX to listen on port 7199 without authentication.
+ com.sun.management.jmxremote.port 
+The port on which Cassandra listens from JMX connections.
+
+ com.sun.management.jmxremote.ssl 
+Enable/disable SSL for JMX.
+
+ com.sun.management.jmxremote.authenticate 
+Enable/disable remote authentication for JMX.
+
+ -Djava.rmi.server.hostname 
+Sets the interface hostname or IP that JMX should use to connect. Uncomment and set if you are having trouble connecting.
+

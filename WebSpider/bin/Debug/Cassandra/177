@@ -1,0 +1,62 @@
+Configuring firewall port access
+Which ports to open when nodes are protected by a firewall.
+
+
+If you have a firewall running on the nodes in your Cassandra cluster, you must open up the following ports to allow communication between the nodes, including certain Cassandra ports. If this isn’t done, when you start Cassandra on a node, the node acts as a standalone database server rather than joining the database cluster.
+
+
+Public ports
+
+
+Port number
+
+Description
+
+
+22SSH port
+8888OpsCenter website. The opscenterd daemon listens on this port for HTTP requests coming directly from the browser.
+
+
+Cassandra inter-node ports
+
+
+Port number
+
+Description
+
+
+7000Cassandra inter-node cluster communication.
+7001Cassandra SSL inter-node cluster communication.
+7199Cassandra JMX monitoring port.
+
+
+Cassandra client ports
+
+
+Port number
+
+Description
+
+
+9042Cassandra client port.
+9160Cassandra client port (Thrift).
+
+
+Cassandra OpsCenter ports
+
+
+Port number
+
+Description
+
+
+61620OpsCenter monitoring port. The opscenterd daemon listens on this port for TCP traffic coming from the agent.
+61621OpsCenter agent port. The agents listen on this port for SSL traffic initiated by OpsCenter.
+
+
+
+Related concepts
+
+
+
+Planning an Amazon EC2 cluster

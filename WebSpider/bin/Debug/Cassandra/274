@@ -1,0 +1,19 @@
+Enabling virtual nodes on an existing production cluster
+Steps and recommendations for enabling virtual nodes (vnodes) on an existing production cluster.
+
+
+For production clusters, enabling virtual nodes (vnodes) has less impact on performance if you bring up a another data center configured with vnodes already enabled and let Cassandra automatic mechanisms distribute the existing data into the new nodes. 
+
+
+Procedure
+Add a new data center to the cluster. 
+Once the new data center with vnodes enabled is up, switch your clients to use the new data center. 
+Run a full repair with nodetool repair. 
+
+This step ensures that after you move the client to the new data center that any previous writes are added to the new data center and that nothing else, such as hints, is dropped when you remove the old data center.
+
+Update your schema to no longer reference the old data center. 
+Remove the old data center from the cluster. 
+
+See Decommissioning a data center.
+

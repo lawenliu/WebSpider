@@ -1,0 +1,62 @@
+Installing and deploying a Cassandra cluster using GoGrid
+A step-by-step guide for installing the DataStax Community AMI (Amazon Machine Image).
+
+
+You can use GoGrid’s 1-Button Deploy for installing and deploying a developer (3-node) or production (5-node) Cassandra cluster. Additional introductory documentation is available from GoGrid at:
+GoGrid Cassandra Wiki
+Getting Started 
+
+The 1-Button Deploy of Cassandra does the following: 
+Installs the latest version of Cassandra on X-Large SSD Cloud Servers running Debian 7.2.
+Installs OpsCenter.
+Installs Oracle JDK 7.
+Installs Python Driver.
+Enables the Firewall Service - All services are blocked except SSH (22) and ping for public traffic.
+Deploys Cassandra using virtual nodes (vnodes).
+
+
+Procedure
+Register with GoGrid. 
+Fill out the registration form and complete the account verification. 
+Access the management console with the login credentials you received in your email.  
+
+Your cluster automatically starts deploying. A green status indicator shows that a server is up and running.
+
+Hover over any item to view its details or right-click to display a context menu.
+
+
+
+
+
+Login to one of the servers and validate that the servers are configured and communicating: 
+
+Note: You can login to any member of the cluster either with SSH, a third-party client (like PuTTY), or through the GoGrid Console service.
+To find your server credentials, right-click the server and select Passwords. 
+From your secure connection client, login to the server with the proper credentials. For example from SSH: 
+$ ssh root@ip_address
+
+Validate that the cluster is running: 
+$ nodestool status
+
+
+Each node should be listed and it's status and state should be UN (Up Normal):
+Datacenter: datacenter1 
+======================= 
+Status=Up/Down |/ State=Normal/Leaving/Joining/Moving 
+-- Address       Load       Tokens Owns (effective)   Host ID                                Rack 
+UN 10.110.94.2   71.46 KB   256    65.9%              3ed072d6-49cb-4713-bd55-ea4de25576a9   rack1 
+UN 10.110.94.5   40.91 KB   256    66.7%              d5d982bc-6e30-40a0-8fe7-e46d6622c1d5   rack1 
+UN 10.110.94.4   73.33 KB   256    67.4%              f6c3bf08-d9e5-43c8-85fa-5420db785052   rack1
+
+
+
+
+
+What's next
+
+The following provides information about using and configuring Cassandra, OpsCenter, GoGrid, and the Cassandra Query Language (CQL):
+About Apache Cassandra
+OpsCenter documentation
+GoGrid Documentation
+CQL for Cassandra 2.0
+

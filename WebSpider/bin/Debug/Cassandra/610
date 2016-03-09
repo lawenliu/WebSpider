@@ -1,0 +1,25 @@
+Using the Daemon Mode
+The daemon in larger-scale testing can prevent potential skews in the test results by keeping the JVM warm.
+
+
+The daemon in larger-scale testing can prevent potential skews in the test results by keeping the JVM warm.
+
+
+Run the daemon from:
+install_location/tools/bin/cassandra-stressd  start|stop|status  [-h  <host>]
+
+During stress testing, you can keep the daemon running and send it commands through it using the --send-to option.
+
+
+
+Example
+Insert 1,000,000 rows to given host:/tools/bin/cassandra-stress -d 192.168.1.101
+
+When the number of rows is not specified, one million rows are inserted.
+
+Read 1,000,000 rows from given host:tools/bin/cassandra-stress -d 192.168.1.101 -o read
+
+Insert 10,000,000 rows across two nodes:/tools/bin/cassandra-stress -d 192.168.1.101,192.168.1.102 -n 10000000
+
+Insert 10,000,000 rows across two nodes using the daemon mode:/tools/bin/cassandra-stress -d 192.168.1.101,192.168.1.102 -n 10000000 --send-to 54.0.0.1
+

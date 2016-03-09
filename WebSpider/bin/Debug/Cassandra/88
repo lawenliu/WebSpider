@@ -1,0 +1,19 @@
+Calculating usable disk capacity
+Determining how much data your Cassandra nodes can hold.
+
+
+To calculate how much data your Cassandra nodes can hold, calculate the usable disk capacity per node and then multiply that by the number of nodes in your cluster. Remember that in a production cluster, you will typically have your commit log and data directories on different disks.
+
+
+Procedure
+Start with the raw capacity of the physical disks: 
+raw_capacity = disk_size * number_of_data_disks
+
+Calculate the formatted disk space as follows: 
+formatted_disk_space = (raw_capacity * 0.9)
+
+During normal operations, Cassandra routinely requires disk capacity for compaction and repair operations. For optimal performance and cluster health, DataStax recommends not filling your disks to capacity, but running at 50% to 80% capacity depending on the compaction strategy and size of the compactions.
+
+Calculate the usable disk space accounting for file system formatting overhead (roughly 10 percent): 
+usable_disk_space = formatted_disk_space * (0.5 to 0.8)
+

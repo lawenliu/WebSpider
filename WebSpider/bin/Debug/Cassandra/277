@@ -1,0 +1,17 @@
+Logging configuration
+About Cassandra logging functionality using Simple Logging Facade for Java (SLF4J) with log4j.
+Topics in this section: 
+
+Logging configuration
+
+How to get more diagnostic information about the runtime behavior of a specific Cassandra node using log4j.
+
+
+Changing the rotation and size of the Cassandra output.log
+
+Controlling the rotation and size of the output.log.
+
+
+Changing the rotation and size of the Cassandra system.log
+
+Controlling the rotation and size of the system.log. 

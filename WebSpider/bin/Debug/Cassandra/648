@@ -1,0 +1,52 @@
+Troubleshooting
+Troubleshooting topics.
+Topics in this section: 
+
+Peculiar Linux kernel performance problem on NUMA systems
+
+Problems due to zone_reclaim_mode.
+
+
+Reads are getting slower while writes are still fast
+
+The cluster's IO capacity is not enough to handle the write load it is receiving.
+
+
+Nodes seem to freeze after some period of time
+
+Some portion of the JVM is being swapped out by the operating system (OS).
+
+
+Nodes are dying with OOM errors
+
+Nodes are dying with OutOfMemory exceptions.
+
+
+Nodetool or JMX connections failing on remote nodes
+
+Nodetool commands can be run locally but not on other nodes in the cluster.
+
+
+View of ring differs between some nodes
+
+Indicates that the ring is in a bad state.
+
+
+Java reports an error saying there are too many open files
+
+Java may not have open enough file descriptors.
+
+
+Insufficient user resource limits errors 
+
+Insufficient resource limits may result in a number of errors in Cassandra and OpsCenter.
+
+
+Cannot initialize class org.xerial.snappy.Snappy
+
+An error may occur when Snappy compression/decompression is enabled although its library is available from the classpath.
+
+
+Firewall idle connection timeout causing nodes to lose communication during low traffic times
+
+Steps to configure the default idle connection timeout.

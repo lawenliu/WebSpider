@@ -1,0 +1,20 @@
+Enabling and configuring caching
+Using CQL to enable or disable caching.
+
+
+Use CQL to enable or disable caching by configuring the caching table property. Set parameters in the cassandra.yaml file to configure other caching properties: Partition key cache size
+Row cache size
+How often Cassandra saves partition key caches to disk
+How often Cassandra saves row caches to disk
+
+
+Procedure
+
+Set the table caching property in the WITH clause of the table definition. Enclose the table property in single quotation marks. For example, configure Cassandra to disable the partition key cache and the row cache.  
+CREATE TABLE users (
+  userid text PRIMARY KEY,
+  first_name text,
+  last_name text,
+)
+WITH caching = 'none';
+

@@ -1,0 +1,13 @@
+Object permissions
+Granting or revoking permissions to access Cassandra data.
+
+You use familiar relational database GRANT/REVOKE paradigm to grant or revoke permissions to access Cassandra data. A superuser grants initial permissions, and subsequently a user may or may not be given the permission to grant/revoke permissions. Object permission management is based on internal authorization.
+
+Read access to these system tables is implicitly given to every authenticated user because the tables are used by most Cassandra tools:
+
+system.schema_keyspace
+system.schema_columns
+system.schema_columnfamilies
+system.local
+system.peers
+

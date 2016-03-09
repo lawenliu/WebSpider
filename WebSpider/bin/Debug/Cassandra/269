@@ -1,0 +1,31 @@
+Configuring gossip settings
+Using the cassandra.yaml file to configure gossip.
+
+
+When a node first starts up, it looks at its cassandra.yaml configuration file to determine the name of the Cassandra cluster it belongs to; which nodes (called seeds) to contact to obtain information about the other nodes in the cluster; and other parameters for determining port and range information. 
+
+
+Procedure
+
+In the cassandra.yaml file, set the following parameters: 
+
+Property
+
+Description
+
+
+cluster_nameName of the cluster that this node is joining. Must be the same for every node in the cluster.
+listen_addressThe IP address or hostname that Cassandra binds to for listening to other Cassandra nodes.
+(Optional) broadcast_addressThe IP address a node tells other nodes in the cluster to contact it by. It allows public and private address to be different. For example, use the broadcast_address parameter in topologies where not all nodes have access to other nodes by their private IP addresses. The default is the listen_address. 
+seed_providerA -seeds list is comma-delimited list of hosts (IP addresses) that gossip uses to learn the topology of the ring. Every node should have the same list of seeds. In multiple data-center clusters, the seed list should include at least one node from each data center (replication group). More than a single seed node per data center is recommended for fault tolerance. Otherwise, gossip has to communicate with another data center when bootstrapping a node. Making every node a seed node is not recommended because of increased maintenance and reduced gossip performance. Gossip optimization is not critical, but it is recommended to use a small seed list (approximately three nodes per data center).
+storage_portThe inter-node communication port (default is 7000). Must be the same for every node in the cluster.
+initial_tokenFor legacy clusters. Used in the single-node-per-token architecture, where a node owns exactly one contiguous range in the ring space.
+num_tokensFor new clusters. Defines the number of tokens randomly assigned to this node on the ring when using virtual nodes (vnodes).
+
+
+
+Related reference
+
+
+
+The cassandra.yaml configuration file

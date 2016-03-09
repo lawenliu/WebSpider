@@ -1,0 +1,52 @@
+Switching snitches
+Steps for switching snitches.
+
+
+Because snitches determine how Cassandra distributes replicas, the procedure to switch snitches depends on whether or not the topology of the cluster will change:If data has not been inserted into the cluster, there is no change in the network topology. This means that you only need to set the snitch; no other steps are necessary.
+If data has been inserted into the cluster, it's possible that the topology has changed and you will need to perform additional steps.
+
+A change in topology means that there is a change in the data centers and/or racks where the nodes are placed. Topology changes may occur when the replicas are placed in different places by the new snitch. Specifically, the replication strategy places the replicas based on the information provided by the new snitch. The following examples demonstrate the differences: No topology change 
+Suppose you have 5 nodes using the SimpleSnitch in a single data center and you change to 5 nodes in 1 data center and 1 rack using a network snitch such as the GossipingPropertyFileSnitch.
+
+Topology change 
+Suppose you have 5 nodes using the SimpleSnitch in a single data center and you change to 5 nodes in 2 data centers using the PropertyFileSnitch.
+
+Note: If splitting from one data center to two, you need to change the schema for the keyspace that are splitting. Additionally, the data center names must change accordingly.
+
+Topology change 
+Suppose you have 5 nodes using the SimpleSnitch in a single data center and you change to 5 nodes in 1 data center and 2 racks using the RackInferringSnitch.
+
+
+The configuration files for snitches are located in:Tarball installs: install_location/conf
+Packaged installs: /etc/cassandra
+
+
+Procedure
+Create a properties file with data center and rack information. cassandra-rackdc.properties - GossipingPropertyFileSnitch Ec2Snitch and Ec2MultiRegionSnitch only
+cassandra-topology.properties - all other network snitches
+
+Copy the cassandra-topology.properties or cassandra-rackdc.properties file to the Cassandra configuration directory on all the cluster's nodes. They won't be used until the new snitch is enabled. 
+Change the snitch for each node in the cluster in the node's cassandra.yaml file. For example: 
+endpoint_snitch: GossipingPropertyFileSnitch
+
+If the topology has not changed, you can restart each node one at a time. 
+
+Any change in the cassandra.yaml file requires a node restart.
+
+If the topology of the network has changed: Shut down all the nodes, then restart them. 
+Run a sequential repair and nodetool cleanup on each node. 
+
+
+
+Related concepts
+
+
+
+Snitches
+
+
+Related reference
+
+
+
+The cassandra.yaml configuration file

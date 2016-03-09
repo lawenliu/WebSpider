@@ -1,0 +1,17 @@
+Clearing the data as a service
+Remove all data from a package installation. Special instructions for AMI restart.
+
+
+Remove all data from a package installation.
+
+
+Procedure
+
+To clear the data from the default directories:
+
+After stopping the service, run the following command: 
+$ sudo rm -rf /var/lib/cassandra/*
+
+
+Note: If you are clearing data from an AMI installation for restart, you need to preserve the log files.
+

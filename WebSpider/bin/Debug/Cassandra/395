@@ -1,0 +1,78 @@
+Restoring from a Snapshot
+Methods for restoring from a snapshot.
+
+
+Restoring a keyspace from a snapshot requires all snapshot files for the table, and if using incremental backups, any incremental backup files created after the snapshot was taken. 
+
+Generally, before restoring a snapshot, you should truncate the table. If the backup occurs before the delete and you restore the backup after the delete without first truncating, you do not get back the original data (row). Until compaction, the tombstone is in a different SSTable than the original row, so restoring the SSTable containing the original row does not remove the tombstone and the data still appears to be deleted.
+
+Cassandra can only restore data from a snapshot when the table schema exists. If you have not backed up the schema, you can do the either of the following:
+Method 1Restore the snapshot, as described below.
+Recreate the schema.
+
+Method 2Recreate the schema.
+Restore the snapshot, as described below.
+Run nodetool refresh.
+
+
+
+Procedure
+
+You can restore a snapshot in several ways:
+Use the sstableloader tool. 
+Copy the snapshot SSTable directory (see Taking a snapshot) to the data/keyspace/table_name directory and then call the JMX method loadNewSSTables() in the column family MBean for each column family through JConsole. You can use nodetool refresh instead of the loadNewSSTables() call. 
+
+The location of the data directory depends on the type of installation:Packaged installs: /var/lib/cassandra/data
+Tarball installs: install_location/data/data
+
+The tokens for the cluster you are restoring must match exactly the tokens of the backed-up cluster at the time of the snapshot. Furthermore, the snapshot must be copied to the correct node with matching tokens matching. If the tokens do not match, or the number of nodes do not match, use the sstableloader procedure.
+
+Use the Node Restart Method described below. 
+
+Node restart method
+
+
+A method for restoring from a snapshot. This method requires shutting down and starting nodes.
+
+
+If restoring a single node, you must first shutdown the node. If restoring an entire cluster, you must shut down all nodes, restore the snapshot data, and then start all nodes again.
+
+Note: Restoring from snapshots and incremental backups temporarily causes intensive CPU and I/O activity on the node being restored.
+
+
+Procedure
+Shut down the node. 
+To ensure that data is not lost, run nodetool drain. This is especially important if only a single table is restored. 
+Clear all files in the commitlog directory: Packaged installs: /var/lib/cassandra/commitlog
+Tarball installs: install_location/data/commitlog
+
+
+This prevents the commitlog replay from putting data back, which would defeat the purpose of restoring data to a particular point in time.
+
+Delete all *.db files in data_directory_location/keyspace_name/table_name directory, but DO NOT delete the /snapshots and /backups subdirectories. 
+
+where data_directory_location isPackaged installs: /var/lib/cassandra/data
+Tarball installs: install_location/data/data
+
+
+Locate the most recent snapshot folder in this directory: 
+
+data_directory_location/keyspace_name/table_name/snapshots/snapshot_name
+
+Copy its contents into this directory: 
+
+data_directory_location/keyspace_name/table_name directory.
+
+If using incremental backups, copy all contents of this directory: 
+
+data_directory_location/keyspace_name/table_name/backups
+
+Paste it into this directory: 
+
+data_directory_location/keyspace_name/table_name
+
+Restart the node. 
+
+Restarting causes a temporary burst of I/O activity and consumes a large amount of CPU resources.
+
+Run nodetool repair. 

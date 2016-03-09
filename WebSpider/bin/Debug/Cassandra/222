@@ -1,0 +1,5 @@
+How write patterns affect reads
+A brief description about how write patterns affect reads.
+
+The type of compaction strategy Cassandra performs on your data is configurable and can significantly affect read performance. Using the SizeTieredCompactionStrategy or DateTieredCompactionStrategy tends to cause data fragmentation when rows are frequently updated. The LeveledCompactionStrategy (LCS) was designed to prevent fragmentation under this condition. For more information about LCS, see the article, Leveled Compaction in Apache Cassandra.
+

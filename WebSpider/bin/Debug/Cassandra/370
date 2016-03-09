@@ -1,0 +1,28 @@
+Removing a node
+Reduce the size of a data center. 
+
+
+Use these instructions when you want to remove nodes to reduce the size of your cluster, not for replacing a dead node. 
+. 
+Attention: If you are not using virtual nodes (vnodes), you must rebalance the cluster.
+
+
+Procedure
+Check whether the node is up or down using nodetool status: 
+
+The nodetool command shows the status of the node (UN=up, DN=down):
+
+
+
+
+
+If the node is up, run nodetool decommission. 
+
+This assigns the ranges that the node was responsible for to other nodes and replicates the data appropriately.
+
+Use nodetool netstats to monitor the progress.
+
+If the node is down: 
+If the cluster uses vnodes, remove the node using the nodetool removenode command.
+If the cluster does not use vnodes, before running the nodetool removenode command, adjust your tokens to evenly distribute the data across the remaining nodes to avoid creating a hot spot. 
+

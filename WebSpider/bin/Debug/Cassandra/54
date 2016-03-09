@@ -1,0 +1,7 @@
+Murmur3Partitioner
+The Murmur3Partitioner provides faster hashing and improved performance than the previous default partitioner (RandomPartitioner).
+
+The Murmur3Partitioner provides faster hashing and improved performance than the previous default partitioner (RandomPartitioner). You can only use Murmur3Partitioner for new clusters; you cannot change the partitioner in existing clusters. The Murmur3Partitioner uses the MurmurHash function. This hashing function creates a 64-bit hash value of the partition key. The possible range of hash values is from -263 to +263-1.
+
+When using the Murmur3Partitioner, you can page through all rows using the token function in a CQL query.
+

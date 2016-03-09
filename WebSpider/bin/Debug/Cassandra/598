@@ -1,0 +1,31 @@
+taketoken
+Deprecated. Do not use. Using this command can result in data loss.
+
+
+Deprecated. Do not use. Using this command can result in data loss.
+
+
+Synopsis 
+nodetool <options> taketoken -- ( <token>, ... )
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option from an argument that could be mistaken for a option.
+token is a token to move.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+This command operates on multiple nodes in a cluster and was made available in Cassandra 2.0.6 for moving virtual nodes (vnodes). This command is being removed in the next release. Using this command can result in data loss. 
+

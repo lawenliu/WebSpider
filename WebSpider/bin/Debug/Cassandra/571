@@ -1,0 +1,31 @@
+move
+Moves the node on the token ring to a new token.
+
+
+Moves the node on the token ring to a new token.
+
+
+Synopsis 
+nodetool <options> move -- <new token>
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option and argument that could be mistaken for a option.
+ new token is a number in the range 0 to 2 127 -1 for negative tokens. 
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+Escape negative tokens using \\ . For example: move \\-123 . This command essentially combines decommission and bootstrapoperations.
+

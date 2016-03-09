@@ -1,0 +1,11 @@
+Nodetool or JMX connections failing on remote nodes
+Nodetool commands can be run locally but not on other nodes in the cluster.
+
+
+Nodetool commands can be run locally but not on other nodes in the cluster.
+
+If you can run nodetool commands locally but not on other nodes in the ring, you may have a common JMX connection problem that is resolved by adding an entry like the following in install_location/conf/cassandra-env.sh on each node:
+JVM_OPTS = "$JVM_OPTS -Djava.rmi.server.hostname=<public name>"
+
+If you still cannot run nodetool commands remotely after making this configuration change, do a full evaluation of your firewall and network security. The nodetool utility communicates through JMX on port 7199.
+

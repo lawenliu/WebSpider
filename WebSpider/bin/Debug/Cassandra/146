@@ -1,0 +1,17 @@
+Internal authentication
+Topics for internal authentication.
+Topics in this section: 
+
+Internal authentication
+
+Internal authentication is based on Cassandra-controlled login accounts and passwords. 
+
+
+Configuring authentication
+
+Steps for configuring authentication.
+
+
+Logging in using cqlsh
+
+How to create a cqlshrc file to avoid having enter credentials every time you launch cqlsh.

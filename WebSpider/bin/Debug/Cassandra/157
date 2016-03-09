@@ -1,0 +1,40 @@
+Client-to-node encryption
+Client-to-node encryption protects data in flight from client machines to a database cluster using SSL (Secure Sockets Layer). 
+
+
+Client-to-node encryption protects data in flight from client machines to a database cluster using SSL (Secure Sockets Layer). It establishes a secure channel between the client and the coordinator node.
+
+
+
+Prerequisites
+All nodes must have all the relevant SSL certificates on all nodes. See Preparing server certificates.
+
+To enable client-to-node SSL, you must set the client_encryption_options in the cassandra.yaml file. 
+
+
+Procedure
+
+On each node under client_encryption_options:
+Enable encryption. 
+Set the appropriate paths to your .keystore and .truststore files. 
+Provide the required passwords. The passwords must match the passwords used when generating the keystore and truststore. 
+To enable client certificate authentication, set require_client_auth to true. (Available starting with Cassandra 1.2.3.) 
+
+
+
+Example
+client_encryption_options:
+enabled: true
+keystore: conf/.keystore ## The path to your .keystore file
+keystore_password: <keystore password> ## The password you used when generating the keystore.
+truststore: conf/.truststore
+truststore_password: <truststore password>
+require_client_auth: <true or false>
+
+
+
+Related reference
+
+
+
+The cassandra.yaml configuration file

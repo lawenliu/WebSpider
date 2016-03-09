@@ -1,0 +1,47 @@
+Installing DataStax Community
+Various installation methods.
+Topics in this section: 
+
+Installing DataStax Community on RHEL-based systems
+
+Install using Yum repositories on RHEL, CentOS, and Oracle Linux.
+
+
+Installing DataStax Community on Debian-based systems
+
+Install using APT repositories on Debian and Ubuntu.
+
+
+Installing DataStax Community on any Linux-based platform
+
+Install on all Linux-based platforms using a binary tarball. 
+
+
+Installing DataStax Community on Windows systems
+
+About installing on Windows systems.
+
+
+Installing prior releases of DataStax Community
+
+Steps for installing the same version as other nodes in your cluster.
+
+
+Uninstalling DataStax Community
+
+Steps for uninstalling Cassandra by install type.
+
+
+Installing on cloud providers
+
+Installation methods for the supported cloud providers.
+
+
+Installing the Oracle JDK and the JNA
+
+Instructions for various platforms.
+
+
+Recommended production settings
+
+Recommendations for production environments.

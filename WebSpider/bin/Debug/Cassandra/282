@@ -1,0 +1,22 @@
+Logging configuration
+How to get more diagnostic information about the runtime behavior of a specific Cassandra node using log4j.
+
+
+To get more diagnostic information about the runtime behavior of a specific Cassandra node than what is provided by Cassandra's JMX MBeans and the nodetool utility, you can increase the logging levels on specific portions of the system using log4j.
+
+Cassandra provides logging functionality using Simple Logging Facade for Java (SLF4J) with a log4j backend. Additionally, the output.log captures the stdout of the Cassandra process, which is configurable using the standard Linux logrotate facility. You can also change logging levels via JMX using the JConsole tool. 
+
+The logging levels from most to least verbose are:
+TRACE 
+DEBUG
+INFO
+WARN
+ERROR
+FATAL
+
+Note: Be aware that increasing logging levels can generate a lot of logging output on even a moderately trafficked cluster.
+Topics in this section: 
+
+Changing Logging Levels
+
+Changing logging levels using the log4j-server.properties file.

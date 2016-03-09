@@ -1,0 +1,9 @@
+Configuring memtable throughput
+Configuring memtable throughput to improve write performance.
+
+Configuring memtable throughput can improve write performance. Cassandra flushes memtables to disk, creating SSTables when the commit log space threshold has been exceeded. Configure the commit log space threshold per node in the cassandra.yaml. How you tune memtable thresholds depends on your data and write load. Increase memtable throughput under either of these conditions:
+The write load includes a high volume of updates on a smaller set of data.
+A steady stream of continuous writes occurs. This action leads to more efficient compaction.
+
+Allocating memory for memtables reduces the memory available for caching and other internal Cassandra structures, so tune carefully and in small increments.
+

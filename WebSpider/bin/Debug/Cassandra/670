@@ -1,0 +1,61 @@
+Tips for using DataStax documentation
+Describes navigation icons and provides search tips and links to other resources.
+
+
+Navigating the documents
+
+To navigate, use the Contents pane or search. Additional controls are:
+
+
+Toolbar icons
+
+
+Go back through the topics as listed in the Contents pane.
+
+
+Go forward through the topics as listed in the Contents pane.
+
+
+See doc tweets and provide feedback.
+
+
+Display PDF version.
+
+
+Send email to DataStax docs.
+
+
+Print page.
+Contents, bookmarking, and legend icons 
+
+
+Opens Contents items.
+Also expands and collapses text, such as Synopsis and Nodetool legends.
+
+
+
+Closes the Contents items.
+
+
+Appears on headings for bookmarking. Right-click to get the link.
+
+
+Searching documents
+
+Search is designed for each product guide. For example, if searching in DataStax Enterprise 4.8, the results include topics from DataStax Enterprise 4.8, Cassandra 2.1, and CQL 3.1. The results are displayed in tabs:
+
+
+
+
+
+
+Other resources
+
+You can find more information and help at:
+Documentation home page
+DataStax Academy
+Datasheets
+Webinars
+Whitepapers
+DataStax Developer Blogs
+Support

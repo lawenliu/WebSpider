@@ -1,0 +1,29 @@
+sstablekeys
+The sstablekeys utility dumps table keys.
+
+
+The sstablekeys utility dumps table keys. To list the keys in an SSTable, find the name of the SSTable file. The file is located in the data directory and has a .db extension. The location of the data directory, listed in the "Install locations" section, depends on the type of installation. After finding the name of the file, use the name as an argument to the sstablekeys command.$ bin/sstablekeys <sstable_name>
+
+
+Procedure
+Create the playlists table in the music keyspace as shown in Data modeling. 
+Insert the row of data about ZZ Top in playlists: 
+INSERT INTO music.playlists (id, song_order, song_id, title, artist, album)
+  VALUES (62c36092-82a1-3a00-93d1-46196ee77204,
+  1,
+  a3e64f8f-bd44-4f28-b8d9-6938726e34d4,
+  'La Grange',
+  'ZZ Top',
+  'Tres Hombres');
+
+Flush the data to disk. 
+$ nodetool flush music playlists
+
+Look at keys in the SSTable data. For example, use sstablekeys followed by the path to the data. Use the path to data for your Cassandra installation: 
+$ sstablekeys <path to data>/data/data/music/
+    playlists-8b9f4cc0229211e4b02073ded3cb6170/music-playlists-ka-1-Data.db
+
+
+The output appears, for example:
+62c3609282a13a0093d146196ee77204
+

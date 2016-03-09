@@ -1,0 +1,34 @@
+Replacing a running node
+Steps to replace a node with a new node, such as when updating to newer hardware or performing proactive maintenance.
+
+
+Steps to replace a node with a new node, such as when updating to newer hardware or performing proactive maintenance.
+
+You must prepare and start the replacement node, integrate it into the cluster, and then decommission the old node.
+
+Note: To change the IP address of a node, simply change the IP of node and then restart Cassandra. If you change the IP address of a seed node, you must update the - seeds parameter in the seed_provider for each node in the cassandra.yaml file.
+
+
+Procedure
+
+Be sure to install the same version of Cassandra as is installed on the other nodes in the cluster. See Installing prior releases of DataStax Community.
+Prepare and start the replacement node, as described in Adding nodes to an existing cluster. 
+
+Note: If not using vnodes, see Adding or replacing single-token nodes.
+
+Confirm that the replacement node is alive: Run nodetool ring if not using vnodes.
+Run nodetool status if using vnodes.
+
+The status should show:nodetool ring: Up
+nodetool status: UN
+
+Note the Host ID of the node; it is used in the next step.  
+Using the Host ID of the original node, decommission the original node from the cluster using the nodetool decommission command. 
+
+
+
+Related tasks
+
+
+
+Removing a node

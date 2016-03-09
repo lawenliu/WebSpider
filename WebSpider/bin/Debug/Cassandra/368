@@ -1,0 +1,6 @@
+Moving a node from one rack to another
+A common task is moving a node from one rack to another. For example, when using GossipPropertyFileSnitch, a common error is mistakenly placing a node in the wrong rack. To correct the error, use one of the following procedures.The preferred method is to decommission the node and re-add it to the correct rack and data center.This method takes longer to complete than the alternative method. Data is moved that the decommissioned node doesn't need anymore. Then the node gets new data while bootstrapping. The alternative method does both operations simultaneously.
+
+An alternative method is to update the node's topology, restart the node. Once the node is up, run a full repair on the cluster.
+Note: This method is not preferred because until the repair is completed. the node might blindly handle requests for data the node doesn't yet have. 
+

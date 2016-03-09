@@ -1,0 +1,106 @@
+cfstats
+Provides statistics about tables.
+
+
+Provides statistics about tables.
+
+
+Synopsis 
+nodetool <options> cfstats -i -- (<keyspace>.<table> ... )
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number>
+( -pw | --password ) <password >
+( -u | --username ) <user name>
+
+-- Separates an option from an argument that could be mistaken for a option.
+keyspace.table is one or more keyspace and table names in dot notation.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope
+
+
+Description 
+
+The nodetool cfstats command provides statistics about one or more tables. You use dot notation to specify one or more keyspace and table names. If you do not specify a keyspace and table, Cassandra provides statistics about all tables.
+
+This table describes the nodetool cfstats output. 
+
+nodetool cfstats output
+
+
+Name of statistic
+
+Example value
+
+Brief description
+
+Related information
+
+
+KeyspacelibdataName of the keyspaceKeyspace and table 
+Read count11207Number of requests to read tables in the libdata keyspace since startup 
+Read latency0.047931114482020164 msLatency reading the tables in the libdata keyspaceOpsCenter alert metrics
+Write count17598Number of requests to update tables in the libdata keyspace since startupSame as above
+Write latency0.053502954881236506 msLatency writing tables in the libdata keyspaceSame as above
+Pending tasks0Tasks in the queue for reads, writes, and cluster operations of tables in the keyspaceOpsCenter pending task metrics
+TableliboutName of the Cassandra table 
+SSTable count3Number of SSTables containing data from the tableHow to use the SSTable counts metric and OpsCenter alert metrics
+Space used (live), bytes:9592399Space that is measured depends on operating systemAdvanced system alert metrics
+Space used (total), bytes:9592399Same as aboveSame as above
+SSTable compression ratio0.36751363892150946Fraction of data-representation size resulting from compression Types of compression option) 
+Memtable cell count0Number of cells (storage engine rows x columns) of data in the memtableCassandra memtable structure in memory
+Memtable data size, bytes:0Size of the memtable dataSame as above
+Memtable switch count3Number of times a full memtable was swapped for an empty one that increases each time the memtable for a table is flushed to diskHow memtables are measured article
+Local read count11207Number of local read requests for the libout table since startupOpsCenter alert documentation
+Local read latency0.048 msRound trip time in milliseconds to complete a request to read the libout table Factors that affect read latency
+Local write count17598Number of local requests to update the libout the table since startupOpsCenter alert documentation
+Local write latency0.054 msRound trip time in milliseconds to complete an update to the libout tableFactors that affect write latency
+Pending tasks0Number of read, write, and cluster operations that are pendingOpsCenter pending task metrics documentation
+Bloom filter false positives0Number of false positives, which occur when the bloom filter said the row existed, but it actually did not exist in absolute numbersTuning bloom filters
+Bloom filter false ratio0.00000Fraction of all bloom filter checks resulting in a false positiveSame as above
+Bloom filter space used, bytes11688Bytes of bloom filter dataSame as above
+Compacted partition minimum bytes1110Lower size limit for the partition being compacted in memoryUsed to calculate what the approximate row cache size should be. Multiply the reported row cache size, which is the number of rows in the cache, by the compacted row mean size for every table and sum them.
+Compacted partition maximum bytes126934Upper size limit for compacted table rows, configurable in the cassandra.yaml in_memory_compaction _limit_in_mbSame as above
+Compacted partition mean bytes2730The average size of compacted table rowsSame as above
+Average live cells per slice (last five minutes)0.0  
+Average tombstones per slice (last five minutes)0.0  
+
+
+Example 
+
+This example shows an excerpt of the output of the command after flushing a table of library data to disk. 
+Keyspace: libdata
+	Read Count: 11207
+	Read Latency: 0.047931114482020164 ms.
+	Write Count: 17598
+	Write Latency: 0.053502954881236506 ms.
+	Pending Tasks: 0
+		Table: libout
+		SSTable count: 3
+		Space used (live), bytes: 9088955
+		Space used (total), bytes: 9088955
+		Space used by snapshots (total), bytes: 0
+		SSTable Compression Ratio: 0.36751363892150946
+		Memtable cell count: 0
+		Memtable data size, bytes: 0
+		Memtable switch count: 3
+		Local read count: 11207
+		Local read latency: 0.048 ms
+		Local write count: 17598
+		Local write latency: 0.054 ms
+		Pending tasks: 0
+		Bloom filter false positives: 0
+		Bloom filter false ratio: 0.00000
+		Bloom filter space used, bytes: 11688
+		Compacted partition minimum bytes: 1110
+		Compacted partition maximum bytes: 126934
+		Compacted partition mean bytes: 2730
+		Average live cells per slice (last five minutes): 0.0
+		Average tombstones per slice (last five minutes): 0.0
+

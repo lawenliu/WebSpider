@@ -1,0 +1,20 @@
+Enabling incremental backups
+Steps to enable incremental backups. When incremental backups are enabled, Cassandra hard-links each flushed SSTable to a backups directory under the keyspace data directory. 
+
+
+When incremental backups are enabled (disabled by default), Cassandra hard-links each flushed SSTable to a backups directory under the keyspace data directory. This allows storing backups offsite without transferring entire snapshots. Also, incremental backups combine with snapshots to provide a dependable, up-to-date backup mechanism.
+
+As with snapshots, Cassandra does not automatically clear incremental backup files. DataStax recommends setting up a process to clear incremental backup hard-links each time a new snapshot is created.
+
+
+Procedure
+
+Edit the cassandra.yaml configuration file on each node in the cluster and change the value of incremental_backups to true. 
+
+
+
+Related reference
+
+
+
+The cassandra.yaml configuration file

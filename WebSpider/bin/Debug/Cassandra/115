@@ -1,0 +1,17 @@
+Installing on cloud providers
+Installation methods for the supported cloud providers.
+Topics in this section: 
+
+Installing a Cassandra cluster on Amazon EC2
+
+A step-by-step guide for installing the DataStax Community AMI (Amazon Machine Image).
+
+
+Clearing the data for an AMI restart
+
+Clearing the data for an Amazon Machine Image restart.
+
+
+Installing and deploying a Cassandra cluster using GoGrid
+
+A step-by-step guide for installing the DataStax Community AMI (Amazon Machine Image).

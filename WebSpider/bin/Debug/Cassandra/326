@@ -1,0 +1,19 @@
+Compaction metrics
+Monitoring compaction performance is an important aspect of knowing when to add capacity to your cluster.
+
+Monitoring compaction performance is an important aspect of knowing when to add capacity to your cluster. The following attributes are exposed through CompactionManagerMBean: 
+
+Compaction Metrics
+
+
+Attribute
+
+Description
+
+
+CompletedTasksNumber of completed compactions since the last start of this Cassandra instance
+PendingTasksNumber of estimated tasks remaining to perform
+ColumnFamilyInProgressThe table currently being compacted. This attribute is null if no compactions are in progress.
+BytesTotalInProgressTotal number of data bytes (index and filter are not included) being compacted. This attribute is null if no compactions are in progress.
+BytesCompactedThe progress of the current compaction. This attribute is null if no compactions are in progress.
+

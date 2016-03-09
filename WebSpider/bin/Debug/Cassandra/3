@@ -1,0 +1,66 @@
+What's new in Cassandra
+An overview of new features in Cassandra.
+
+Cassandra 2.0 included major enhancements to CQL, security, and performance. CQL for Cassandra 2.0.6 adds several important features including batching of conditional updates, static columns, and increased control over slicing of clustering columns. 
+
+Key features of Cassandra 2.0 are:
+Support for lightweight transactions Use of the IF keyword in CQL INSERT and UPDATE statements
+New SERIAL consistency level
+
+Triggers
+The first phase of support for triggers for firing an event that executes a set of programmatic logic, which runs either inside or outside a database cluster
+
+CQL paging support 
+Paging of result sets of SELECT statements executed over a CQL native protocol 2 connection, which eliminates the need to use the token function to page through results. For example, to page through data in this table, a simple SELECT statement after Cassandra 2.0 replaces the complex one using the token function before Cassandra 2.0.
+
+
+
+
+
+Improved authentication
+SASL support for easier and better authentication over prior versions of the CQL native protocol
+
+Drop column support
+Re-introduction of the ALTER TABLE DROP command
+
+SELECT column aliases
+Support for column aliases in a SELECT statement, similar to aliases in RDBMS SQL:SELECT hdate AS hired_date 
+  FROM emp WHERE empid = 500
+
+Conditional DDL
+Conditionally tests for the existence of a table, keyspace, or index before issuing a DROP or CREATE statement using IF EXISTS or IF NOT EXISTS
+
+ Index enhancements
+Indexing of any part, partition key or clustering columns, portion of a compound primary key
+
+One-off prepare and execute statements 
+Use of a prepared statement, even for the single execution of a query to pass binary values for a statement, for example to avoid a conversion of a blob to a string, over a native protocol version 2 connection
+
+Performance enhancementsOff-heap partition summary
+Eager retries support
+Sending the user request to other replicas before the query times out when a replica is unusually slow in delivering needed data 
+
+Compaction improvements
+Hybrid (leveled and size-tiered) compaction improvements to the leveled compaction strategy to reduce the performance overhead on read operations when compaction cannot keep pace with write-heavy workloads
+
+
+
+Other changes in Cassandra 2.0 are:New commands to disable background compactions
+nodetool disableautocompaction and nodetool enableautocompaction 
+
+A change to random token selection during cluster setup
+Auto_bootstrapping of a single-token node with no initial_token
+
+Removal of super column support
+Continued support for apps that query super columns, translation of super columns on the fly into CQL constructs and results
+
+Removal of the cqlsh ASSUME command
+Use the blobAsType and typeAsBlob conversion functions instead of ASSUME
+
+
+Cqlsh COPY command support for collections
+
+Inclusion of the native protocol version in the system.local table 
+Inclusion of default_time_to_live, speculative_retry, and memtable_flush_period_in_ms in cqlsh DESCRIBE TABLE output
+Support for an empty list of values in the IN clause of SELECT, UPDATE, and DELETE commands, useful in Java Driver applications when passing empty arrays as arguments for the IN clause
+

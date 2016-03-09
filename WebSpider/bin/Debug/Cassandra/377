@@ -1,0 +1,13 @@
+Replacing a dead seed node
+Steps to replace a seed node.
+
+
+Steps to replace a seed node.
+
+Because Cassandra doesn't allow a seed node to be bootstrapped, use the following steps for replacing the dead node:
+
+
+Procedure
+Promote an existing node to a seed node by adding its IP address to -seeds list and remove (demote) the IP address of the dead seed node from the cassandra.yaml file for each node in the cluster. 
+Replace the dead node, as described in Replacing a dead node. 
+

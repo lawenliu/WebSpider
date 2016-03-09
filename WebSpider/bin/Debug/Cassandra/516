@@ -1,0 +1,72 @@
+repair
+Repairs one or more tables.
+
+
+Repairs one or more tables.
+
+
+Synopsis 
+nodetool <options> repair
+ ( -dc <dc_name> | --in-dc <dc_name> )
+ ( -et <end_token> | --end-token <end_token> )
+ ( -local | --in-local-dc )
+ ( -par | --parallel )
+ ( -pr | --partitioner-range )
+ ( -st <start_token> --start-token <start_token> )
+-- <keyspace> ( <table> ... )
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-dc, or --in-dc, followed by dc_name, or means restrict repair to nodes in the named data center, which must be the local data center.
+-et, or --end-token, followed by the UUID of a token means stop repairing a range of nodes after repairing this token.
+-local, or --in-local-dc, means repair nodes in the same data center only.
+-par, or --parallel, means carry out a parallel repair.
+pr, or --partitioner-range, means repair only the first range returned by the partitioner.
+-st, or --start-token, followed by the UUID of a token means start repairing a range of nodes at this token.
+-- Separates an option and argument that could be mistaken for a option.
+keyspace is the keyspace name.
+table is one or more table names, separated by a space.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+This command operates on multiple nodes in a cluster, and includes an option to restrict repair to a set of nodes. This command begins an anti-entropy node repair operation. If the -pr option is specified, only the first range returned by the partitioner for a node is repaired. This allows you to repair each node in the cluster in succession without duplicating work. If the -pr option is not specified, Cassandra repairs all replica ranges that fall within the responsibility of the node.
+
+By default, the repair command takes a snapshot of each replica immediately and then sequentially repairs each replica from the snapshots. For example, if you have RF=3 and A, B and C represents three replicas, this command takes a snapshot of each replica immediately and then sequentially repairs each replica from the snapshots (A<->B, A<->C, B<->C) instead of repairing A, B, and C all at once. This allows the dynamic snitch to maintain performance for your application via the other replicas, because at least one replica in the snapshot is not undergoing repair.
+
+Unlike sequential repair (described above), parallel repair constructs the Merkle tables for all nodes at the same time. Therefore, no snapshots are required (or generated). Use a parallel repair to complete the repair quickly or when you have operational downtime that allows the resources to be completely consumed during the repair.
+
+To restrict the repair to the local data center, use the -dc option followed by the name of the data center. Issue the command from a node in the data center you want to repair. Issuing the command from a data center other than the named one returns an error. Do not use -pr with this option to repair only a local data center.
+$ nodetool repair -dc DC1
+[2014-07-24 21:59:55,326] Nothing to repair for keyspace 'system'
+[2014-07-24 21:59:55,617] Starting repair command #2, repairing 490 ranges 
+  for keyspace system_traces (seq=true, full=true)
+[2014-07-24 22:23:14,299] Repair session 323b9490-137e-11e4-88e3-c972e09793ca 
+  for range (820981369067266915,822627736366088177] finished
+[2014-07-24 22:23:14,320] Repair session 38496a61-137e-11e4-88e3-c972e09793ca 
+  for range (2506042417712465541,2515941262699962473] finished
+. . .
+
+An inspection of the system.log shows repair taking place only on IP addresses in DC1.
+. . .
+INFO  [AntiEntropyStage:1] 2014-07-24 22:23:10,708 RepairSession.java:171 
+  - [repair #16499ef0-1381-11e4-88e3-c972e09793ca] Received merkle tree 
+  for sessions from /192.168.2.101
+INFO  [RepairJobTask:1] 2014-07-24 22:23:10,740 RepairJob.java:145 
+  - [repair #16499ef0-1381-11e4-88e3-c972e09793ca] requesting merkle trees 
+  for events (to [/192.168.2.103, /192.168.2.101])
+. . .
+
+For more information about the repair operation, see "Repairing nodes."
+

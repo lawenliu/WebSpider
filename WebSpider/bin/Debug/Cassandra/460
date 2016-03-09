@@ -1,0 +1,92 @@
+tpstats
+Provides usage statistics of thread pools.
+
+
+Provides usage statistics of thread pools.
+
+
+Synopsis 
+nodetool <options> tpstats
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password> 
+( -u | --username ) <user name> 
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) means not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+Run the nodetool tpstats command on the local node. The nodetool tpstats command provides statistics about the number of active, pending, and completed tasks for each stage of Cassandra operations by thread pool. A high number of pending tasks for any pool can indicate performance problems, as described in http://wiki.apache.org/cassandra/Operations#Monitoring . 
+
+This table describes the indicators:
+
+
+nodetool tpstats output
+
+
+Name of statistic
+
+Task
+
+Related information
+
+
+ReadStageLocal reads 
+RequestResponseHandle responses from other nodes 
+MutationStageLocal writesA high number of pending write requests indicates a problem handling them. Tune hardware or Cassandra configuration.
+ReadRepairStageA digest query and update of replicas of a key  
+ReplicateOnWriteStageCounter writes, replications after a local write 
+GossipStageHandle gossip rounds every second 
+AntiEntropyStageRepair consistencyNodetool repair 
+MigrationStageMake schema changes 
+MemoryMeterActual object memory including JVM overhead 
+MemtablePostFlusherFlush the commit log and other operations after flushing the memtable 
+FlushWriterFlush the memtable to disk, the status of the sort and write-to-disk operationsTune hardware or Cassandra configuration.
+MiscStageMiscellaneous operations 
+PendingRangeCalculatorCalculate pending ranges per bootstraps and departed nodesDeveloper notes 
+commitlog_archiverSave the commit log 
+InternalResponseStageRespond to non-client initiated messages, including bootstrapping and schema checking 
+HintedHandoffSend missed mutations to other nodes 
+
+
+Example 
+
+Run the command every two seconds.
+nodetool -h labcluster tpstats
+
+Example output is:
+Pool Name                    Active   Pending      Completed   Blocked  All time blocked
+ReadStage                         3         2       19570606         0                 0
+RequestResponseStage              0         1       10552500         0                 0
+MutationStage                     0         0       11554725         0                 0
+ReadRepairStage                   0         0         124792         0                 0
+ReplicateOnWriteStage             0         0              0         0                 0
+GossipStage                       0         0           2713         0                 0
+AntiEntropyStage                  0         0             50         0                 0
+MigrationStage                    0         0              0         0                 0
+MemoryMeter                       1         4            545         0                 0
+MemtablePostFlusher               0         0            417         0                 0
+FlushWriter                       0         0            371         0                 0
+MiscStage                         0         0             25         0                 0
+PendingRangeCalculator            0         0             16         0                 0   
+commitlog_archiver                0         0              0         0                 0
+InternalResponseStage             0         0              0         0                 0
+HintedHandoff                     0         0             10         0                 0
+
+Message type           Dropped
+RANGE_SLICE                  0
+READ_REPAIR                  0
+BINARY                       0
+READ                         0
+MUTATION                     0
+_TRACE                       0
+REQUEST_RESPONSE             0
+

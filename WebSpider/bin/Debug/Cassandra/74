@@ -1,0 +1,17 @@
+GossipingPropertyFileSnitch
+Automatically updates all nodes using gossip when adding new nodes and is recommended for production.
+
+This snitch is recommended for production. It uses rack and data center information for the local node defined in the cassandra-rackdc.properties file and propagates this information to other nodes via gossip. 
+
+The cassandra-rackdc.properties file defines the default data center and rack used by this snitch:
+Note: Data center and rack names are case-sensitive.
+dc=DC1
+rack=RAC1
+
+To save bandwidth, add the prefer_local=true option. This option tells Cassandra to use the local IP address when communication is not across different data centers.
+
+The location of the conf directory depends on the type of installation:Packaged installs: /etc/cassandra/cassandra-rackdc.properties
+Tarball installs: install_location/conf/cassandra-rackdc.properties
+
+To migrate from the PropertyFileSnitch to the GossipingPropertyFileSnitch, update one node at a time to allow gossip time to propagate. The PropertyFileSnitch is used as a fallback when cassandra-topologies.properties is present.
+

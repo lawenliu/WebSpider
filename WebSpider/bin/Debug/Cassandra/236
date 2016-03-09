@@ -1,0 +1,16 @@
+Consistency
+Types of consistency offered by Cassandra.
+
+Cassandra 2.0 offers two types of consistency: Tunable consistency
+Availability and consistency can be tuned, and can be strong in the CAP sense--data is made consistent across all the nodes in a distributed database cluster.
+
+Linearizable consistency
+In ACID terms, linearizable consistency is a serial (immediate) isolation level for lightweight (compare-and-set, CAS) transactions. 
+
+In Cassandra, there are no locking or transactional dependencies when concurrently updating multiple rows or tables. Tuning availability and consistency always gives you partition tolerance. A user can pick and choose on a per operation basis how many nodes must receive a DML command or respond to a SELECT query.
+Linearizable consistency is used in rare cases when a strong version of tunable consistency in a distributed, masterless Cassandra with quorum reads and writes is not enough. Such cases might be encountered when performing uninterrupted sequential operations or when producing the same results when running an operation concurrently or not. For example, an application that registers new accounts needs to ensure that only one user can claim a given account. The challenge is handling a race condition analogous to two threads attempting to make an insertion into a non-concurrent Map. Checking for the existence of the account before performing the insert in thread A does not guarantee that thread X will not insert the account between the check time and A's insert. Linearizable consistency meets these challenges. 
+
+Cassandra 2.0 uses the Paxos consensus protocol, which resembles 2-phase commit, to support linearizable consistency. All operations are quorum-based and updates will incur a performance hit, effectively a degradation to one-third of normal. For in-depth information about this new consistency level, see the article, Lightweight transactions in Cassandra.
+
+To support linearizable consistency, a consistency level of SERIAL has been added to Cassandra. Additions to CQL have been made to support lightweight transactions.
+

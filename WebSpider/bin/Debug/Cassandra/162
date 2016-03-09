@@ -1,0 +1,45 @@
+Node-to-node encryption
+Node-to-node encryption protects data transferred between nodes, including gossip communications, in a cluster using SSL (Secure Sockets Layer).
+
+
+Node-to-node encryption protects data transferred between nodes in a cluster, including gossip communications, using SSL (Secure Sockets Layer).
+
+
+
+Prerequisites
+All nodes must have all the relevant SSL certificates on all nodes. See Preparing server certificates.
+
+To enable node-to-node SSL, you must set the server_encryption_options in the cassandra.yaml file. 
+
+
+Procedure
+
+On each node under sever_encryption_options:
+Enable internode_encryption. 
+The available options are:all
+none
+dc: Cassandra encrypts the traffic between the data centers.
+rack: Cassandra encrypts the traffic between the racks.
+
+Set the appropriate paths to your .keystore and .truststore files. 
+Provide the required passwords. The passwords must match the passwords used when generating the keystore and truststore. 
+To enable client certificate authentication, set require_client_auth to true. (Available starting with Cassandra 1.2.3.) 
+
+
+
+Example
+server_encryption_options:
+   internode_encryption: <internode_option>
+   keystore: resources/dse/conf/.keystore
+   keystore_password: <keystore password>
+   truststore: resources/dse/conf/.truststore
+   truststore_password: <truststore password>
+   require_client_auth: <true or false>
+
+
+
+Related reference
+
+
+
+The cassandra.yaml configuration file

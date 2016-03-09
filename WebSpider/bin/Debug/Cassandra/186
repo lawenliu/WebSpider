@@ -1,0 +1,5 @@
+The write path of an update
+A brief description of the write path of an update.
+
+Inserting a duplicate primary key is treated as an upsert. Eventually, the updates are streamed to disk using sequential I/O and stored in a new SSTable. During an update, Cassandra time-stamps and writes columns to disk using the write path. During the update, if multiple versions of the column exist in the memtable, Cassandra flushes only the newer version of the column to disk, as described in the Compaction section.
+

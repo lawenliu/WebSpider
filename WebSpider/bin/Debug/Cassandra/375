@@ -1,0 +1,87 @@
+Adding a data center to a cluster
+Steps to add a data center to an existing cluster.
+
+
+Steps to add a data center to an existing cluster.
+
+
+Procedure
+
+Be sure to install the same version of Cassandra as is installed on the other nodes in the cluster. See Installing prior releases of DataStax Community.
+Ensure that you are using NetworkTopologyStrategy for all of your keyspaces. 
+For each node, set the following properties in the cassandra.yaml file:.  Add (or edit) auto_bootstrap: false. 
+
+By default, this setting is true and not listed in the cassandra.yaml file. Setting this parameter to false prevents the new nodes from attempting to get all the data from the other nodes in the data center. When you run nodetool rebuild in the last step, each node is properly mapped.
+
+Set other properties, such as -seeds and endpoint_snitch, to match the cluster settings. 
+
+For more guidance, see Initializing a multiple node cluster (multiple data centers).
+
+Note: Do not make all nodes seeds, see Internode communications (gossip).
+
+If you want to enable vnodes, set num_tokens. 
+
+The recommended value is 256. Do not set the initial_token parameter.
+
+
+Update the relevant property file for snitch used on all servers to include the new nodes. You do not need to restart. GossipingPropertyFileSnitch: cassandra-rackdc.properties
+PropertyFileSnitch: cassandra-topology.properties
+
+Ensure that your clients are configured correctly for the new cluster: If your client uses the DataStax Java, C#, or Python driver, set the load-balancing policy to DCAwareRoundRobinPolicy (Java, C#, Python).
+If you are using another client such as Hector, make sure it does not auto-detect the new nodes so that they aren't contacted by the client until explicitly directed. For example if you are using Hector, use sethostConfig.setAutoDiscoverHosts(false);. If you are using Astyanax, use ConnectionPoolConfigurationImpl.setLocalDatacenter("<data center name">) to ensure you are connecting to the specified data center.
+If you are using Astyanax 2.x, with integration with the DataStax Java Driver 2.0, you can set the load-balancing policy to DCAwareRoundRobinPolicy by calling JavaDriverConfigBuilder.withLoadBalancingPolicy().AstyanaxContext<Keyspace> context = new AstyanaxContext.Builder()
+    ...
+    .withConnectionPoolConfiguration(new JavaDriverConfigBuilder()
+        .withLoadBalancingPolicy(new TokenAwarePolicy(new DCAwareRoundRobinPolicy()))
+        .build())
+    ...
+
+
+If using a QUORUM consistency level for reads or writes, check the LOCAL_QUORUM or EACH_QUORUM consistency level to see if the level meets your requirements for multiple data centers. 
+Start Cassandra on the new nodes.  
+After all nodes are running in the cluster: Change the keyspace properties to specify the desired replication factor for the new data center.  
+
+For example, set strategy options to DC1:2, DC2:2. 
+
+
+For more information, see ALTER KEYSPACE.
+
+Run nodetool rebuild specifying the existing data center on all nodes in the new data center: 
+nodetool rebuild -- name_of_existing_data_center
+
+
+Otherwise, requests to the new data center with LOCAL_ONE or ONE consistency levels may fail if the existing data centers are not completely in-sync.
+
+You can run rebuild on one or more nodes at the same time. The choices depends on whether your cluster can handle the extra IO and network pressure of running on multiple nodes. Running on one node at a time has the least impact on the existing cluster. 
+
+Attention: If you don't specify the existing data center in the command line, the new nodes will appear to rebuild successfully, but will not contain any data.
+
+
+For each new node, change to true or remove auto_bootstrap: false in the cassandra.yaml file. 
+
+Returns this parameter to its normal setting so the nodes can get all the data from the other nodes in the data center if restarted.
+
+
+
+Related tasks
+
+
+
+Starting Cassandra as a service
+
+
+Starting Cassandra as a stand-alone process
+
+
+Related reference
+
+
+
+The cassandra.yaml configuration file
+
+
+Related information
+
+
+
+Install locations

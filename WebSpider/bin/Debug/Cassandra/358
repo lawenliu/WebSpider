@@ -1,0 +1,20 @@
+Testing compaction and compression
+Enabling write survey mode.
+
+
+Write survey mode is a Cassandra startup option for testing new compaction and compression strategies. In write survey mode, you can test out new compaction and compression strategies on that node and benchmark the write performance differences, without affecting the production cluster.
+
+Write survey mode adds a node to a database cluster. The node accepts all write traffic as if it were part of the normal Cassandra cluster, but the node does not officially join the ring.
+
+Also use write survey mode to try out a new Cassandra version. The nodes you add in write survey mode to a cluster must be of the same major release version as other nodes in the cluster. The write survey mode relies on the streaming subsystem that transfers data between nodes in bulk and differs from one major release to another.
+
+If you want to see how read performance is affected by modifications, stop the node, bring it up as a standalone machine, and then benchmark read operations on the node.
+
+
+Procedure
+
+Enable write survey mode by starting a Cassandra node using the write_survey option.
+bin/cassandra – Dcassandra.write_survey=true
+
+This example shows how to start a tarball installation of Cassandra.
+

@@ -1,0 +1,19 @@
+Installing the JNA on RHEL or CentOS Systems
+Installing JNA can improve Cassandra memory usage. 
+
+
+Installing JNA can improve Cassandra memory usage. When installed and configured, Linux does not swap out the JVM, and thus avoids related performance issues. The latest version is recommended.
+
+
+
+Prerequisites
+Cassandra requires JNA 3.2.7 or later. Some Yum repositories may provide earlier versions.
+EPEL (Extra Packages for Enterprise Linux). See Installing EPEL.
+
+
+Procedure
+Install with the following command: 
+$ sudo yum install jna
+
+If you can't install using Yum or it provides a version of the JNA earlier than 3.2.7, install as described in Installing the JNA from the JAR file. 
+

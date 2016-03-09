@@ -1,0 +1,38 @@
+The sstablescrub utility
+An offline version of nodetool scrub. This tool attempts to remove the corrupted parts while preserving non-corrupted data.
+
+
+The sstablescrub utility is an offline version of nodetool scrub. It attempts to remove the corrupted parts while preserving non-corrupted data.
+
+If scrubbing results in dropping rows, new SSTables become unrepaired. However, if no bad rows are detected, the SSTable keeps its origin repairedAt field, which denotes the time of repair. If the entire table is unreadable, it will not be able to repair it.
+
+
+Procedure
+Before using sstablescrub, try rebuilding the tables using nodetool scrub.  
+
+If nodetool scrub does not fix the problem, use this utility. Because it runs offline, sstablescrub can correct errors that nodetool scrub cannot. 
+
+Shut down the node. 
+Run the utility: 
+Packaged installs:  sstablescrub [options] <keyspace> <table>
+Tarball installs:  install_location/bin/sstablescrub [options] <keyspace> <table>
+
+
+
+Options
+
+
+Flag
+
+Option
+
+Description
+
+
+--debug Display stack traces.
+ -h--helpDisplay help.
+-m--manifest-checkOnly check and repair the leveled manifest, without actually scrubbing the SSTables.
+-v--verboseVerbose output.
+
+After running this utility, you must perform a repair because corrupted rows are thrown away. 
+

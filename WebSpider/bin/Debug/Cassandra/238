@@ -1,0 +1,7 @@
+Durability
+About durable writes in Cassandra.
+
+Writes in Cassandra are durable. All writes to a replica node are recorded both in memory and in a commit log on disk before they are acknowledged as a success. If a crash or server failure occurs before the memtables are flushed to disk, the commit log is replayed on restart to recover any lost writes. In addition to the local durability (data immediately written to disk), the replication of data on other nodes strengthens durability.
+
+You can manage the local durability to suit your needs for consistency using the commitlog_sync option in the cassandra.yaml file. Set the option to either periodic or batch.
+

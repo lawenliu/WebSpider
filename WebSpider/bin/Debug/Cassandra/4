@@ -1,0 +1,8 @@
+CQL
+Cassandra Query Language (CQL) is the default and primary interface into the Cassandra DBMS. 
+
+Cassandra Query Language (CQL) is the default and primary interface into the Cassandra DBMS. Using CQL is similar to using SQL (Structured Query Language). CQL and SQL share the same abstract idea of a table constructed of tables and rows. The main difference from SQL is that Cassandra does not support joins or subqueries, except for batch analysis through Hive. Instead, Cassandra emphasizes denormalization through CQL features like collections and clustering specified at the schema level.
+
+CQL is the recommended way to interact with Cassandra. Performance and the simplicity of reading and using CQL is an advantage of modern Cassandra over older Cassandra APIs.
+
+The CQL documentation contains a data modeling section, examples, and command reference. The cqlsh utility for using CQL interactively on the command line is also covered.

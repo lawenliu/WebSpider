@@ -1,0 +1,12 @@
+Data caching
+Data caching topics.
+Topics in this section: 
+
+Configuring data caches
+
+Cassandra includes integrated caching and distributes cache data around the cluster. The integrated architecture facilitates troubleshooting and the cold start problem.
+
+
+Monitoring and adjusting caching
+
+Use nodetool to make changes to cache options and then monitor the effects of each change.

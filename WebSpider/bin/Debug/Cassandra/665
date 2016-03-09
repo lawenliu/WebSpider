@@ -1,0 +1,10 @@
+Java reports an error saying there are too many open files
+Java may not have open enough file descriptors.
+
+
+Java may not have open enough file descriptors.
+
+Cassandra generally needs more than the default (1024) amount of file descriptors. To increase the number of file descriptors, change the security limits on your Cassandra nodes as described in the Recommended Settings section of  Insufficient user resource limits errors .
+
+Another, much less likely possibility, is a file descriptor leak in Cassandra. Run lsof -n | grep java to check that the number of file descriptors opened by Java is reasonable and reports the error if the number is greater than a few thousand.
+

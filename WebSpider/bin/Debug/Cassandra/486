@@ -1,0 +1,28 @@
+disablebinary
+Disables the native transport.
+
+
+Disables the native transport.
+
+
+Synopsis 
+nodetool <options> disablebinary
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+Disables the binary protocol, also known as the native transport.
+

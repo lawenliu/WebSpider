@@ -1,0 +1,27 @@
+refresh
+Loads newly placed SSTables onto the system without a restart.
+
+
+Loads newly placed SSTables onto the system without a restart.
+
+
+Synopsis 
+nodetool <options> refresh -- <keyspace> <table>
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option and argument that could be mistaken for a option.
+keyspace is a keyspace name.
+table is a table name.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+

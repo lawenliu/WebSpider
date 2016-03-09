@@ -1,0 +1,45 @@
+Cassandra-CLI utility (deprecated)
+Cassandra stores storage configuration attributes in the system keyspace.
+
+
+Cassandra stores storage configuration attributes in the system keyspace. You set storage configuration attributes on a per-keyspace or per-table basis programmatically or using a client application, such as CLI or Thrift.
+
+Important: The CLI utility is deprecated and will be removed in Cassandra 3.0. For ease of use and performance, switch from Thrift and CLI to CQL and cqlsh.
+
+
+Keyspace attributes 
+
+A keyspace must have a user-defined name, a replica placement strategy, and options that specify the number of copies per data center or node.
+
+name Required. The name for the keyspace.placement_strategy Required. Determines how Cassandra distributes replicas for a keyspace among nodes in the ring. Values are:SimpleStrategy or org.apache.cassandra.locator.SimpleStrategy
+NetworkTopologyStrategy or org.apache.cassandra.locator.NetworkTopologyStrategy
+
+NetworkTopologyStrategy requires a snitch to be able to determine rack and data center locations of a node. For more information about replication placement strategy, see Data replication.
+strategy_optionsSpecifies configuration options for the chosen replication strategy class. The replication factor option is the total number of replicas across the cluster. A replication factor of 1 means that there is only one copy of each row on one node. A replication factor of 2 means there are two copies of each row, where each copy is on a different node. All replicas are equally important; there is no primary or master replica. As a general rule, the replication factor should not exceed the number of nodes in the cluster. However, you can increase the replication factor and then add the desired number of nodes.
+When the replication factor exceeds the number of nodes, writes are rejected, but reads are served as long as the desired consistency level can be met.
+
+For more information about configuring the replication placement strategy for a cluster and data centers, see Choosing keyspace replication options.
+durable_writes(Default: true) When set to false, data written to the keyspace bypasses the commit log. Be careful using this option because you risk losing data. 
+
+Table attributes
+
+
+Attributes that can be declared per table.
+
+
+The following attributes can be declared per table.
+bloom_filter_fp_chance See CQL properties in CQL for Cassandra 2.0.bucket_high See CQL Compaction Subproperties in CQL for Cassandra 2.0.bucket_low See CQL Compaction Subproperties in CQL for Cassandra 2.0.caching See CQL properties in CQL for Cassandra 2.0.chunk_length_kb See CQLCompression Subproperties in CQL for Cassandra 2.0.column_metadata (Default: N/A - container attribute) Column metadata defines these attributes of a column:name: Binds a validation_class and (optionally) an index to a column.
+validation_class: Type used to check the column value.
+index_name: Name of the index.
+index_type: Type of index. Currently the only supported value is KEYS.
+
+Setting a value for the name option is required. The validation_class is set to the default_validation_class of the table if you do not set the validation_class option explicitly. The value of index_type must be set to create an index for a column. The value of index_name is not valid unless index_type is also set.
+
+Setting and updating column metadata with the Cassandra-CLI utility requires a slightly different command syntax than other attributes; note the brackets and curly braces in this example:
+
+[default@demo ] UPDATE COLUMN FAMILY users WITH  comparator =UTF8Type
+AND  column_metadata =[{column_name: full_name, validation_class: UTF8Type, index_type: KEYS }];
+column_type (Default: Standard) The standard type of table contains regular columns.comment See CQL properties in CQL for Cassandra 2.0.compaction_strategy See compaction in CQL properties in CQL for Cassandra 2.0.comparator (Default: BytesType) Defines the data types used to validate and sort column names. There are several built-in column comparators available. The comparator cannot be changed after you create a table.compare_subcolumns_with (Default: BytesType) Required when the column_type attribute is set to Super. Same as comparator but for the sub-columns of a super column. Deprecated as of Cassandra 1.0, but can still be declared for backward compatibility.compression_options (Default: N/A - container attribute) Sets the compression algorithm and sub-properties for the table. Choices are: sstable_compression
+chunk_length_kb
+crc_check_chance 
+crc_check_chance See CQLCompression Subproperties in CQL for Cassandra 2.0.default_time_to_liveSee CQL properties in CQL for Cassandra 2.0.default_validation_class (Default: N/A) Defines the data type used to validate column values. There are several built-in column validators available.dclocal_read_repair_chance See CQLCompression Subproperties in CQL for Cassandra 2.0.gc_grace See CQL properties in CQL for Cassandra 2.0.index_interval See CQL properties in CQL for Cassandra 2.0.key_validation_class (Default: N/A) Defines the data type used to validate row key values. There are several built-in key validators available, however CounterColumnType (distributed counters) cannot be used as a row key validator.max_compaction_threshold See max_threshold in CQL Compaction Subproperties in CQL for Cassandra 2.0.min_compaction_threshold See min_threshold in CQL Compaction Subproperties in CQL for Cassandra 2.0.memtable_flush_after_mins Deprecated as of Cassandra 1.0, but can still be declared for backward compatibility. Use commitlog_total_space_in_mb.memtable_flush_period_in_msSee CQL properties in CQL for Cassandra 2.0.memtable_operations_in_millions Deprecated as of Cassandra 1.0, but can still be declared for backward compatibility. Use commitlog_total_space_in_mb.memtable_throughput_in_mb Deprecated as of Cassandra 1.0, but can still be declared for backward compatibility. Use commitlog_total_space_in_mb.min_sstable_size See CQL Compaction Subproperties in CQL for Cassandra 2.0.name (Default: N/A) Required. The user-defined name of the table.populate_io_cache_on_flushSee CQLCompression Subproperties in CQL for Cassandra 2.0.read_repair_chance See CQL properties in CQL for Cassandra 2.0.replicate_on_write See CQLCompression Subproperties in CQL for Cassandra 2.0.speculative_retrySee CQL properties in CQL for Cassandra 2.0.sstable_size_in_mb See CQL Compaction Subproperties in CQL for Cassandra 2.0.sstable_compression See compression in CQL properties in CQL for Cassandra 2.0.tombstone_compaction_interval See CQL Compaction Subproperties in CQL for Cassandra 2.0.tombstone_threshold See CQL Compaction Subproperties in CQL for Cassandra 2.0.

@@ -1,0 +1,26 @@
+truncatehints
+Truncates all hints on the local node, or truncates hints for the one or more endpoints. 
+
+
+Truncates all hints on the local node, or truncates hints for the one or more endpoints. 
+
+
+Synopsis 
+nodetool <options> truncatehints -- ( <endpoint> ... )
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option and argument that could be mistaken for a option.
+endpoint is one or more endpoint IP addresses or host names which hints are to be deleted.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+

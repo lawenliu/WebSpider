@@ -1,0 +1,44 @@
+Partitioners
+A partitioner determines how data is distributed across the nodes in the cluster (including replicas).
+
+A partitioner determines how data is distributed across the nodes in the cluster (including replicas). Basically, a partitioner is a function for deriving a token representing a row from its partion key, typically by hashing. Each row of data is then distributed across the cluster by the value of the token.
+
+Both the Murmur3Partitioner and RandomPartitioner use tokens to help assign equal portions of data to each node and evenly distribute data from all the tables throughout the ring or other grouping, such as a keyspace. This is true even if the tables use different partition keys, such as usernames or timestamps. Moreover, the read and write requests to the cluster are also evenly distributed and load balancing is simplified because each part of the hash range receives an equal number of rows on average. For more detailed information, see Consistent hashing.
+
+Cassandra offers the following partitioners:
+Murmur3Partitioner (default): uniformly distributes data across the cluster based on MurmurHash hash values.
+RandomPartitioner: uniformly distributes data across the cluster based on MD5 hash values.
+ByteOrderedPartitioner: keeps an ordered distribution of data lexically by key bytes
+
+The Murmur3Partitioner is the default partitioning strategy for new Cassandra clusters and the right choice for new clusters in almost all cases.
+
+Set the partitioner in the cassandra.yaml file:
+Murmur3Partitioner: org.apache.cassandra.dht.Murmur3Partitioner
+RandomPartitioner: org.apache.cassandra.dht.RandomPartitioner
+ByteOrderedPartitioner: org.apache.cassandra.dht.ByteOrderedPartitioner
+
+Note: If using virtual nodes (vnodes), you do not need to calculate the tokens. If not using vnodes, you must calculate the tokens to assign to the initial_token parameter in the cassandra.yaml file. See Generating tokens and use the method for the type of partitioner you are using.
+Topics in this section: 
+
+Murmur3Partitioner
+
+The Murmur3Partitioner provides faster hashing and improved performance than the previous default partitioner (RandomPartitioner).
+
+
+RandomPartitioner
+
+The default partitioner prior to Cassandra 1.2.
+
+
+ByteOrderedPartitioner
+
+Cassandra provides this partitioner for ordered partitioning. It is included for backwards compatibility.
+
+
+
+
+Related information
+
+
+
+Install locations

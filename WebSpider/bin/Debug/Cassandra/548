@@ -1,0 +1,32 @@
+disableautocompaction
+Disables autocompaction for a keyspace and one or more tables.
+
+
+Disables autocompaction for a keyspace and one or more tables.
+
+
+Synopsis 
+nodetool <options> disableautocompaction -- <keyspace> ( <table> ... )
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option and argument that could be mistaken for a option.
+keyspace is the name of a keyspace.
+table is one or more table names, separated by a space.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+The keyspace can be followed by one or more tables.
+

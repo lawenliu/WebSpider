@@ -1,0 +1,104 @@
+proxyhistograms
+Provides a histogram of network statistics.
+
+
+Provides a histogram of network statistics.
+
+
+Synopsis 
+nodetool <options> proxyhistograms
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number>
+( -pw | --password ) <password >
+( -u | --username ) <user name>
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope
+
+
+Description 
+
+The output of this command shows the full request latency recorded by the coordinator. The output includes the percentile rank of read and write latency values for inter-node communication. Range latency is the latency of range scans, such as getting all partitions, executing an IN statement, or performing any selection that requires ALLOW FILTERING or index lookups. Typically, you use the command to see if requests encounter a slow node.
+
+
+Examples 
+This example shows the output from nodetool proxyhistograms after running 4,500 insert statements and 45,000 select statements on a three ccm node-cluster on a local computer. The output shows an offset on the left and latencies in microseconds (µs) on the right. The offset corresponds to the x-axis in a histogram. It represents buckets of values, which are a series of ranges. Each offset includes the range of values greater than the previous offset and less than or equal to the current offset. Each offset is calculated by multiplying the previous offset by 1.2, rounding up, and removing duplicates. $ nodetool proxyhistograms
+proxy histograms
+
+Read Latency (microseconds)
+61214 us: 1
+
+Write Latency (microseconds)
+  103 us: 22
+  124 us: 142
+  149 us: 297
+  179 us: 1190
+  215 us: 1823
+  258 us: 2091
+  310 us: 1291
+  372 us: 753
+  446 us: 297
+  535 us: 72
+  642 us: 26
+  770 us: 15
+  924 us: 4
+ 1109 us: 0
+ 1331 us: 0
+ 1597 us: 0
+ 1916 us: 0
+ 2299 us: 0
+ 2759 us: 0
+ 3311 us: 1
+ 3973 us: 0
+ 4768 us: 0
+ 5722 us: 0
+ 6866 us: 0
+ 8239 us: 0
+ 9887 us: 0
+11864 us: 0
+14237 us: 0
+17084 us: 0
+20501 us: 0
+24601 us: 0
+29521 us: 0
+35425 us: 0
+42510 us: 0
+51012 us: 1
+
+Range Latency (microseconds)
+  310 us: 1
+  372 us: 139
+  446 us: 1824
+  535 us: 8933
+  642 us: 6123
+  770 us: 3672
+  924 us: 2178
+ 1109 us: 1152
+ 1331 us: 673
+ 1597 us: 112
+ 1916 us: 15
+ 2299 us: 2
+ 2759 us: 1
+ 3311 us: 1
+ 3973 us: 0
+ 4768 us: 0
+ 5722 us: 0
+ 6866 us: 0
+ 8239 us: 1
+ 9887 us: 0
+11864 us: 0
+14237 us: 2
+17084 us: 0
+20501 us: 0
+24601 us: 0
+29521 us: 1
+35425 us: 0
+42510 us: 1
+51012 us: 1
+

@@ -1,0 +1,17 @@
+Deleting snapshot files
+Steps to delete snapshot files.
+
+
+When taking a snapshot, previous snapshot files are not automatically deleted. You should remove old snapshots that are no longer needed.
+
+The nodetool clearsnapshot command removes all existing snapshot files from the snapshot directory of each keyspace. You should make it part of your back-up process to clear old snapshots before taking a new one.
+
+
+Procedure
+
+To delete all snapshots for a node, run the nodetool clearsnapshot command. For example: 
+$ nodetool -h localhost -p 7199 clearsnapshot
+
+
+To delete snapshots on all nodes at once, run the nodetool clearsnapshot command using a parallel ssh utility.
+

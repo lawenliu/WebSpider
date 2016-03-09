@@ -1,0 +1,34 @@
+Configuring data caches
+Cassandra includes integrated caching and distributes cache data around the cluster. The integrated architecture facilitates troubleshooting and the cold start problem.
+
+Cassandra includes integrated caching and distributes cache data around the cluster for you. When a node goes down, the client can read from another cached replica of the data. The integrated architecture also facilitates troubleshooting because there is no separate caching tier, and cached data matches what’s in the database exactly. The integrated cache solves the cold start problem by virtue of saving your cache to disk periodically and being able to read contents back in when it restarts—you never have to start with a cold cache.
+
+
+About the partition key cache 
+The partition key cache is a cache of the partition index for a Cassandra table. Using the key cache instead of relying on the OS page cache saves CPU time and memory. However, enabling just the key cache results in disk (or OS page cache) activity to actually read the requested data rows. 
+
+About the row cache 
+
+The row cache is similar to a traditional cache like memcached. When a row is accessed, the entire row is pulled into memory, merging from multiple SSTables if necessary, and cached, so that further reads against that row can be satisfied without hitting disk at all.
+
+Important: Cassandra caches all rows in a partition when reading the partition. 
+
+While storing the row cache off-heap, Cassandra has to deserialize a partition into heap to read from it. Consequently, use the row cache under these conditions only:The partition you will cache is small.
+Your users or applications will read most of the partition all at once.
+Do not use the row cache unless you fully understand how to prevent misusing the row cache. Misuse exhausts the JVM heap and causes Cassandra to fail. 
+Typically, you enable either the partition key or row cache for a table--not both. The main exception is for caching archive tables that are infrequently read. Disable caching entirely for archive tables.
+Topics in this section: 
+
+Enabling and configuring caching
+
+Using CQL to enable or disable caching.
+
+
+How caching works
+
+Brief overview of how caching works.
+
+
+Tips for efficient cache use
+
+Various tips for efficient cache use.

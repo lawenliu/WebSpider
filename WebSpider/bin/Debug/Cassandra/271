@@ -1,0 +1,39 @@
+Generating tokens
+If not using virtual nodes (vnodes), you still need to calculate tokens for your cluster.
+
+If not using virtual nodes (vnodes), you still need to calculate tokens for your cluster.
+
+The following topics in the Cassandra 1.1 documentation provide conceptual information about tokens:
+Data Distribution in the Ring 
+Replication Strategy 
+
+
+
+About calculating tokens for single or multiple data centers in Cassandra 1.2 and later 
+Single data center deployments: calculate tokens by dividing the hash range by the number of nodes in the cluster.
+Multiple data center deployments: calculate the tokens for each data center so that the hash range is evenly divided for the nodes in each data center.
+
+For more explanation, see be sure to read the conceptual information mentioned above.
+
+The method used for calculating tokens depends on the type of partitioner:
+
+
+
+Calculating tokens for the Murmur3Partitioner 
+
+Use this method for generating tokens when you are not using virtual nodes (vnodes) and using the Murmur3Partitioner (default). This partitioner uses a maximum possible range of hash values from -2 63 to +2 63 -1. To calculate tokens for this partitioner: 
+python -c 'print [str(((2**64 / number_of_tokens) * i) - 2**63) for i in range(number_of_tokens)]'
+
+For example, to generate tokens for 6 nodes:
+python -c 'print [str(((2**64 / 6) * i) - 2**63) for i in range(6)]'
+
+The command displays the token for each node:
+[ '-9223372036854775808', '-6148914691236517206', '-3074457345618258604', 
+  '-2', '3074457345618258600', '6148914691236517202' ]
+
+
+
+Calculating tokens for the RandomPartitioner 
+
+To calculate tokens when using the RandomPartitioner in Cassandra 1.2 clusters, use the Cassandra 1.1 Token Generating Tool. 
+

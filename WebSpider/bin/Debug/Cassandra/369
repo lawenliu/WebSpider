@@ -1,0 +1,16 @@
+Decommissioning a data center
+Steps to properly remove a data center so no information is lost.
+
+
+Steps to properly remove a data center so no information is lost.
+
+
+Procedure
+Make sure no clients are still writing to any nodes in the data center.  
+Run a full repair with nodetool repair. 
+
+This ensures that all data is propagated from the data center being decommissioned. 
+
+Change all keyspaces so they no longer reference the data center being removed. 
+Run nodetool decommission on every node in the data center being removed. 
+

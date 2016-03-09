@@ -1,0 +1,6 @@
+Installing a Cassandra cluster on Amazon EC2
+A step-by-step guide for installing the DataStax Community AMI (Amazon Machine Image).
+
+
+For instructions on installing the DataStax AMI (Amazon Machine Image), see the AMI documentation for Cassandra 2.1.
+

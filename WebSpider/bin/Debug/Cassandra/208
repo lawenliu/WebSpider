@@ -1,0 +1,9 @@
+Separate table directories
+Cassandra provides fine-grained control of table storage on disk.
+
+Cassandra provides fine-grained control of table storage on disk, writing tables to disk using separate table directories within each keyspace directory. Data files are stored using this directory and file naming format:
+
+/var/lib/cassandra/data/ks1/cf1/ks1-cf1-hc-1-Data.db
+
+The new file name format includes the keyspace name to distinguish which keyspace and table the file contains when streaming or bulk loading data. Cassandra creates a subdirectory for each table, which allows you to symlink a table to a chosen physical drive or data volume. This provides the capability to move very active tables to faster media, such as SSD’s for better performance, and also divvy up tables across all attached storage devices for better I/O balance at the storage layer.
+

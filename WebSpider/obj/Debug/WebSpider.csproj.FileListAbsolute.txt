@@ -1,0 +1,20 @@
+c:\users\xlian\documents\visual studio 2012\Projects\WebSpider\WebSpider\bin\Debug\WebSpider.exe.config
+c:\users\xlian\documents\visual studio 2012\Projects\WebSpider\WebSpider\bin\Debug\WebSpider.exe
+c:\users\xlian\documents\visual studio 2012\Projects\WebSpider\WebSpider\bin\Debug\WebSpider.pdb
+c:\users\xlian\documents\visual studio 2012\Projects\WebSpider\WebSpider\obj\Debug\WebSpider.csprojResolveAssemblyReference.cache
+c:\users\xlian\documents\visual studio 2012\Projects\WebSpider\WebSpider\obj\Debug\WebSpider.Spider.resources
+c:\users\xlian\documents\visual studio 2012\Projects\WebSpider\WebSpider\obj\Debug\WebSpider.Properties.Resources.resources
+c:\users\xlian\documents\visual studio 2012\Projects\WebSpider\WebSpider\obj\Debug\WebSpider.csproj.GenerateResource.Cache
+c:\users\xlian\documents\visual studio 2012\Projects\WebSpider\WebSpider\obj\Debug\WebSpider.exe
+c:\users\xlian\documents\visual studio 2012\Projects\WebSpider\WebSpider\obj\Debug\WebSpider.pdb
+C:\Users\xlian\documents\visual studio 2012\Projects\WebSpider\WebSpider\bin\Debug\WebKitBrowser.dll
+C:\Users\xlian\documents\visual studio 2012\Projects\WebSpider\WebSpider\bin\Debug\WebKit.Interop.dll
+C:\Users\wliu37\Downloads\WebSpider\WebSpider\bin\Debug\WebSpider.exe.config
+C:\Users\wliu37\Downloads\WebSpider\WebSpider\obj\Debug\WebSpider.exe
+C:\Users\wliu37\Downloads\WebSpider\WebSpider\obj\Debug\WebSpider.pdb
+C:\Users\wliu37\Downloads\WebSpider\WebSpider\bin\Debug\WebSpider.exe
+C:\Users\wliu37\Downloads\WebSpider\WebSpider\bin\Debug\WebSpider.pdb
+C:\Users\wliu37\Downloads\WebSpider\WebSpider\obj\Debug\WebSpider.csprojResolveAssemblyReference.cache
+C:\Users\wliu37\Downloads\WebSpider\WebSpider\obj\Debug\WebSpider.Spider.resources
+C:\Users\wliu37\Downloads\WebSpider\WebSpider\obj\Debug\WebSpider.Properties.Resources.resources
+C:\Users\wliu37\Downloads\WebSpider\WebSpider\obj\Debug\WebSpider.csproj.GenerateResource.Cache

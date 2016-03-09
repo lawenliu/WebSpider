@@ -1,0 +1,51 @@
+Snitches
+A snitch determines which data centers and racks nodes belong to.
+
+A snitch determines which data centers and racks nodes belong to. Snitches inform Cassandra about the network topology so that requests are routed efficiently and allows Cassandra to distribute replicas by grouping machines into data centers and racks. Specifically, the replication strategy places the replicas based on the information provided by the new snitch. All nodes must return to the same rack and data center. Cassandra does its best not to have more than one replica on the same rack (which is not necessarily a physical location). 
+
+Note: If you change snitches, you may need to perform additional steps because the snitch affects where replicas are placed. See Switching snitches.
+Topics in this section: 
+
+Dynamic snitching
+
+Monitors the performance of reads from the various replicas and chooses the best replica based on this history.
+
+
+SimpleSnitch
+
+The SimpleSnitch is used only for single-data center deployments.
+
+
+RackInferringSnitch
+
+Determines the location of nodes by rack and data center corresponding to the IP addresses.
+
+
+PropertyFileSnitch
+
+Determines the location of nodes by rack and data center.
+
+
+GossipingPropertyFileSnitch
+
+Automatically updates all nodes using gossip when adding new nodes and is recommended for production.
+
+
+Ec2Snitch
+
+Use with Amazon EC2 in a single region.
+
+
+Ec2MultiRegionSnitch
+
+Use this snitch for deployments on Amazon EC2 where the cluster spans multiple regions.
+
+
+GoogleCloudSnitch
+
+Use this snitch for Cassandra deployments on Google Cloud Platform across one or more regions.
+
+
+CloudstackSnitch
+
+Use this snitch for Apache Cloudstack environments. 

@@ -1,0 +1,34 @@
+upgradesstables
+Rewrites SSTables for tables that are not running the current version of Cassandra.
+
+
+Rewrites SSTables for tables that are not running the current version of Cassandra.
+
+
+Synopsis 
+nodetool <options> upgradesstables
+ (-a | --include-all-sstables )
+ -- ( <keyspace> <table>  ... )
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-a or --include-all-sstables, followed by the snapshot name.
+-- Separates an option and argument that could be mistaken for a option.
+keyspace a keyspace name.
+table is one or more table names, separated by a space.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+Rebuilds SSTables on a node that are not compatible with the current version. Use this command when upgrading your server or changing compression options. 
+

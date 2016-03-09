@@ -1,0 +1,27 @@
+statusbinary
+Provide the status of native transport.
+
+
+Provide the status of native transport.
+
+
+Synopsis 
+nodetool <options> statusbinary
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+Provides the status of the binary protocol, also known as the native transport. 
+

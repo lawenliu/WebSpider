@@ -1,0 +1,14 @@
+Choosing keyspace replication options
+Options to set replication strategy.
+
+To set the replication strategy for a keyspace, see CREATE KEYSPACE.
+
+When you use NetworkToplogyStrategy, during creation of the keyspace, you use the data center names defined for the snitch used by the cluster. To place replicas in the correct location, Cassandra requires a keyspace definition that uses the snitch-configured data center names. For example, if the cluster uses the PropertyFileSnitch, create the keyspace using the user-defined data center and rack names in the cassandra-topologies.properties file. If the cluster uses the Ec2Snitch, create the keyspace using EC2 data center and rack names.
+
+
+
+Related information
+
+
+
+Install locations

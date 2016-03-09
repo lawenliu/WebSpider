@@ -1,0 +1,33 @@
+Edge cases for transitioning or migrating a cluster
+Unusual migration scenarios without interruption of service.
+
+
+The information in this topic is intended for the following types of scenarios (without any interruption of service):Transition a cluster on EC2 to a cluster on Amazon virtual private cloud (VPC).
+Migrate from a cluster when the network separates the current cluster from the future location.
+Migrate from an early Cassandra cluster to a recent major version.
+
+
+Procedure
+
+The following method ensures that if something goes wrong with the new cluster, you still have the existing cluster until you no longer need it.
+Set up and configure the new cluster as described in Provisioning a new cluster.  
+
+Note: If you're not using vnodes, be sure to configure the token ranges in the new nodes to match the ranges in the old cluster.
+
+Set up the schema for the new cluster using CQL. 
+Configure your client to write to both clusters. 
+
+Depending on how the writes are done, code changes may be needed. Be sure to use identical consistency levels.
+
+Ensure that the data is flowing to the new nodes so you won't have any gaps when you copy the snapshots to the new cluster in step 6. 
+Snapshot the old EC2 cluster. 
+Copy the data files from your keyspaces to the nodes. If not using vnodes and the if the node ratio is 1:1, it's simpler and more efficient to simply copy the data files to their matching nodes.
+If the clusters are different sizes or if you are using vnodes, use the Cassandra bulk loader (sstableloader) (sstableloader).
+
+You can either switch to the new cluster all at once or perform an incremental migration. 
+
+For example, to perform an incremental migration, you can set your client to designate a percentage of the reads that go to the new cluster. This allows you to test the new cluster before decommissioning the old cluster.
+
+Decommission the old cluster: Remove the cluster from the OpsCenter. 
+Remove the nodes. 
+

@@ -1,0 +1,23 @@
+invalidaterowcache
+Resets the global key cache parameter, row_cache_keys_to_save, to the default (not set), which saves all keys. 
+
+
+Resets the global key cache parameter, row_cache_keys_to_save, to the default (not set), which saves all keys. 
+
+
+Synopsis 
+nodetool <options> invalidaterowcache
+options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+

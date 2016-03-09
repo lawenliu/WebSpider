@@ -1,0 +1,131 @@
+cfhistograms
+Provides statistics about a table that could be used to plot a frequency function.
+
+
+Provides statistics about a table that could be used to plot a frequency function.
+
+
+Synopsis 
+nodetool <options> cfhistograms -- <keyspace> <table>
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option from an argument that could be mistaken for a option.
+keyspace is the name of a keyspace.
+table is the name of a table.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+
+
+Description 
+
+The nodetool cfhistograms command provides statistics about a table, including number of SSTables, read/write latency, partition (row) size, and cell count. 
+
+
+Example 
+
+If you are using DataStax Enterprise, performthe Wikipedia demo, and then run this command to get statistics about the solr table in the wiki keyspace. $ nodetool cfhistograms wiki solr
+The output shows latencies in microseconds (µs), partition (formerly called row) size in bytes, and the number of SSTables and the cell count. The Offset column corresponds to the x-axis in a histogram. It represents buckets of values, which are a series of ranges. Each offset includes the range of values greater than the previous offset and less than or equal to the current offset. The offsets start at 1 and each subsequent offset is calculated by multiplying the previous offset by 1.2, rounding up, and removing duplicates. The offsets can range from 1 to approximately 25 million, with less precision as the offsets get larger.
+For example:
+Offset 1 shows that 3579 requests only had to look at one SSTable. The SSTables column corresponds to how many SSTables were involved in a read request.
+Offset 86 shows that there were 663 requests with a write latency between 73 and 86 µs. The range falls into the 73 to 86 bucket.
+
+On some versions of Cassandra, the output looks like this:
+wiki/solr histograms
+Offset      SSTables     Write Latency      Read Latency          Row Size      Column Count
+1               3579                 0                 0                 0                 0
+2                  0                 0                 0                 0                 0
+. . .
+35                 0                 0                 0                 0                 0
+42                 0                 0                27                 0                 0
+50                 0                 0               187                 0                 0
+60                 0                10               460                 0                 0
+72                 0               200               689                 0                 0
+86                 0               663               552                 0                 0
+103                0               796               367                 0                 0
+124                0               297               736                 0                 0
+149                0               265               243                 0                 0
+179                0               460               263                 0                 0
+. . .
+25109160           0                 0                 0                 0                 0
+
+On other versions of Cassandra 2.0.x, the output does not label the columns. The offset is on the left, the latency on the right:
+SSTables per Read
+1 sstables: 3579
+
+Write Latency (microseconds)
+  50 us: 1
+  60 us: 195
+  72 us: 1029
+  86 us: 876
+ 103 us: 433
+ 124 us: 170
+ 149 us: 208
+ 179 us: 247
+ 215 us: 216
+ 258 us: 137
+ 310 us: 43
+ 372 us: 9
+ 446 us: 4
+ 535 us: 1
+ 642 us: 2
+ 770 us: 2
+ 924 us: 1
+1109 us: 1
+1331 us: 2
+1597 us: 0
+1916 us: 0
+2299 us: 1
+2759 us: 1
+
+Read Latency (microseconds)
+   50 us: 4
+   60 us: 69
+   72 us: 384
+   86 us: 802
+  103 us: 936
+  124 us: 523
+  149 us: 452
+  179 us: 271
+  215 us: 106
+  258 us: 13
+  310 us: 4
+  372 us: 6
+  446 us: 1
+  535 us: 3
+  642 us: 3
+  770 us: 0
+  924 us: 0
+ 1109 us: 0
+ 1331 us: 1
+ 1597 us: 0
+ 1916 us: 0
+ 2299 us: 0
+ 2759 us: 0
+ 3311 us: 0
+ 3973 us: 0
+ 4768 us: 0
+ 5722 us: 0
+ 6866 us: 0
+ 8239 us: 0
+ 9887 us: 0
+11864 us: 0
+14237 us: 1
+
+Partition Size (bytes)
+No Data
+
+Cell Count per Partition
+No Data
+
+OpsCenter displays the same information in a better format for understanding the statistics.
+

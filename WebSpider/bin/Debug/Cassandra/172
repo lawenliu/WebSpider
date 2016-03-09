@@ -1,0 +1,12 @@
+Internal authorization
+Topics about internal authorization.
+Topics in this section: 
+
+Object permissions
+
+Granting or revoking permissions to access Cassandra data.
+
+
+Configuring internal authorization
+
+Steps for adding the CassandraAuthorizer.

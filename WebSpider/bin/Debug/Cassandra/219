@@ -1,0 +1,33 @@
+About reads
+How Cassandra combines results from the active memtable and potentially mutliple SSTables to satisfy a read.
+
+Cassandra must combine results from the active memtable and potentially mutliple SSTables to satisfy a read. First, Cassandra checks the Bloom filter. Each SSTable has a Bloom filter associated with it that checks the probability of having any data for the requested partition in the SSTable before doing any disk I/O.
+
+If the Bloom filter does not rule out the SSTable, Cassandra checks the partition key cache and takes one of these courses of action:
+If an index entry is found in the cache: Cassandra goes to the compression offset map to find the compressed block having the data.
+Fetches the compressed data on disk and returns the result set.
+
+If an index entry is not found in the cache:Cassandra searches the partition summary to determine the approximate location on disk of the index entry.
+Next, to fetch the index entry, Cassandra hits the disk for the first time, performing a single seek and a sequential read of columns (a range read) in the SSTable if the columns are contiguous. 
+Cassandra goes to the compression offset map to find the compressed block having the data.
+Fetches the compressed data on disk and returns the result set. 
+Topics in this section: 
+
+How off-heap components affect reads
+
+Factors for increasing the data handling capacity per node.
+
+
+Reading from a partition
+
+A brief description about reading from a partition.
+
+
+How write patterns affect reads
+
+A brief description about how write patterns affect reads.
+
+
+How the row cache affects reads
+
+A brief description and illustration about how the row cache affects reads.

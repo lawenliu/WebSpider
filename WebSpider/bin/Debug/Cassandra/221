@@ -1,0 +1,5 @@
+Reading from a partition
+A brief description about reading from a partition.
+
+Within a partition, all rows are not equally expensive to query. The very beginning of the partition—the first rows, clustered by your key definition—is slightly less expensive to query because there is no need to consult the partition-level index.
+

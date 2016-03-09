@@ -1,0 +1,64 @@
+Adding nodes to an existing cluster
+Steps to add nodes when using virtual nodes.
+
+
+Virtual nodes (vnodes) greatly simplify adding nodes to an existing cluster:
+Calculating tokens and assigning them to each node is no longer required.
+Rebalancing a cluster is no longer necessary because a node joining the cluster assumes responsibility for an even portion of the data.
+
+For a detailed explanation about how this works, see Virtual nodes.
+
+If you are using racks, you can safely bootstrap two nodes at a time when both nodes are on the same rack.
+
+Note: If you do not use vnodes, see Adding or replacing single-token nodes.
+
+
+Procedure
+
+Be sure to install the same version of Cassandra as is installed on the other nodes in the cluster. See Installing prior releases of DataStax Community.
+Install Cassandra on the new nodes, but do not start Cassandra. 
+
+If you used the Debian install, Cassandra starts automatically and you must and stop the node and clear the data.
+
+Set the following properties in the cassandra.yaml and, depending on the snitch, the cassandra-topology.properties or cassandra-rackdc.properties configuration files: auto_bootstrap - If this option has been set to false, you must set it to true. This option is not listed in the default cassandra.yaml configuration file and defaults to true. 
+cluster_name - The name of the cluster the new node is joining.
+listen_address/broadcast_address - May usually be left blank. Otherwise, use IP address or host name that other Cassandra nodes use to connect to the new node. 
+endpoint_snitch - The snitch Cassandra uses for locating nodes and routing requests. 
+num_tokens - The number of vnodes to assign to the node. If the hardware capabilities vary among the nodes in your cluster, you can assign a proportional number of vnodes to the larger machines. 
+seed_provider - The -seeds list in this setting determines which nodes the new node should contact to learn about the cluster and establish the gossip process.
+Note: Seed nodes cannot bootstrap. Make sure the new node is not listed in the -seeds list. Do not make all nodes seed nodes. Please read Internode communications (gossip).
+
+Change any other non-default settings you have made to your existing cluster in the cassandra.yaml file and cassandra-topology.properties or cassandra-rackdc.properties files. Use the diff command to find and merge (by head) any differences between existing and new nodes. 
+
+Start Cassandra on each new node. Allow two minutes between node initializations. You can monitor the startup and data streaming process using nodetool netstats. 
+After all new nodes are running, run nodetool cleanup on each of the previously existing nodes to remove the keys no longer belonging to those nodes. Wait for cleanup to complete on one node before doing the next. 
+
+Cleanup may be safely postponed for low-usage hours.
+
+
+
+Related tasks
+
+
+
+Starting Cassandra as a service
+
+
+Starting Cassandra as a stand-alone process
+
+
+Related reference
+
+
+
+The cassandra.yaml configuration file
+
+
+The nodetool utility
+
+
+Related information
+
+
+
+Install locations

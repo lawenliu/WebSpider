@@ -1,0 +1,22 @@
+Changing the rotation and size of the Cassandra output.log
+Controlling the rotation and size of the output.log.
+
+
+Cassandra's output.log logging configuration is controlled by the log4j-server.properties file in the following directories:
+file in the following directories:Packaged installs: /etc/dse/cassandra
+Tarball installs: install_location/resources/cassandra/conf
+
+The output.log stores the stdout of the Cassandra process; it is not controllable from log4j. However, you can rotate it using the standard Linux logrotate facility. 
+
+The copytruncate directive is critical because it allows the log to be rotated without any support from Cassandra for closing and reopening the file. For more information, refer to the logrotate man page.
+
+
+To configure logrotate to work with Cassandra, create a file called /etc/logrotate.d/cassandra with the following contents:
+/var/log/cassandra/output.log {
+  size 10M
+  rotate 9
+  missingok
+  copytruncate
+  compress
+}
+

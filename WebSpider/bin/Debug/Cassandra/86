@@ -1,0 +1,86 @@
+Selecting hardware for enterprise implementations
+Choosing appropriate hardware depends on selecting the right balance of the following resources: memory, CPU, disk type, number of nodes, and network.
+
+Choosing appropriate hardware depends on selecting the right balance of the following resources: memory, CPU, disk type, number of nodes, and network. Anti-patterns in Cassandra also contains important information about hardware, particularly SAN storage, NAS devices, and NFS.
+
+CAUTION:
+
+Do not use a machine suited for development for load testing or production. Failure may result.
+
+
+Memory 
+
+The more memory a Cassandra node has, the better read performance. More RAM allows for larger cache sizes and reduces disk I/O for reads. More RAM also allows memory tables (memtables) to hold more recently written data. Larger memtables lead to a fewer number of SSTables being flushed to disk and fewer files to scan during a read. The ideal amount of RAM depends on the anticipated size of your hot data.
+
+For both dedicated hardware and virtual environments:
+Production: 16GB to 64GB; the minimum is 8GB.
+Development in non-loading testing environments: no less than 4GB.
+For setting Java heap space, see Tuning Java resources.
+
+
+CPU 
+
+Insert-heavy workloads are CPU-bound in Cassandra before becoming memory-bound. (All writes go to the commit log, but Cassandra is so efficient in writing that the CPU is the limiting factor.) Cassandra is highly concurrent and uses as many CPU cores as available:
+Production environments:For dedicated hardware, 8-core CPU processors are the current price-performance sweet spot.
+For virtual environments, 4 to 8-core CPU processors.
+
+Development in non-loading testing environments:For dedicated hardware, 2-core CPU processors.
+For virtual environments, 2-core CPU processors.
+
+For virtual environments, consider using a provider that allows CPU bursting, such as Rackspace Cloud Servers.
+
+
+Spinning disks versus Solid State Drives 
+
+SSDs are recommended for Cassandra. The NAND Flash chips that power SSDs provide extremely low-latency response times for random reads while supplying ample sequential write performance for compaction operations. In recent years, drive manufacturers have improved overall endurance, usually in conjunction with spare (unexposed) capacity. Additionally, because PBW/DWPD ratings are probabilistic estimates based on worst case scenarios, such as random write workloads, and Cassandra does only large sequential writes, drives significantly exceed their endurance ratings. However, it is important to plan for drive failures and have spares available. A large variety of SSDs are available on the market from server vendors and third-party drive manufacturers. 
+
+For purchasing SSDs, the best recommendation is to make SSD endurance decisions not based on workload, but on how difficult it is to change drives when they fail. Remember, your data is protected because Cassandra replicates data across the cluster. Buying strategies include:If drives are quickly available, buy the cheapest drives that provide the performance you want.
+If it is more challenging to swap the drives, consider higher endurance models, possibly starting in the mid range, and then choose replacements of higher or lower endurance based on the failure rates of the initial model chosen.
+Always buy cheap SSDs and keep several spares online and unused in the servers until the initial drives fail. This way you can replace the drives without touching the server.
+
+DataStax customers that need help in determining the most cost-effective option for a given deployment and workload, should contact their Solutions Engineer or Architect.
+
+
+Disks space 
+
+Disk space depends on usage, so it's important to understand the mechanism. Cassandra writes data to disk when appending data to the commit log for durability and when flushing memtable to SSTable data files for persistent storage. The commit log has a different access pattern (read/writes ratio) than the pattern for accessing data from SSTables. This is more important for spinning disks than for SSDs (solid state drives). See the recommendations below.
+
+SSTables are periodically compacted. Compaction improves performance by merging and rewriting data and discarding old data. However, depending on the type of compaction strategy and size of the compactions, during compaction disk utilization and data directory volume temporarily increases. For large compactions, leave an adequate amount of free disk space available on a node: 50% (worst case) for SizeTieredCompactionStrategy and DateTieredCompactionStrategy, and 10% for LeveledCompactionStrategy. For more information about compaction, see:
+Compaction
+The Apache Cassandra storage engine
+Leveled Compaction in Apache Cassandra
+When to Use Leveled Compaction
+DateTieredCompactionStrategy: Compaction for Time Series Data
+
+For information on calculating disk size, see Calculating usable disk capacity.
+
+Recommendations:  
+Capacity per node Most workloads work best with a capacity under 500GB to 1TB per node depending on I/O. Maximum recommended capacity for Cassandra 1.2 and later is 3 to 5TB per node for uncompressed data. For Cassandra 1.1, it is 500 to 800GB per node. Be sure to account for replication.Capacity and I/O When choosing disks, consider both capacity (how much data you plan to store) and I/O (the write/read throughput rate). Some workloads are best served by using less expensive SATA disks and scaling disk capacity and I/O by adding more nodes (with more RAM). Number of disks - SATA Ideally Cassandra needs at least two disks, one for the commit log and the other for the data directories. At a minimum the commit log should be on its own partition. Commit log disk - SATA The disk not need to be large, but it should be fast enough to receive all of your writes as appends (sequential I/O).Commit log disk - SSD Unlike spinning disks, it's all right to store both commit logs and SSTables are on the same mount point.Data disks Use one or more disks and make sure they are large enough for the data volume and fast enough to both satisfy reads that are not cached in memory and to keep up with compaction. RAID on data disks It is generally not necessary to use RAID for the following reasons:Data is replicated across the cluster based on the replication factor you've chosen.
+Starting in version 1.2, Cassandra includes a JBOD (Just a bunch of disks) feature to take care of disk management. Because Cassandra properly reacts to a disk failure either by stopping the affected node or by blacklisting the failed drive, you can deploy Cassandra nodes with large disk arrays without the overhead of RAID 10. You can configure Cassandra to stop the affected node or blacklist the drive according to your availability/consistency requirements.
+
+Also see Recovering from a single disk failure using JBOD.
+RAID on the commit log disk Generally RAID is not needed for the commit log disk. Replication adequately prevents data loss. If you need the extra redundancy, use RAID 1.Extended file systems DataStax recommends deploying Cassandra on either XFS or ext4. On ext2 or ext3, the maximum file size is 2TB even using a 64-bit kernel. On ext4 it is 16TB.
+Because Cassandra can use almost half your disk space for a single file, use XFS when using large disks, particularly if using a 32-bit kernel. XFS file size limits are 16TB max on a 32-bit kernel, and essentially unlimited on 64-bit.
+
+
+Number of nodes 
+
+Prior to version 1.2, the recommended size of disk space per node was 300 to 500GB. Improvement to Cassandra 1.2, such as JBOD support, virtual nodes (vnodes), off-heap Bloom filters, and parallel leveled compaction (SSD nodes only), allow you to use few machines with multiple terabytes of disk space.
+
+
+Network 
+
+Since Cassandra is a distributed data store, it puts load on the network to handle read/write requests and replication of data across nodes. Be sure that your network can handle traffic between nodes without bottlenecks. You should bind your interfaces to separate Network Interface Cards (NIC). You can use public or private depending on your requirements.
+Recommended bandwidth is 1000 Mbit/s (gigabit) or greater.
+Thrift/native protocols use the rpc_address.
+Cassandra's internal storage protocol uses the listen_address.
+
+Cassandra efficiently routes requests to replicas that are geographically closest to the coordinator node and chooses a replica in the same rack if possible; it always chooses replicas located in the same data center over replicas in a remote data center.
+
+
+Firewall 
+
+If using a firewall, make sure that nodes within a cluster can reach each other. See Configuring firewall port access.
+
+Generally, when you have firewalls between machines, it is difficult to run JMX across a network and maintain security. This is because JMX connects on port 7199, handshakes, and then uses any port within the 1024+ range. Instead use SSH to execute commands remotely connect to JMX locally or use the DataStax OpsCenter.
+

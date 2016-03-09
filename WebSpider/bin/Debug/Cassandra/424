@@ -1,0 +1,28 @@
+getendpoints
+Provides the end points that own the partition key.
+
+
+Provides the end points that own the partition key. <note>The partitioner returns a token for the key. Cassandra will return an endpoint whether or not data exists on the identified node for that token. </note>
+
+
+Synopsis 
+nodetool <options> getendpoints -- <keyspace> <table> key
+ options are: ( -h | --host ) <host name> | <ip address> 
+( -p | --port ) <port number> 
+( -pw | --password ) <password > 
+( -u | --username ) <user name> 
+
+-- Separates an option and argument that could be mistaken for a option.
+keyspace is a keyspace name.
+table is a table name.
+key is the partition key of the end points you want to get.
+
+
+Synopsis Legend 
+
+ Angle brackets (< >) mean not literal, a variable
+Italics mean optional
+The pipe (|) symbol means OR or AND/OR
+Ellipsis (...) means repeatable
+Orange ( and ) means not literal, indicates scope 
+

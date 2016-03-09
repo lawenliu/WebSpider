@@ -1,0 +1,64 @@
+Installing DataStax Community on RHEL-based systems
+Install using Yum repositories on RHEL, CentOS, and Oracle Linux.
+
+
+Use these steps to install Cassandra using Yum repositories on RHEL, CentOS, and Oracle Linux.
+
+
+Note: To install on SUSE, use the Cassandra binary tarball distribution.
+
+For a complete list of supported platforms, see DataStax Community – Supported Platforms. 
+
+
+
+Prerequisites
+Yum Package Management application installed.
+Root or sudo access to the install machine.
+Latest version of Oracle Java Platform, Standard Edition 8 (JDK) is recommended or OpenJDK 7. 
+Note: The JDK is recommended for development and production systems. It provides tools that are not in the JRE, such as jstack, jmap, jps, and jstat, that are useful for troubleshooting.
+
+Python 2.6+ (needed if installing OpsCenter).
+Java Native Access (JNA) is required for production installations (latest version recommended). See Installing the JNA on RHEL or CentOS Systems.
+
+
+The packaged releases create a cassandra user. When starting Cassandra as a service, the service runs as this user. 
+
+
+Procedure
+
+In a terminal window:
+Check which version of Java is installed by running the following command: 
+$ java -version
+
+
+Note: It is recommended to use the latest version of Oracle Java 8 on all nodes. (Oracle Java 7 is also supported.)
+See Installing Oracle JDK on RHEL-based Systems.
+
+Add the DataStax Community repository to the /etc/yum.repos.d/datastax.repo:  
+[datastax] 
+name = DataStax Repo for Apache Cassandra
+baseurl = http://rpm.datastax.com/community
+enabled = 1
+gpgcheck = 0
+
+Install the packages: 
+$ sudo yum install dsc20-2.0.x-1 cassandra2.0.x-1
+
+For example, to install DataStax Community 2.0.11:$ sudo yum install dsc20-2.0.11-1 cassandra20-2.0.11-1
+
+Check Download DataStax Community Edition on Planet Cassandra for the latest version. 
+
+The DataStax Community distribution of Cassandra is ready for configuration.
+
+
+
+
+What's next
+Initializing a multiple node cluster (single data center)
+Initializing a multiple node cluster (multiple data centers)
+Recommended production settings
+Installing OpsCenter
+Key components for configuring Cassandra
+Starting Cassandra as a service
+Package installation directories
+

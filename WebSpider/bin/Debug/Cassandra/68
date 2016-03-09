@@ -1,0 +1,7 @@
+GoogleCloudSnitch
+Use this snitch for Cassandra deployments on Google Cloud Platform across one or more regions.
+
+Use the GoogleCloudSnitch for Cassandra deployments on Google Cloud Platform across one or more regions. The region is treated as a data center and the availability zones are treated as racks within the data center. All communication occurs over private IP addresses within the same logical network.
+
+Note: Data center and rack names are case-sensitive.
+

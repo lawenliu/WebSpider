@@ -1,0 +1,33 @@
+Installing prior releases of DataStax Community
+Steps for installing the same version as other nodes in your cluster.
+
+
+How to install the same version as other nodes in your cluster. 
+
+Follow the install instructions in the relevant documentation and specify the specific version in the install command.
+
+
+Installing the packages on RHEL-based platforms
+
+Examples:$ sudo yum install dsc20-2.0.2.1 cassandra20-2.0.2-1
+$ sudo yum install dsc20-2.0.2.1 cassandra20-2.0.2-1 cassandra20-tools-2.0.2-1 ## Optional
+
+
+Installing the packages on Debian-based platforms
+
+Examples:$ sudo apt-get install dsc20=2.0.2-1 cassandra=2.0.2
+$ sudo apt-get install dsc20=2.0.2-1 cassandra=2.0.2 cassandra-tools=2.0.2 ## Optional
+
+
+Installing from the binary tarball
+Download the tarball using the URL for the prior version. 
+Cassandra 2.0.0 example:
+http://downloads.datastax.com/community/dsc-cassandra-2.0.0-bin.tar.gz
+
+Cassandra 2.0.3 example:
+http://downloads.datastax.com/community/dsc-cassandra-2.0.3-bin.tar.gz
+
+Unpack the distribution. For example:$ tar -xzvf dsc-cassandra-2.0.3-bin.tar.gz
+
+The files are extracted into the dsc-cassandra-2.0.3 directory.
+
